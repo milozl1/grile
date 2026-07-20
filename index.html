@@ -2,12 +2,14 @@
 <html lang="ro">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1, user-scalable=no">
 <meta name="theme-color" content="#F2EEE2" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#161B2B" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#0F1421" media="(prefers-color-scheme: dark)">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
 <title>Teste grilă — Licență 2026</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,500;8..60,600&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,500;8..60,600;8..60,700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
@@ -15,313 +17,415 @@
   --paper-card:#FBF9F3;
   --ink:#1E2A44;
   --ink-soft:#4C5670;
+  --ink-faint:#8B93A8;
   --line:#D8D2C0;
+  --line-light:#E6E0D0;
   --gold:#B8912B;
   --gold-soft:#EFE2BC;
+  --gold-bright:#D4A843;
   --green:#2E6B4E;
   --green-bg:#E1EEE4;
+  --green-bright:#3D8B67;
   --red:#AC3B2E;
   --red-bg:#F5E1DD;
+  --red-bright:#D64F3E;
+  --blue:#3A5F8A;
+  --blue-bg:#E0E8F2;
   --mono:'IBM Plex Mono',monospace;
   --serif:'Source Serif 4',Georgia,serif;
   --sans:'Inter',-apple-system,sans-serif;
+  --radius-sm:8px;
   --radius:12px;
+  --radius-lg:16px;
+  --shadow-sm:0 1px 2px rgba(0,0,0,.04);
   --shadow:0 1px 3px rgba(0,0,0,.06),0 1px 2px rgba(0,0,0,.04);
+  --shadow-lg:0 4px 16px rgba(0,0,0,.08);
   --safe-bottom:env(safe-area-inset-bottom,0px);
+  --safe-top:env(safe-area-inset-top,0px);
+  --font-scale:1;
 }
 [data-theme=dark]{
-  --paper:#161B2B;
-  --paper-card:#1E2740;
-  --ink:#E8E4D8;
-  --ink-soft:#9DA3B5;
-  --line:#2E3854;
+  --paper:#0F1421;
+  --paper-card:#171E32;
+  --ink:#E0DDD2;
+  --ink-soft:#8B94AD;
+  --ink-faint:#5A637A;
+  --line:#262F4A;
+  --line-light:#1E2640;
   --gold:#D4A843;
-  --gold-soft:#2E2A1A;
+  --gold-soft:#2A2516;
+  --gold-bright:#E6BC54;
   --green:#4CAF7A;
-  --green-bg:#1A2E22;
+  --green-bg:#142A1E;
+  --green-bright:#66D499;
   --red:#E06050;
-  --red-bg:#2E1A18;
+  --red-bg:#2A1815;
+  --red-bright:#F07060;
+  --blue:#5A8FC9;
+  --blue-bg:#182438;
+  --shadow:none;
+  --shadow-lg:0 4px 24px rgba(0,0,0,.3);
 }
-html{height:100%;-webkit-tap-highlight-color:transparent}
+html{height:100%;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
 body{
-  margin:0;min-height:100%;background:var(--paper);color:var(--ink);
+  margin:0;min-height:100%;min-height:100dvh;background:var(--paper);color:var(--ink);
   font-family:var(--sans);-webkit-font-smoothing:antialiased;
-  transition:background .25s ease,color .25s ease;
+  transition:background .3s ease,color .3s ease;
+  overflow-x:hidden;
 }
 #app{
-  max-width:760px;margin:0 auto;padding:24px 16px calc(80px + var(--safe-bottom));
-  animation:fadeIn .2s ease;
+  max-width:760px;margin:0 auto;padding:calc(16px + var(--safe-top)) 16px calc(24px + var(--safe-bottom));
+  animation:pageIn .25s ease;
 }
-@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
-@keyframes slideUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
-@keyframes scaleIn{from{transform:scale(.95);opacity:0}to{transform:scale(1);opacity:1}}
-@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
-.animate{animation:slideUp .25s ease forwards;opacity:0}
+@keyframes pageIn{from{opacity:0;transform:translateY(12px);filter:blur(2px)}to{opacity:1;transform:translateY(0);filter:blur(0)}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes slideUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+@keyframes scaleIn{from{transform:scale(.96);opacity:0}to{transform:scale(1);opacity:1}}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.04)}}
+@keyframes ripple{to{transform:scale(4);opacity:0}}
+@keyframes counting{0%{opacity:.4}100%{opacity:1}}
+@keyframes confetti-fall{0%{transform:translateY(-10px) rotate(0deg);opacity:1}100%{transform:translateY(100vh) rotate(720deg);opacity:0}}
+.animate{animation:slideUp .3s cubic-bezier(.22,1,.36,1) forwards;opacity:0}
 .animate:nth-child(1){animation-delay:0s}
-.animate:nth-child(2){animation-delay:.06s}
-.animate:nth-child(3){animation-delay:.12s}
-.animate:nth-child(4){animation-delay:.18s}
-.animate:nth-child(5){animation-delay:.24s}
-.animate:nth-child(6){animation-delay:.30s}
+.animate:nth-child(2){animation-delay:.07s}
+.animate:nth-child(3){animation-delay:.14s}
+.animate:nth-child(4){animation-delay:.21s}
+.animate:nth-child(5){animation-delay:.28s}
+.animate:nth-child(6){animation-delay:.35s}
+.animate:nth-child(7){animation-delay:.42s}
+.animate:nth-child(8){animation-delay:.49s}
 
-/* Header */
+/* ------ Top Bar ------ */
 .top-bar{
   display:flex;align-items:center;justify-content:space-between;
-  padding:8px 0 16px;
+  padding:4px 0 20px;gap:8px;
 }
-.top-bar h2{
-  font-family:var(--serif);font-size:20px;font-weight:600;color:var(--ink);
-}
+.top-bar .tb-start{display:flex;align-items:center;gap:8px;min-width:0}
+.top-bar .tb-end{display:flex;align-items:center;gap:8px;flex-shrink:0}
+.top-bar .tb-label{font-family:var(--serif);font-size:19px;font-weight:600;color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .btn-icon{
   width:44px;height:44px;display:flex;align-items:center;justify-content:center;
   border:none;background:var(--paper-card);color:var(--ink-soft);font-size:20px;
   border-radius:50%;cursor:pointer;transition:all .15s ease;border:1px solid var(--line);
+  flex-shrink:0;position:relative;overflow:hidden;
 }
-.btn-icon:hover,.btn-icon:focus-visible{color:var(--ink);border-color:var(--ink-soft)}
+.btn-icon:hover,.btn-icon:focus-visible{border-color:var(--ink-soft);color:var(--ink);background:var(--paper)}
+.btn-icon:active{transform:scale(.93)}
 
-/* Cards */
+/* ------ Cards ------ */
 .card{
-  background:var(--paper-card);border:1px solid var(--line);border-radius:var(--radius);
-  padding:24px;position:relative;transition:background .25s ease,border-color .25s ease;
-  animation:scaleIn .2s ease;
+  background:var(--paper-card);border:1px solid var(--line);border-radius:var(--radius-lg);
+  padding:24px;position:relative;transition:background .3s ease,border-color .3s ease;
+  animation:scaleIn .25s ease;
+}
+.card-header{
+  font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--ink-faint);margin-bottom:14px;
 }
 .eyebrow{
   font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;
   color:var(--gold);margin:0 0 6px;
 }
 h1{
-  font-family:var(--serif);font-weight:600;font-size:28px;margin:0 0 6px;color:var(--ink);
-  line-height:1.2;
+  font-family:var(--serif);font-weight:700;font-size:30px;margin:0 0 6px;color:var(--ink);
+  line-height:1.15;letter-spacing:-.01em;
+}
+h2{
+  font-family:var(--serif);font-weight:600;font-size:20px;color:var(--ink);
 }
 .sub{
-  color:var(--ink-soft);font-size:15px;line-height:1.5;margin:0 0 24px;max-width:52ch;
+  color:var(--ink-soft);font-size:14.5px;line-height:1.55;margin:0 0 24px;max-width:56ch;
 }
 
-/* Home menu */
-.home-menu{display:flex;flex-direction:column;gap:12px}
+/* ------ Home Menu ------ */
+.home-menu{display:flex;flex-direction:column;gap:14px}
 .menu-btn{
-  display:flex;align-items:center;gap:16px;
-  padding:18px 20px;border:1.5px solid var(--line);border-radius:var(--radius);
-  background:var(--paper-card);cursor:pointer;transition:all .15s ease;text-align:left;
-  width:100%;font-family:var(--sans);
+  display:flex;align-items:center;gap:18px;
+  padding:20px 22px;border:1.5px solid var(--line);border-radius:var(--radius-lg);
+  background:var(--paper-card);cursor:pointer;transition:all .18s ease;text-align:left;
+  width:100%;font-family:var(--sans);position:relative;overflow:hidden;
 }
 .menu-btn:hover,.menu-btn:focus-visible{border-color:var(--gold);transform:translateX(4px)}
+.menu-btn:active{transform:scale(.99)}
 .menu-btn .icon{
-  width:44px;height:44px;border-radius:12px;display:flex;align-items:center;
-  justify-content:center;font-size:20px;flex-shrink:0;
-  background:var(--gold-soft);color:var(--gold);transition:background .25s ease;
+  width:48px;height:48px;border-radius:14px;display:flex;align-items:center;
+  justify-content:center;font-size:22px;flex-shrink:0;
+  background:var(--gold-soft);color:var(--gold);transition:background .3s ease;
 }
-.menu-btn .mtitle{font-weight:600;font-size:15px;color:var(--ink);margin-bottom:2px}
-.menu-btn .mdesc{font-size:13px;color:var(--ink-soft)}
+.menu-btn .mtitle{font-weight:600;font-size:16px;color:var(--ink);margin-bottom:3px}
+.menu-btn .mdesc{font-size:13px;color:var(--ink-soft);line-height:1.4}
+.menu-btn .mbadge{
+  display:inline-block;margin-left:8px;padding:2px 8px;border-radius:20px;
+  font-family:var(--mono);font-size:9px;font-weight:600;text-transform:uppercase;
+  letter-spacing:.04em;background:var(--gold-soft);color:var(--gold);
+}
 
-/* Toggle row in card */
-.toggle-row{
-  display:flex;align-items:center;justify-content:space-between;
-  padding:14px 0;border-top:1px solid var(--line);margin-top:8px;
-}
+/* ------ Toggle ------ */
+.toggle-row{display:flex;align-items:center;justify-content:space-between;padding:14px 0;border-top:1px solid var(--line);margin-top:6px}
 .toggle-row .ttitle{font-size:14px;font-weight:500}
 .toggle-row .tdesc{font-size:12px;color:var(--ink-soft);margin-top:2px}
-
-/* Switch */
-.switch{position:relative;width:44px;height:26px;flex-shrink:0}
+.switch{position:relative;width:46px;height:26px;flex-shrink:0}
 .switch input{opacity:0;width:0;height:0}
 .slider-el{
   position:absolute;inset:0;background:var(--line);border-radius:26px;
-  cursor:pointer;transition:background .2s ease;
+  cursor:pointer;transition:background .25s ease;
 }
 .slider-el::before{
   content:"";position:absolute;width:20px;height:20px;left:3px;top:3px;
-  background:#fff;border-radius:50%;transition:transform .2s ease;
+  background:#fff;border-radius:50%;transition:transform .25s cubic-bezier(.34,1.56,.64,1);
 }
 input:checked+.slider-el{background:var(--gold)}
-input:checked+.slider-el::before{transform:translateX(18px)}
+input:checked+.slider-el::before{transform:translateX(20px)}
 
-/* Section picker */
+/* ------ Section cards ------ */
 .sec-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px}
 .sec-card{
-  padding:16px;border:1.5px solid var(--line);border-radius:var(--radius);
-  cursor:pointer;transition:all .15s ease;text-align:center;background:var(--paper-card);
+  padding:18px;border:1.5px solid var(--line);border-radius:var(--radius-lg);
+  cursor:pointer;transition:all .15s ease;text-align:center;background:var(--paper-card);position:relative;
 }
-.sec-card:hover{border-color:var(--ink-soft)}
+.sec-card:active{transform:scale(.97)}
+.sec-card:hover{border-color:var(--ink-faint)}
 .sec-card.active{border-color:var(--gold);background:var(--gold-soft)}
-.sec-card .sec-code{
-  font-family:var(--mono);font-weight:600;font-size:18px;color:var(--gold);
-}
-.sec-card .sec-name{font-size:11px;color:var(--ink-soft);margin-top:4px}
-.range-row{display:flex;align-items:center;gap:12px;margin-bottom:20px}
-.range-row label{font-size:13px;font-weight:500;white-space:nowrap}
-input[type=range]{flex:1;accent-color:var(--gold);height:6px;cursor:pointer}
-.rangeval{font-family:var(--mono);font-weight:600;font-size:14px;min-width:36px;text-align:right}
+.sec-card .sec-code{font-family:var(--mono);font-weight:600;font-size:22px;color:var(--gold)}
+.sec-card .sec-name{font-size:10.5px;color:var(--ink-soft);margin-top:4px;line-height:1.3}
+.range-row{display:flex;align-items:center;gap:14px;margin-bottom:20px}
+.range-row label{font-size:13px;font-weight:500;white-space:nowrap;color:var(--ink-soft)}
+input[type=range]{flex:1;accent-color:var(--gold);height:6px;cursor:pointer;-webkit-appearance:none;appearance:none;background:var(--line);border-radius:3px}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:22px;height:22px;border-radius:50%;background:var(--gold);cursor:pointer;border:3px solid var(--paper-card);box-shadow:var(--shadow)}
+.rangeval{font-family:var(--mono);font-weight:600;font-size:15px;min-width:38px;text-align:right;color:var(--ink)}
 
-/* Test list */
-.test-list{display:flex;flex-direction:column;gap:8px}
+/* ------ Test list ------ */
+.test-list{display:flex;flex-direction:column;gap:10px}
 .test-opt{
-  display:flex;align-items:center;gap:14px;
-  padding:16px;border:1.5px solid var(--line);border-radius:var(--radius);
-  cursor:pointer;transition:all .15s ease;background:var(--paper-card);
+  display:flex;align-items:center;gap:16px;
+  padding:18px;border:1.5px solid var(--line);border-radius:var(--radius-lg);
+  cursor:pointer;transition:all .15s ease;background:var(--paper-card);position:relative;
 }
-.test-opt:hover{border-color:var(--ink-soft)}
-.test-opt .tnum{
-  font-family:var(--mono);font-weight:600;font-size:16px;color:var(--gold);
-  min-width:40px;
-}
+.test-opt:active{transform:scale(.99)}
+.test-opt:hover{border-color:var(--ink-faint)}
+.test-opt .tnum{font-family:var(--mono);font-weight:600;font-size:15px;color:var(--gold);min-width:34px}
 .test-opt .tinfo .ttitle{font-weight:600;font-size:14px;color:var(--ink)}
-.test-opt .tinfo .tdesc{font-size:12px;color:var(--ink-soft);margin-top:2px}
-.test-opt .check{
-  margin-left:auto;width:24px;height:24px;border-radius:50%;
-  display:flex;align-items:center;justify-content:center;
-}
-.test-opt .check.done{background:var(--green);color:#fff;font-size:13px}
+.test-opt .tinfo .tdesc{font-size:12px;color:var(--ink-soft);margin-top:3px}
+.test-opt .check{margin-left:auto;width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.test-opt .check.done{background:var(--green);color:#fff;font-size:12px}
 
-/* Buttons */
-button{font-family:var(--sans);-webkit-tap-highlight-color:transparent}
+/* ------ Buttons ------ */
+button{font-family:var(--sans);-webkit-tap-highlight-color:transparent;border:none;cursor:pointer}
 .btn-primary{
   width:100%;padding:16px;background:var(--ink);color:var(--paper-card);
-  border:none;border-radius:var(--radius);font-size:15px;font-weight:600;
-  cursor:pointer;transition:opacity .15s ease,transform .1s ease;
+  border-radius:var(--radius);font-size:15px;font-weight:600;
+  cursor:pointer;transition:all .15s ease;position:relative;overflow:hidden;
+  display:flex;align-items:center;justify-content:center;gap:8px;
 }
 .btn-primary:active{transform:scale(.98)}
-.btn-primary:hover{opacity:.88}
-.btn-primary:disabled{opacity:.4;cursor:default}
+.btn-primary:hover{opacity:.9}
+.btn-primary:disabled{opacity:.35;cursor:default;transform:none}
+.btn-primary.gold{background:var(--gold);color:#fff}
+.btn-primary.gold:hover{background:var(--gold-bright)}
+.btn-primary.red{background:var(--red);color:#fff}
+.btn-primary.red:hover{background:var(--red-bright)}
 .btn-secondary{
   width:100%;padding:14px;background:transparent;color:var(--ink);
   border:1.5px solid var(--line);border-radius:var(--radius);font-size:14px;
   font-weight:500;cursor:pointer;transition:all .15s ease;display:flex;
   align-items:center;justify-content:center;gap:8px;
 }
+.btn-secondary:active{transform:scale(.98)}
 .btn-secondary:hover{border-color:var(--ink-soft)}
 .btn-small{
-  padding:10px 16px;border:1.5px solid var(--line);border-radius:8px;
-  background:transparent;color:var(--ink-soft);font-size:13px;font-weight:500;
+  padding:8px 16px;border:1.5px solid var(--line);border-radius:var(--radius-sm);
+  background:transparent;color:var(--ink-soft);font-size:12px;font-weight:500;
   cursor:pointer;transition:all .15s ease;font-family:var(--sans);
 }
 .btn-small:hover{border-color:var(--ink-soft);color:var(--ink)}
 
-/* Quiz */
-.quiz-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;gap:8px}
-.quiz-top .qmeta{font-family:var(--mono);font-size:11px;color:var(--ink-soft)}
+/* ------ Quiz Top ------ */
+.quiz-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;gap:10px}
+.quiz-top .qmeta{font-family:var(--mono);font-size:11px;color:var(--ink-soft);display:flex;align-items:center;gap:6px}
 .quiz-top .qscore{font-family:var(--mono);font-size:11px;color:var(--ink-soft)}
-.progress-track{
-  height:4px;background:var(--line);border-radius:2px;overflow:hidden;margin-bottom:16px;
-}
-.progress-fill{height:100%;background:var(--gold);transition:width .3s ease}
+.progress-track{height:4px;background:var(--line);border-radius:2px;overflow:hidden;margin-bottom:16px}
+.progress-fill{height:100%;background:var(--gold);transition:width .4s cubic-bezier(.22,1,.36,1);border-radius:2px}
+.progress-fill.exam{background:linear-gradient(90deg,var(--gold),var(--gold-bright))}
 
-/* Palette dots */
-.palette{display:flex;gap:4px;margin-bottom:16px;overflow-x:auto;padding:4px 0}
+/* ------ Timer ------ */
+.timer-bar{
+  display:flex;align-items:center;justify-content:center;gap:7px;
+  font-family:var(--mono);font-size:14px;font-weight:500;color:var(--ink-soft);
+  padding:4px 0 14px;letter-spacing:.02em;
+}
+.timer-bar .timer-icon{font-size:16px}
+.timer-bar.warning{color:var(--red);animation:counting .6s ease infinite alternate}
+.timer-bar.critical{color:var(--red-bright);animation:counting .3s ease infinite alternate}
+
+/* ------ Palette ------ */
+.palette-wrap{overflow-x:auto;margin-bottom:16px;padding:2px 0;-webkit-overflow-scrolling:touch}
+.palette-wrap::-webkit-scrollbar{height:0}
+.palette{display:flex;gap:5px;padding:0 2px;min-width:min-content}
 .palette-dot{
-  width:20px;height:20px;border-radius:4px;border:1.5px solid var(--line);
+  width:30px;height:30px;border-radius:var(--radius-sm);border:1.5px solid var(--line);
   flex-shrink:0;cursor:pointer;transition:all .15s ease;position:relative;
   display:flex;align-items:center;justify-content:center;
+  font-family:var(--mono);font-size:10px;font-weight:500;color:var(--ink-faint);
+  background:transparent;
 }
-.palette-dot.current{border-color:var(--gold)}
-.palette-dot.answered{border-color:var(--ink-soft);background:var(--ink-soft)}
-.palette-dot.answered.wrong{border-color:var(--red);background:var(--red)}
-.palette-dot.answered.correct{border-color:var(--green);background:var(--green)}
+.palette-dot:active{transform:scale(.9)}
+.palette-dot.current{border-color:var(--gold);color:var(--gold);font-weight:600}
+.palette-dot.saved{border-color:var(--ink-soft);background:var(--ink-soft);color:#fff}
+.palette-dot.answered{border-color:var(--ink-soft);background:var(--ink-soft);color:#fff}
+.palette-dot.answered.wrong{background:var(--red);border-color:var(--red);color:#fff}
+.palette-dot.answered.correct{background:var(--green);border-color:var(--green);color:#fff}
+.palette-dot.exam-saved{border-color:var(--gold);background:var(--gold-soft);color:var(--gold);font-weight:600}
 
-.qid{font-family:var(--mono);font-size:11px;color:var(--gold);margin-bottom:8px;letter-spacing:.04em}
+/* ------ Options ------ */
+.qid{font-family:var(--mono);font-size:11px;color:var(--gold);margin-bottom:10px;letter-spacing:.04em;font-weight:500}
 .qtext{
-  font-family:var(--serif);font-size:17px;line-height:1.55;
-  white-space:pre-wrap;margin:0 0 20px;color:var(--ink);
+  font-family:var(--serif);font-size:17px;line-height:1.55;font-weight:500;
+  white-space:pre-wrap;margin:0 0 22px;color:var(--ink);
 }
 .qtext code,.code-block{
   font-family:var(--mono);font-size:13px;background:var(--line);
-  display:block;padding:10px 12px;border-radius:6px;margin:10px 0;white-space:pre-wrap;
+  display:block;padding:10px 14px;border-radius:var(--radius-sm);margin:12px 0;white-space:pre-wrap;
+  border:1px solid var(--line-light);
 }
-.multi-hint{font-size:12px;color:var(--ink-soft);font-style:italic;margin:-12px 0 14px}
-
-/* Options */
+.multi-hint{font-size:12px;color:var(--ink-soft);font-style:italic;margin:-14px 0 16px}
 .opts{display:flex;flex-direction:column;gap:10px}
 .opt{
   display:flex;align-items:flex-start;gap:14px;
   padding:14px 16px;border:1.5px solid var(--line);border-radius:var(--radius);
   cursor:pointer;background:var(--paper-card);transition:all .15s ease;
-  min-height:56px;
+  min-height:54px;position:relative;overflow:hidden;
 }
-.opt:hover:not(.locked):not(.disabled){border-color:var(--ink-soft)}
 .opt:active:not(.locked){transform:scale(.99)}
+.opt:hover:not(.locked):not(.disabled){border-color:var(--ink-faint)}
 .opt .bubble{
   flex-shrink:0;width:28px;height:28px;border-radius:50%;
-  border:1.5px solid var(--ink-soft);display:flex;align-items:center;
+  border:1.5px solid var(--ink-faint);display:flex;align-items:center;
   justify-content:center;font-family:var(--mono);font-size:13px;font-weight:600;
-  color:var(--ink-soft);transition:all .15s ease;margin-top:1px;
+  color:var(--ink-faint);transition:all .18s ease;margin-top:2px;
 }
 .opt.selected .bubble{background:var(--ink);border-color:var(--ink);color:var(--paper-card)}
+.opt.exam-selected{border-color:var(--gold);background:var(--gold-soft)}
+.opt.exam-selected .bubble{background:var(--gold);border-color:var(--gold);color:#fff}
 .opt.correct{border-color:var(--green);background:var(--green-bg)}
 .opt.correct .bubble{background:var(--green);border-color:var(--green);color:#fff}
 .opt.incorrect{border-color:var(--red);background:var(--red-bg)}
 .opt.incorrect .bubble{background:var(--red);border-color:var(--red);color:#fff}
 .opt.missed{border-color:var(--green);border-style:dashed}
-.opt-text{font-size:14px;line-height:1.45;padding-top:2px;flex:1}
+.opt.missed .bubble{background:transparent;border-color:var(--green);color:var(--green)}
+.opt-text{font-size:14px;line-height:1.5;padding-top:2px;flex:1}
 
-/* Feedback */
-.feedback{
-  margin-top:16px;padding:14px 16px;border-radius:var(--radius);
-  font-size:14px;line-height:1.5;animation:slideUp .2s ease;
-}
+/* ------ Feedback ------ */
+.feedback{margin-top:16px;padding:14px 16px;border-radius:var(--radius);font-size:14px;line-height:1.5;animation:slideUp .25s ease}
 .feedback.ok{background:var(--green-bg);color:var(--green)}
 .feedback.bad{background:var(--red-bg);color:var(--red)}
-
-.actions{display:flex;gap:10px;margin-top:16px}
+.actions{display:flex;gap:10px;margin-top:18px}
 .actions button{flex:1}
 
-/* Results */
-.score-hero{text-align:center;padding:16px 0 4px}
-.score-num{font-family:var(--serif);font-size:52px;font-weight:600;color:var(--ink)}
-.score-label{font-size:12px;color:var(--ink-soft);font-family:var(--mono);text-transform:uppercase;letter-spacing:.06em}
-.breakdown{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin:20px 0}
-.bd-item{background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:12px 14px}
-.bd-item .bname{font-size:11px;color:var(--ink-soft);font-family:var(--mono);margin-bottom:4px}
-.bd-item .bscore{font-size:18px;font-weight:600}
-.review-item{border-top:1px solid var(--line);padding:16px 0}
+/* ------ Submit Bar (exam) ------ */
+.submit-bar{
+  position:sticky;bottom:0;margin-top:24px;padding:16px 0 calc(8px + var(--safe-bottom));
+  background:linear-gradient(transparent,var(--paper) 30%);z-index:10;
+}
+.submit-bar .btn-primary{animation:slideUp .3s ease}
+
+/* ------ Results ------ */
+.score-hero{text-align:center;padding:20px 0 8px}
+.score-num{font-family:var(--serif);font-size:56px;font-weight:700;color:var(--ink);line-height:1}
+.score-num.excellent{background:linear-gradient(135deg,var(--gold),var(--gold-bright));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.breakdown{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;margin:24px 0}
+.bd-item{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius-sm);padding:14px;text-align:center}
+.bd-item .bname{font-size:10px;color:var(--ink-soft);font-family:var(--mono);margin-bottom:6px;text-transform:uppercase;letter-spacing:.06em}
+.bd-item .bscore{font-size:20px;font-weight:700}
+.review-list{margin-top:6px}
+.review-item{border-top:1px solid var(--line);padding:18px 0}
 .review-item:first-child{border-top:none}
-.review-q{font-family:var(--serif);font-size:14px;margin:0 0 8px;white-space:pre-wrap}
-.review-line{font-size:13px;margin:2px 0}
+.review-q{font-family:var(--serif);font-size:14px;font-weight:500;margin:0 0 8px;white-space:pre-wrap}
+.review-line{font-size:13px;margin:3px 0;display:flex;gap:6px}
+.review-line .rl{color:var(--ink-soft)}
 .review-line.correct-ans{color:var(--green)}
 .review-line.wrong-ans{color:var(--red)}
 
-/* Stats */
-.stat-card{padding:16px;text-align:center;border:1px solid var(--line);border-radius:var(--radius);background:var(--paper)}
-.stat-card .stat-num{font-family:var(--serif);font-size:32px;font-weight:600;color:var(--ink)}
-.stat-card .stat-label{font-size:11px;color:var(--ink-soft);font-family:var(--mono);text-transform:uppercase;margin-top:2px}
-.stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px}
-.section-stats{display:flex;flex-direction:column;gap:8px}
-.section-stat{display:flex;align-items:center;gap:12px;padding:10px 12px}
-.section-stat .sname{font-size:12px;font-weight:500;min-width:30px}
-.section-stat .sbar{flex:1;height:8px;background:var(--line);border-radius:4px;overflow:hidden}
-.section-stat .sbar-fill{height:100%;background:var(--gold);border-radius:4px;transition:width .3s ease}
-.section-stat .spct{font-family:var(--mono);font-size:11px;color:var(--ink-soft);min-width:36px;text-align:right}
-
+/* ------ Stats ------ */
+.stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px}
+.stat-card{padding:20px 16px;text-align:center;border:1px solid var(--line);border-radius:var(--radius);background:var(--paper)}
+.stat-card .stat-num{font-family:var(--serif);font-size:34px;font-weight:700;color:var(--ink)}
+.stat-card .stat-label{font-size:10px;color:var(--ink-soft);font-family:var(--mono);text-transform:uppercase;letter-spacing:.06em;margin-top:3px}
+.sec-stats{display:flex;flex-direction:column;gap:10px}
+.sec-stat-row{display:flex;align-items:center;gap:12px;padding:8px 4px}
+.sec-stat-row .slabel{font-size:12px;font-weight:500;min-width:28px;color:var(--ink-soft)}
+.sec-stat-row .sbar{flex:1;height:8px;background:var(--line);border-radius:4px;overflow:hidden}
+.sec-stat-row .sbar-fill{height:100%;background:linear-gradient(90deg,var(--gold),var(--gold-bright));border-radius:4px;transition:width .6s ease}
+.sec-stat-row .spct{font-family:var(--mono);font-size:11px;color:var(--ink-soft);min-width:44px;text-align:right}
 .history-item{
   display:flex;align-items:center;justify-content:space-between;
-  padding:12px 0;border-top:1px solid var(--line);
+  padding:14px 0;border-top:1px solid var(--line);gap:8px;
 }
-.history-item .hname{font-size:13px;font-weight:500}
-.history-item .hscore{font-family:var(--mono);font-size:13px}
+.history-item:first-child{border-top:none}
+.history-item .hleft{display:flex;align-items:center;gap:8px;min-width:0}
+.history-item .hbadge{
+  font-size:9px;padding:2px 6px;border-radius:4px;font-family:var(--mono);
+  background:var(--gold-soft);color:var(--gold);flex-shrink:0;
+}
+.history-item .hname{font-size:13px;font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.history-item .hscore{font-family:var(--mono);font-size:13px;flex-shrink:0;color:var(--ink-soft)}
 
-/* Timer */
-.timer-bar{
-  display:flex;align-items:center;justify-content:center;gap:6px;
-  font-family:var(--mono);font-size:12px;color:var(--ink-soft);padding:4px 0 12px;
+/* ------ Custom Modal ------ */
+.modal-overlay{
+  position:fixed;inset:0;z-index:1000;background:rgba(0,0,0,.45);
+  display:flex;align-items:center;justify-content:center;padding:24px;
+  animation:fadeIn .2s ease;backdrop-filter:blur(4px);
+}
+.modal{
+  background:var(--paper-card);border:1px solid var(--line);border-radius:var(--radius-lg);
+  padding:28px 24px 24px;max-width:400px;width:100%;animation:scaleIn .25s ease;
+  box-shadow:var(--shadow-lg);
+}
+.modal-title{font-family:var(--serif);font-size:19px;font-weight:600;color:var(--ink);margin-bottom:8px;text-align:center}
+.modal-body{font-size:14px;color:var(--ink-soft);line-height:1.55;text-align:center;margin-bottom:22px}
+.modal-body strong{color:var(--ink)}
+.modal-actions{display:flex;flex-direction:column;gap:10px}
+.modal-actions.row{flex-direction:row}
+.modal-actions.row .btn-primary,.modal-actions.row .btn-secondary{flex:1}
+
+/* ------ Badge ------ */
+.badge{
+  display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:20px;
+  font-family:var(--mono);font-size:9px;font-weight:600;text-transform:uppercase;letter-spacing:.04em;
+}
+.badge.exam{background:var(--gold-soft);color:var(--gold)}
+.badge.section{background:var(--blue-bg);color:var(--blue)}
+.badge.test{background:var(--green-bg);color:var(--green)}
+
+/* ------ Empty state ------ */
+.empty-state{text-align:center;padding:40px 16px;color:var(--ink-soft);font-size:14px;line-height:1.6}
+
+/* ------ Confetti overlay ------ */
+.confetti-container{
+  position:fixed;inset:0;pointer-events:none;z-index:999;overflow:hidden;
+}
+.confetti-piece{
+  position:absolute;top:-10px;width:8px;height:8px;border-radius:2px;
+  animation:confetti-fall 2.5s linear forwards;
 }
 
-/* Swipe zone */
-.swipe-zone{position:relative}
-
-/* Empty state */
-.empty-state{text-align:center;padding:32px 16px;color:var(--ink-soft);font-size:14px}
-
-/* Responsive */
+/* ------ Responsive ------ */
 @media(max-width:480px){
-  #app{padding:16px 12px calc(70px + var(--safe-bottom))}
-  h1{font-size:24px}
+  #app{padding:calc(12px + var(--safe-top)) 12px calc(20px + var(--safe-bottom))}
+  h1{font-size:26px}
   .card{padding:18px}
   .qtext{font-size:16px}
-  .score-num{font-size:42px}
-  .menu-btn{padding:14px 16px}
+  .score-num{font-size:44px}
+  .menu-btn{padding:16px 18px}
+  .menu-btn .icon{width:44px;height:44px;font-size:20px}
   .opt{padding:12px 14px;min-height:50px}
-  .sec-grid{grid-template-columns:1fr 1fr;gap:8px}
+  .opt .bubble{width:26px;height:26px;font-size:12px}
+  .sec-grid{gap:8px}
   .sec-card{padding:14px}
-  .stats-grid{grid-template-columns:1fr 1fr;gap:8px}
+  .stat-grid{gap:8px}
+  .stat-card .stat-num{font-size:28px}
+  .palette-dot{width:26px;height:26px;font-size:9px}
+  .modal{padding:24px 20px 20px}
+  .bd-item{padding:12px}
 }
 @media(min-width:481px){
   .sec-grid{grid-template-columns:repeat(4,1fr)}
@@ -333,7 +437,7 @@ button{font-family:var(--sans);-webkit-tap-highlight-color:transparent}
 <script>
 const QUESTIONS = [{"id": "A.1", "sec": "A", "secName": "Algoritmi. Programare. Structuri de date", "text": "Ce anume se specifică prin tipul unei date?", "opts": {"a": "numai numărul de octeți ocupați;", "b": "numai spațiul necesar reprezentării și modul de reprezentare;", "c": "numai operațiile permise."}, "ans": ["b"]}, {"id": "A.2", "sec": "A", "secName": "Algoritmi. Programare. Structuri de date", "text": "Ce este o variabilă?", "opts": {"a": "litera care ține locul unor valori (de exemplu a, b, c sau x, y, z);", "b": "o valoare care se schimbă;", "c": "o zonă de memorie identificabilă în care se pot păstra valori."}, "ans": ["c"]}, {"id": "A.3", "sec": "A", "secName": "Algoritmi. Programare. Structuri de date", "text": "Ce caracteristică a unei variabile este precizată de clasa sa de memorare?", "opts": {"a": "locul unde poate fi folosită;", "b": "locul unde se creează;", "c": "locul unde este memorată."}, "ans": ["b"]}, {"id": "A.4", "sec": "A", "secName": "Algoritmi. Programare. Structuri de date", "text": "Domeniul identificatorilor de variabile globale ține din locul declarației până la:", "opts": {"a": "sfârșitul blocului;", "b": "sfârșitul programului;", "c": "sfârșitul textului sursă."}, "ans": ["c"]}, {"id": "A.5", "sec": "A", "secName": "Algoritmi. Programare. Structuri de date", "text": "Durata de viață a variabilelor globale este:", "opts": {"a": "cât timp sunt utilizate;", "b": "câteva minute;", "c": "cât durează execuția programului."}, "ans": ["c"]}, {"id": "A.6", "sec": "A", "secName": "Algoritmi. Programare. Structuri de date", "text": "Durata de viață a variabilelor locale este:", "opts": {"a": "cât timp sunt utilizate;", "b": "cât durează execuția subprogramului;", "c": "depinde de clasa lor de memorare."}, "ans": ["c"]}, {"id": "A.7", "sec": "A", "secName": "Algoritmi. Programare. Structuri de date", "text": "Care din următorii operatori admit operanzi reali?", "opts": {"a": "operatorii de incrementare/decrementare", "b": "operatorii logici", "c": "operatorii logici pe biți", "d": "operatorii de deplasare"}, "ans": ["a", "b"]}, {"id": "A.8", "sec": "A", "secName": "Algoritmi. Programare. Structuri de date", "text": "Când au loc conversii implicite de tip?", "opts": {"a": "la citirea datelor de intrare respectiv la afișarea rezultatelor;", "b": "când operanzii unei expresii au tipuri diferite;", "c": "când argumentul actual cu care se apelează o funcție are alt tip decât argumentul formal corespunzător."}, "ans": ["b", "c"]}, {"id": "A.9", "sec": "A", "secName": "Algoritmi. Programare. Structuri de date", "text": "Se consideră șirul lui Fibonacci dat de relația de recurență F0=0, F1=1 și Fn+1=Fn+Fn-1. De câte ori este evaluat F2 pentru a calcula F5 în cazul calculului termenului Fn în mod recursiv?", "opts": {"a": "de 3 ori", "b": "o dată", "c": "de 4 ori"}, "ans": ["a"]}, {"id": "A.10", "sec": "A", "secName": "Algoritmi. Programare. Structuri de date", "text": "Care este rezultatul numeric al evaluării unei expresii relaționale sau logice?", "opts": {"a": "FALSE sau TRUE;", "b": "0 sau 1;", "c": "0 sau diferit de 0."}, "ans": ["b"]}, {"id": "A.11", "sec": "A", "secName": "Algoritmi. Programare. Structuri de date", "text": "Dacă a=-2, b=-1 și c=0, care este rezultatul numeric al evaluării expresiei a<b<c?", "opts": {"a": "1;", "b": "depinde de declarația de tip a variabilelor a, b, c;", "c": "0."}, "ans": ["c"]}, {"id": "A.12", "sec": "A", "secName": "Algoritmi. Programare. Structuri de date", "text": "Care dintre următoarele afirmații este/sunt adevărată/adevărate pentru algoritmul corespunzător funcției de mai jos (se consideră că a este un tablou unidimensional cu n elemente)?\ndef transform(a):\n    n=len(a)\n    for i in range(0,n-1):\n        if (a[i]<a[i+1]):\n            a[i], a[i+1] = a[i+1], a[i]\n    return(a)", "opts": {"a": "Algoritmul sortează descrescător tabloul a", "b": "După aplicarea algoritmului, tabloul a satisface proprietatea a[i] ≥ a[n-1] pentru 0≤i<n", "c": "Algoritmul sortează crescător tabloul a", "d": "După aplicarea algoritmului, tabloul a satisface proprietatea a[i] ≤ a[n-1] pentru 0≤i<n"}, "ans": ["b"]}, {"id": "A.13", "sec": "A", "secName": "Algoritmi. Programare. Structuri de date", "text": "Fie declarațiile: int x=10, y=20. Care este valoarea expresiei !x-y?", "opts": {"a": "0;", "b": "-10;", "c": "-20."}, "ans": ["c"]}, {"id": "A.14", "sec": "A", "secName": "Algoritmi. Programare. Structuri de date", "text": "Fie declarațiile: int x=8, y=20. Care este valoarea expresiei x--/++y?", "opts": {"a": "0;", "b": "3;", "c": "0.399875."}, "ans": ["a"]}, {"id": "A.15", "sec": "A", "secName": "Algoritmi. Programare. Structuri de date", "text": "Care din următoarele variante reprezintă modalități de comunicare între funcții?", "opts": {"a": "prin argumentele actuale;", "b": "prin valoarea returnata;", "c": "prin variabile globale."}, "ans": ["a", "b", "c"]}, {"id": "A.16", "sec": "A", "secName": "Algoritmi. Programare. Structuri de date", "text": "Ce este contextul de apel al unei funcții?", "opts": {"a": "lista argumentelor formale;", "b": "o zonă de memorie (stivă);", "c": "instrucțiunile (definiția funcției)."}, "ans": ["b"]}, {"id": "A.17", "sec": "A", "secName": "Algoritmi. Programare. Structuri de date", "text": "Care din următoarele acțiuni au loc la compilarea unui fișier sursă în C?", "opts": {"a": "analiza lexicală", "b": "includerea fișierelor header", "c": "analiza sintactica", "d": "generarea codului obiect", "e": "editarea de legături"}, "ans": ["a", "c", "d"]}, {"id": "A.18", "sec": "A", "secName": "Algoritmi. Programare. Structuri de date", "text": "Transmiterea argumentelor către funcția apelată (convenția de apel C) se face:", "opts": {"a": "prin variabile globale;", "b": "prin valoare;", "c": "în ordine inversă celei din lista de argumente."}, "ans": ["b", "c"]}, {"id": "A.19", "sec": "A", "secName": "Algoritmi. Programare. Structuri de date", "text": "Ce este o funcție recursivă?", "opts": {"a": "o funcție care recurge la context;", "b": "o funcție cu lista variabilă de argumente;", "c": "o funcție care se autoapelează."}, "ans": ["c"]}, {"id": "A.20", "sec": "A", "secName": "Algoritmi. Programare. Structuri de date", "text": "Ce este un pointer?", "opts": {"a": "un indicator;", "b": "o adresă de memorie;", "c": "o variabilă a cărei valoare se interpretează ca adresă."}, "ans": ["c"]}, {"id": "A.21", "sec": "A", "secName": "Algoritmi. Programare. Structuri de date", "text": "Cât spațiu de memorie ocupă o variabilă structură:", "opts": {"a": "cât spațiu ocupă de cel mai \"voluminos\" dintre membri;", "b": "egal cu suma spațiilor necesare membrilor;", "c": "cel puțin cât suma spațiilor necesare membrilor."}, "ans": ["c"]}, {"id": "A.22", "sec": "A", "secName": "Algoritmi. Programare. Structuri de date", "text": "Care din afirmațiile următoare, referitoare la structuri, sunt adevărate:", "opts": {"a": "sunt tipuri de date agregate;", "b": "sunt tipuri de date definite de programator;", "c": "sunt tipuri de date predefinite."}, "ans": ["a", "b"]}, {"id": "A.23", "sec": "A", "secName": "Algoritmi. Programare. Structuri de date", "text": "Care din următoarele operații sunt legale:", "opts": {"a": "returnarea unei structuri ca valoare a unei funcții;", "b": "adunarea a două structuri;", "c": "copierea unei structuri."}, "ans": ["a", "c"]}, {"id": "A.24", "sec": "A", "secName": "Algoritmi. Programare. Structuri de date", "text": "În care dintre următoarele prelucrări repetitive este posibil să nu se efectueze niciodată corpul ciclului?", "opts": {"a": "FOR;", "b": "REPEAT;", "c": "WHILE."}, "ans": ["a", "c"]}, {"id": "A.25", "sec": "A", "secName": "Algoritmi. Programare. Structuri de date", "text": "Într-o prelucrare repetitivă cu contor (de tip FOR) ordinea efectuării operațiilor este:", "opts": {"a": "inițializare, modificare contor, corp ciclu, testare;", "b": "inițializare, testare, corp ciclu, modificare contor;", "c": "inițializare, corp ciclu, modificare contor, testare."}, "ans": ["b"]}, {"id": "A.26", "sec": "A", "secName": "Algoritmi. Programare. Structuri de date", "text": "Care dintre următoarele afirmații sunt adevărate pentru o prelucrare repetitivă de tip WHILE?", "opts": {"a": "se începe cu verificarea condiției;", "b": "corpul ciclului se execută cel puțin o dată;", "c": "este posibil să nu se execute nici o dată corpul ciclului."}, "ans": ["a", "c"]}, {"id": "A.27", "sec": "A", "secName": "Algoritmi. Programare. Structuri de date", "text": "Efectul execuției următoarelor secvențe:\nfor(exp_1; exp_2; exp_3)\n  instrucțiune;\nversus\nexp_1;\nwhile(exp_2)\n{ instrucțiune;\n  exp_3; }\neste:", "opts": {"a": "identic;", "b": "diferit;", "c": "dependent de context."}, "ans": ["a"]}, {"id": "A.28", "sec": "A", "secName": "Algoritmi. Programare. Structuri de date", "text": "Se consideră secvența în pseudocod:\na=3\nREPEAT\n  a=a*a\nUNTIL a=n\nPentru ce valori ale lui n ciclul de mai sus nu este infinit?", "opts": {"a": "pentru orice valoare naturală multiplu de 3;", "b": "pentru orice valoare naturală care este pătratul unui multiplu de 3;", "c": "pentru orice putere a lui 3 al cărui exponent este o putere a lui 2."}, "ans": ["c"]}, {"id": "A.29", "sec": "A", "secName": "Algoritmi. Programare. Structuri de date", "text": "Fie x[1..n] un tablou cu elemente întregi și secvența în pseudocod:\nFOR i=1, m, +1 DO\n  a=x[i]\n  x[i]=x[n-i+1]\n  x[n-i+1]=a\nENDFOR\nCe valoare ar trebui să aibă m astfel încât efectul secvenței de mai sus să fie inversarea ordinii elementelor tabloului și numărul de interschimbări să fie cât mai mic?", "opts": {"a": "n;", "b": "n DIV 2;", "c": "3n DIV 2."}, "ans": ["b"]}, {"id": "A.30", "sec": "A", "secName": "Algoritmi. Programare. Structuri de date", "text": "Se consideră secvența în pseudocod:\nFOR i=1,n,+ DO\n  FOR j=i+1,n,+1 DO\n    WRITE (i,j)\n  ENDFOR\nENDFOR\nPrin execuția prelucrărilor de mai sus se vor afișa:", "opts": {"a": "toate perechile de forma (i,j) cu 1≤i≤n și 1≤j≤n;", "b": "toate perechile de forma (i,j) cu 1≤i≤n și 1≤j≤n și i<j;", "c": "toate perechile de forma (i,j) cu 1≤i≤n și 1≤j≤n și i≤j."}, "ans": ["c"]}, {"id": "A.31", "sec": "A", "secName": "Algoritmi. Programare. Structuri de date", "text": "Fie x[1..n] un tablou cu elemente reale. Se consideră secvența în pseudocod:\nFOR i=1,n-1,1 DO\n  IF x[i]>x[i+1] THEN\n    aux=x[i]\n    x[i]=x[i+1]\n    x[i+1]=aux\n  ENDIF\nENDFOR\nCe efect are secvența de prelucrări asupra tabloului x?", "opts": {"a": "ordonează crescător elementele lui x;", "b": "aduce cea mai mare valoare pe ultima poziție din tablou;", "c": "inversează ordinea elementelor tabloului."}, "ans": ["b"]}, {"id": "A.32", "sec": "A", "secName": "Algoritmi. Programare. Structuri de date", "text": "La adunarea a două matrice a[1..m,1..n] și b[1..m,1..n] numărul de operații de adunare efectuate asupra elementelor este:", "opts": {"a": "m+n;", "b": "m*n;", "c": "max{m,n}."}, "ans": ["b"]}, {"id": "A.33", "sec": "A", "secName": "Algoritmi. Programare. Structuri de date", "text": "La înmulțirea a două matrice a[1..m,1..n] și b[1..n,1..p] numărul de operații de înmulțire efectuate este:", "opts": {"a": "m+n+p;", "b": "m*n+n*p;", "c": "m*n*p."}, "ans": ["c"]}, {"id": "A.34", "sec": "A", "secName": "Algoritmi. Programare. Structuri de date", "text": "Componentele unei structuri de date:", "opts": {"a": "pot fi la rândul lor structuri de date;", "b": "pot fi toate de același tip;", "c": "pot avea unul din tipurile standard ale limbajului de programare utilizat."}, "ans": ["a", "b", "c"]}, {"id": "A.35", "sec": "A", "secName": "Algoritmi. Programare. Structuri de date", "text": "Următoarea structură de date:\nstruct genealogie {\n  char numepren[20];\n  struct genealogie mama, tata;\n};", "opts": {"a": "nu este o structură recursivă;", "b": "este o descriere greșită în limbajul \"C\" a structurii genealogie;", "c": "este descrierea, în limbajul \"C\", utilizată în practică pentru a descrie structura de arbore genealogic al unei persoane."}, "ans": ["b"]}, {"id": "A.36", "sec": "A", "secName": "Algoritmi. Programare. Structuri de date", "text": "O structură dinamică de date este o structură de date care:", "opts": {"a": "se generează pe parcursul prelucrării;", "b": "este fixă ca formă și dimensiune;", "c": "în momentul compilării nu este cunoscut spațiul de memorie necesar ce urmează a-i fi alocat."}, "ans": ["a", "c"]}, {"id": "A.37", "sec": "A", "secName": "Algoritmi. Programare. Structuri de date", "text": "Un fișier:", "opts": {"a": "este o structură externă de date;", "b": "este o colecție de date pe care s-a definit o anumită structură și căreia îi este specific un anumit mecanism de selecție și identificare;", "c": "este o colecție omogenă de date din punctul de vedere al semnificației și al cerințelor de prelucrare, depusă pe un suport extern de memorare."}, "ans": ["a", "b", "c"]}, {"id": "A.38", "sec": "A", "secName": "Algoritmi. Programare. Structuri de date", "text": "Modul de acces la înregistrările unui fișier poate fi, în funcție de modul de organizare:", "opts": {"a": "aleator;", "b": "secvențial;", "c": "direct."}, "ans": ["b", "c"]}, {"id": "A.39", "sec": "A", "secName": "Algoritmi. Programare. Structuri de date", "text": "Dacă într-un fișier înregistrările sunt depuse în mod continuu pe suport (în locații succesive), în ordinea în care sunt furnizate înregistrările, se spune că fișierul este de organizare:", "opts": {"a": "aleatoare;", "b": "secvențială;", "c": "relativă."}, "ans": ["b"]}, {"id": "A.40", "sec": "A", "secName": "Algoritmi. Programare. Structuri de date", "text": "Dacă într-un fișier informația este depusă pe suport în funcție de valoarea unui câmp cheie, se spune că fișierul este de organizare:", "opts": {"a": "aleatoare;", "b": "secvențială;", "c": "relativă."}, "ans": ["a"]}, {"id": "A.41", "sec": "A", "secName": "Algoritmi. Programare. Structuri de date", "text": "Se numește listă liniară:", "opts": {"a": "structura de date în care inserările, suprimările și orice alt acces se efectuează la unul din capetele listei;", "b": "o colecție de n≥0 elemente de același tip, ale căror proprietăți structurale se reduc la pozițiile relative liniare (unidimensionale) ale elementelor în cadrul structurii;", "c": "o structură de date asimilată cu un tablou în care elementele sunt memorate într-o zonă continuă de memorie, în locații succesive."}, "ans": ["b"]}, {"id": "A.42", "sec": "A", "secName": "Algoritmi. Programare. Structuri de date", "text": "O listă liniară simplu înlănțuită este:", "opts": {"a": "lista liniară, în care relația de ordonare este materializată pe suport printr-un pointer către elementul următor;", "b": "o structură de date implementată prin tipul tablou;", "c": "o structură explicită și recursivă."}, "ans": ["a", "c"]}, {"id": "A.43", "sec": "A", "secName": "Algoritmi. Programare. Structuri de date", "text": "Algoritmul de sortare rapidă este cel mai potrivit pentru:", "opts": {"a": "sortarea unei liste mari cu elemente aleatoare", "b": "sortarea unei liste aproape ordonate", "c": "sortarea unei liste scurte", "d": "nu este potrivit pentru nici un fel de sortare"}, "ans": ["a"]}, {"id": "A.44", "sec": "A", "secName": "Algoritmi. Programare. Structuri de date", "text": "O stivă este:", "opts": {"a": "listă liniară în care inserările se fac la un capăt al listei și suprimările la celălalt capăt al listei;", "b": "o listă liniară de tipul LIFO (Last In First Out);", "c": "o listă liniară în care se manipulează mereu elementul cel mai recent introdus."}, "ans": ["b", "c"]}, {"id": "A.45", "sec": "A", "secName": "Algoritmi. Programare. Structuri de date", "text": "Care din afirmațiile următoare sunt greșite:", "opts": {"a": "stiva este o listă în care inserările, suprimările și orice alt acces se efectuează la un singur capăt numit vârf;", "b": "o stivă poate fi implementată fie static folosind tipul tablou, fie dinamic folosind tipul pointer;", "c": "o stivă este o listă de tip FIFO (First In First Out)."}, "ans": ["c"]}, {"id": "A.46", "sec": "A", "secName": "Algoritmi. Programare. Structuri de date", "text": "O structură de date de tip coadă este:", "opts": {"a": "structură de tip listă cu restricție la intrare;", "b": "o listă liniară de tipul FIFO (First In First Out);", "c": "o listă liniară în care inserările se efectuează la un capăt al listei, iar suprimările se efectuează la celălalt capăt al listei."}, "ans": ["b", "c"]}, {"id": "A.47", "sec": "A", "secName": "Algoritmi. Programare. Structuri de date", "text": "În cazul unei structuri de date de tip arbore:", "opts": {"a": "fiecare nod este subordonat direct unui alt nod;", "b": "fiecare nod este subordonat direct unui nod numit rădăcină;", "c": "fiecare nod, cu excepția nodului rădăcină, este subordonat direct unui alt nod."}, "ans": ["c"]}, {"id": "A.48", "sec": "A", "secName": "Algoritmi. Programare. Structuri de date", "text": "Care din următoarele afirmații sunt adevărate:", "opts": {"a": "gradul maxim al nodurilor unui arbore se numește gradul arborelui;", "b": "numărul fiilor unui nod se numește gradul nodului;", "c": "un nod care nu are fii se numește nod terminal sau frunză."}, "ans": ["a", "b", "c"]}, {"id": "A.49", "sec": "A", "secName": "Algoritmi. Programare. Structuri de date", "text": "Un arbore binar este perfect echilibrat:", "opts": {"a": "dacă nodurile terminale sunt doar pe ultimul nivel;", "b": "dacă nodurile terminale sunt doar pe ultimele două niveluri;", "c": "dacă numărul de noduri din subarborele stâng diferă de numărul de noduri din subarborele drept, cu cel mult 1."}, "ans": ["c"]}, {"id": "A.50", "sec": "A", "secName": "Algoritmi. Programare. Structuri de date", "text": "Într-un arbore adâncimea unui nod este:", "opts": {"a": "egală cu lungimea celui mai lung drum de la nodul respectiv la un nod terminal;", "b": "egală cu înălțimea arborelui;", "c": "egală cu lungimea drumului unic de la rădăcină la acel nod."}, "ans": ["c"]}, {"id": "BD.1", "sec": "BD", "secName": "Baze de Date", "text": "Printr-o bază de date se înțelege:", "opts": {"a": "un fișier cu date;", "b": "colecție de informații stocate astfel încât să poată fi regăsite, modificate sau șterse;", "c": "un tabel cu înregistrări."}, "ans": ["b"]}, {"id": "BD.2", "sec": "BD", "secName": "Baze de Date", "text": "Principalele funcții ale unui SGBD sunt:", "opts": {"a": "stocarea, regăsirea și actualizarea datelor;", "b": "facilitează accesul simultan al mai multor utilizatori;", "c": "securizarea datelor prin parolare."}, "ans": ["a", "b", "c"]}, {"id": "BD.3", "sec": "BD", "secName": "Baze de Date", "text": "Avantajele accesării datelor printr-un SGBD sunt:", "opts": {"a": "asigurarea integrității datelor;", "b": "reducerea redondanței;", "c": "creșterea securității."}, "ans": ["a", "b", "c"]}, {"id": "BD.4", "sec": "BD", "secName": "Baze de Date", "text": "Limbajele de interogare utilizate în gestiunea BD pot fi:", "opts": {"a": "algebrice;", "b": "logice;", "c": "relaționale."}, "ans": ["a", "b", "c"]}, {"id": "BD.5", "sec": "BD", "secName": "Baze de Date", "text": "Datele stocate într-o bază de date sunt:", "opts": {"a": "scalare;", "b": "vectoriale;", "c": "complexe."}, "ans": ["c"]}, {"id": "BD.6", "sec": "BD", "secName": "Baze de Date", "text": "O colecție de date reprezintă:", "opts": {"a": "un set de date scalare;", "b": "un ansamblu de date omogene;", "c": "un vector."}, "ans": ["b"]}, {"id": "BD.7", "sec": "BD", "secName": "Baze de Date", "text": "Între două colecții de date se poate stabili:", "opts": {"a": "o corespondență;", "b": "o relație de subsidiaritate;", "c": "o relație de recurență."}, "ans": ["a"]}, {"id": "BD.8", "sec": "BD", "secName": "Baze de Date", "text": "Corespondența între două colecții poate fi:", "opts": {"a": "una la una;", "b": "una la mai multe;", "c": "mai multe la mai multe."}, "ans": ["a", "b", "c"]}, {"id": "BD.9", "sec": "BD", "secName": "Baze de Date", "text": "Relația între două colecții poate fi:", "opts": {"a": "nondirecțională;", "b": "unidirecțională;", "c": "bidirecțională."}, "ans": ["a", "b", "c"]}, {"id": "BD.10", "sec": "BD", "secName": "Baze de Date", "text": "O colecție de date poate fi legată printr-o relație de:", "opts": {"a": "doar de o singură altă colecție;", "b": "mai multe alte colecții;", "c": "nici una, una sau mai multe colecții."}, "ans": ["c"]}, {"id": "BD.11", "sec": "BD", "secName": "Baze de Date", "text": "O structură de date reprezintă:", "opts": {"a": "o colecție de date complexe;", "b": "o colecție de date scalare;", "c": "o colecție de date cu un mecanism de localizare."}, "ans": ["c"]}, {"id": "BD.12", "sec": "BD", "secName": "Baze de Date", "text": "Mecanismul de accesare al datelor poate fi:", "opts": {"a": "relațional;", "b": "secvențial;", "c": "direct."}, "ans": ["a", "b", "c"]}, {"id": "BD.13", "sec": "BD", "secName": "Baze de Date", "text": "O structură tabelară este divizibilă în:", "opts": {"a": "înregistrări;", "b": "câmpuri;", "c": "predicate."}, "ans": ["a", "b"]}, {"id": "BD.14", "sec": "BD", "secName": "Baze de Date", "text": "O bază de date relațională conține:", "opts": {"a": "un tabel conducător (rădăcină);", "b": "o structură arborescentă de tabele;", "c": "un set de reguli de fidelitate."}, "ans": ["b"]}, {"id": "BD.15", "sec": "BD", "secName": "Baze de Date", "text": "E.F.Codd a definit treisprezece reguli de fidelitate pentru:", "opts": {"a": "clienții bazei de date;", "b": "administratorul bazei de date;", "c": "bazele de date relaționale."}, "ans": ["c"]}, {"id": "BD.16", "sec": "BD", "secName": "Baze de Date", "text": "Limbajul SQL este un limbaj ce permite:", "opts": {"a": "crearea unei baze de date;", "b": "gestionarea datelor;", "c": "interogarea bazelor de date."}, "ans": ["a", "b", "c"]}, {"id": "BD.17", "sec": "BD", "secName": "Baze de Date", "text": "Limbajul SQL conține următoarele subseturi:", "opts": {"a": "Limbaj de definire a datelor;", "b": "Limbaj de manipulare a datelor;", "c": "Limbaj de gestionare a datelor."}, "ans": ["a", "b"]}, {"id": "BD.18", "sec": "BD", "secName": "Baze de Date", "text": "Schema unei baze de date cuprinde:", "opts": {"a": "tabelele, atributele și domeniile acestora;", "b": "restricțiile de integritate;", "c": "drepturile utilizatorilor."}, "ans": ["a", "b"]}, {"id": "BD.19", "sec": "BD", "secName": "Baze de Date", "text": "Limbajul SQL este:", "opts": {"a": "un standard unic;", "b": "un limbaj cu dialecte relativ diferite între ele;", "c": "o familie de limbaje independente fără elemente comune."}, "ans": ["b"]}, {"id": "BD.20", "sec": "BD", "secName": "Baze de Date", "text": "MySQL este:", "opts": {"a": "un mediu de dezvoltare a SGBD relaționale;", "b": "un limbaj de definire a datelor;", "c": "un dialect al SQL."}, "ans": ["c"]}, {"id": "BD.21", "sec": "BD", "secName": "Baze de Date", "text": "MySQL conține instrucțiuni pentru:", "opts": {"a": "definirea datelor;", "b": "programare procedurală;", "c": "programare obiectuală."}, "ans": ["a", "b"]}, {"id": "BD.22", "sec": "BD", "secName": "Baze de Date", "text": "Definirea datelor se face cu sub-limbajul:", "opts": {"a": "DLL;", "b": "DML;", "c": "DDL."}, "ans": ["c"]}, {"id": "BD.23", "sec": "BD", "secName": "Baze de Date", "text": "Există instrucțiuni pentru:", "opts": {"a": "crearea tabelelor;", "b": "definirea câmpurilor;", "c": "delimitarea domeniilor atributelor."}, "ans": ["a", "b", "c"]}, {"id": "BD.24", "sec": "BD", "secName": "Baze de Date", "text": "Protecția unei baze de date împotriva introducerii unor valori eronate se face prin:", "opts": {"a": "controlul permanent al administratorului;", "b": "domenii de inexistență;", "c": "restricții de integritate."}, "ans": ["c"]}, {"id": "BD.25", "sec": "BD", "secName": "Baze de Date", "text": "Ștergerea unei Baze de date este o operație din:", "opts": {"a": "doar sub-limbajul de definire a datelor;", "b": "doar sub-limbajul de manipulare a datelor;", "c": "ambele sub-seturi."}, "ans": ["a"]}, {"id": "BD.26", "sec": "BD", "secName": "Baze de Date", "text": "Declararea atributelor în MySQL se face astfel:", "opts": {"a": "tip_data nume_data;", "b": "tip_data(lungime) nume_data;", "c": "nume_data tip_data(lungime)."}, "ans": ["c"]}, {"id": "BD.27", "sec": "BD", "secName": "Baze de Date", "text": "Dialectul MySQL cuprinde următoarele tipuri de date:", "opts": {"a": "numerice;", "b": "șir;", "c": "dată calendaristică."}, "ans": ["a", "b", "c"]}, {"id": "BD.28", "sec": "BD", "secName": "Baze de Date", "text": "Tipul varchar este:", "opts": {"a": "identic cu char;", "b": "economisește spațiu fiind mai flexibil decât char;", "c": "necesită ZEROFILL."}, "ans": ["b"]}, {"id": "BD.29", "sec": "BD", "secName": "Baze de Date", "text": "Tipul decimal se poate folosi astfel:", "opts": {"a": "decimal(m,d);", "b": "decimal(m);", "c": "decimal."}, "ans": ["a"]}, {"id": "BD.30", "sec": "BD", "secName": "Baze de Date", "text": "Coloana timestamp(12) are formatul:", "opts": {"a": "YYMMDDhhmmss;", "b": "YY-MM-DD hh:mm;", "c": "YYMMDDHHMMSS."}, "ans": ["c"]}, {"id": "BD.31", "sec": "BD", "secName": "Baze de Date", "text": "Crearea unei baze de date se face cu comanda:", "opts": {"a": "CREATE DATABASE;", "b": "CREATE DATABASE nume_bd;", "c": "CREATE DATABASE cale/nume_bd."}, "ans": ["b"]}, {"id": "BD.32", "sec": "BD", "secName": "Baze de Date", "text": "Crearea unui tabel se face cu sintaxa:", "opts": {"a": "CREATE TABLE nume_tab;", "b": "CREATE TABLE nume_tab(lista_nume_cmp);", "c": "CREATE TABLE nume_tab(lista_restrictii)."}, "ans": ["b"]}, {"id": "BD.33", "sec": "BD", "secName": "Baze de Date", "text": "Un tabel poate fi creat:", "opts": {"a": "prin declararea directă a câmpurilor sale;", "b": "prin copierea rezultatelor unei interogări;", "c": "prin indexare."}, "ans": ["a", "b"]}, {"id": "BD.34", "sec": "BD", "secName": "Baze de Date", "text": "Principalele restricții de integritate ale unei coloane sunt:", "opts": {"a": "not null;", "b": "default;", "c": "check out."}, "ans": ["a"]}, {"id": "BD.35", "sec": "BD", "secName": "Baze de Date", "text": "Ștergerea unei baze de date produce eliminarea:", "opts": {"a": "tuturor tabelelor componente;", "b": "directorului corespunzător bazei de date;", "c": "tuplei corespunzătoare bazei de date din SYSDBS."}, "ans": ["a"]}, {"id": "BD.36", "sec": "BD", "secName": "Baze de Date", "text": "Inserarea datelor într-un tabel se face cu instrucțiunile:", "opts": {"a": "INSERT INTO;", "b": "SET;", "c": "LOAD DATA INFILE."}, "ans": ["a", "c"]}, {"id": "BD.37", "sec": "BD", "secName": "Baze de Date", "text": "Instrucțiunea INSERT permite introducerea într-un tabel a:", "opts": {"a": "înregistrărilor complete;", "b": "valorilor unor câmpuri;", "c": "corecturilor."}, "ans": ["a", "b"]}, {"id": "BD.38", "sec": "BD", "secName": "Baze de Date", "text": "Instrucțiunea UPDATE are sintaxa:", "opts": {"a": "SET nume_cp= val/expr WHERE cond;", "b": "UPDATE nume_tab WHERE cond;", "c": "UPDATE nume_tab SET nume_cp= val/expr WHERE cond."}, "ans": ["c"]}, {"id": "BD.39", "sec": "BD", "secName": "Baze de Date", "text": "Instrucțiunea UPDATE poate modifica:", "opts": {"a": "numai un singur câmp dintr-o singură înregistrare;", "b": "mai multe câmpuri dintr-o singură înregistrare;", "c": "mai multe câmpuri din mai multe înregistrări."}, "ans": ["c"]}, {"id": "BD.40", "sec": "BD", "secName": "Baze de Date", "text": "Instrucțiunea DELETE șterge:", "opts": {"a": "înregistrări întregi;", "b": "câmpuri izolate;", "c": "câmpuri adiacente."}, "ans": ["a"]}, {"id": "BD.41", "sec": "BD", "secName": "Baze de Date", "text": "O propoziție SELECT trebuie obligatoriu să conțină:", "opts": {"a": "SELECT;", "b": "FROM;", "c": "WHERE."}, "ans": ["b"]}, {"id": "BD.42", "sec": "BD", "secName": "Baze de Date", "text": "Condițiile WHERE pot conține ca operatori:", "opts": {"a": "AND, OR și NOT;", "b": "=, <>, >, <;", "c": "LIKE, BETWEEN."}, "ans": ["a", "b", "c"]}, {"id": "BD.43", "sec": "BD", "secName": "Baze de Date", "text": "Sortarea descendentă a înregistrărilor se face cu:", "opts": {"a": "SELECT lista_cmp ORDER BY cmp_ord DESC;", "b": "SELECT lista_cmp WHERE cond SORT cmp_ord DESC;", "c": "SELECT lista_cmp FROM lista_tab WHERE cond."}, "ans": ["a"]}, {"id": "BD.44", "sec": "BD", "secName": "Baze de Date", "text": "Eliminarea duplicatelor se poate face cu:", "opts": {"a": "SELECT UNIQUE;", "b": "SELECT DISTINCT;", "c": "WHERE UNIQUE."}, "ans": ["b"]}, {"id": "BD.45", "sec": "BD", "secName": "Baze de Date", "text": "Clauza ORDER BY se poate folosi împreună cu:", "opts": {"a": "ASC;", "b": "DESC;", "c": "LIMIT."}, "ans": ["a", "b", "c"]}, {"id": "BD.46", "sec": "BD", "secName": "Baze de Date", "text": "O propoziție SELECT ce cuprinde mai multe tabele face:", "opts": {"a": "JOIN;", "b": "NATURAL_JOIN;", "c": "RIGHT_JOIN."}, "ans": ["a"]}, {"id": "BD.47", "sec": "BD", "secName": "Baze de Date", "text": "Directiva STRAIGHT_JOIN se plasează în cadrul zonei:", "opts": {"a": "SELECT;", "b": "FROM;", "c": "WHERE."}, "ans": ["b"]}, {"id": "BD.48", "sec": "BD", "secName": "Baze de Date", "text": "Uniunile se folosesc pentru a combina date din:", "opts": {"a": "mai multe câmpuri;", "b": "mai multe tabele;", "c": "mai multe baze de date."}, "ans": ["b"]}, {"id": "BD.49", "sec": "BD", "secName": "Baze de Date", "text": "Uniunile LEFT_JOIN se folosesc pentru:", "opts": {"a": "combinarea unor date din tabele disjuncte;", "b": "combinarea unor date din înregistrări disjuncte;", "c": "evidențierea tuplelor din T1 care nu au corespondent în T2."}, "ans": ["c"]}, {"id": "BD.50", "sec": "BD", "secName": "Baze de Date", "text": "În MySQL se utilizează:", "opts": {"a": "EQUI_JOIN;", "b": "SEMI_JOIN;", "c": "RIGHT_JOIN."}, "ans": ["c"]}, {"id": "J.1", "sec": "J", "secName": "Programare Orientată pe Obiecte (Java)", "text": "Dintr-o singură clasă de bază se pot deriva:", "opts": {"a": "Doar o singură clasă fiică;", "b": "Mai multe clase fiică;", "c": "Nu se pot deriva clasele."}, "ans": ["b"]}, {"id": "J.2", "sec": "J", "secName": "Programare Orientată pe Obiecte (Java)", "text": "În Java metodele sunt scrise:", "opts": {"a": "în interiorul declarației clasei din care fac parte;", "b": "în afara declarației clasei din care fac parte;", "c": "Ambele."}, "ans": ["a"]}, {"id": "J.3", "sec": "J", "secName": "Programare Orientată pe Obiecte (Java)", "text": "Crearea unui obiect se face prin:", "opts": {"a": "Instanțiere;", "b": "Cu ajutorul unui constructor;", "c": "Prin simpla declarare."}, "ans": ["a", "b"]}, {"id": "J.4", "sec": "J", "secName": "Programare Orientată pe Obiecte (Java)", "text": "Instanțierea unui obiect produce:", "opts": {"a": "Rezervarea spațiului în memorie pentru acel obiect;", "b": "Eliminarea clasei utilizate;", "c": "Atribuirea de valori pentru datele membre."}, "ans": ["a", "c"]}, {"id": "J.5", "sec": "J", "secName": "Programare Orientată pe Obiecte (Java)", "text": "Clasele dintr-un program pot fi:", "opts": {"a": "Independente;", "b": "Derivate dintr-o clasă de bază;", "c": "Ambele."}, "ans": ["a", "b", "c"]}, {"id": "J.6", "sec": "J", "secName": "Programare Orientată pe Obiecte (Java)", "text": "Într-un program scris în limbajul Java se poate afla:", "opts": {"a": "O singură clasă;", "b": "Mai multe clase;", "c": "Nu se pun clasele în program, ci în biblioteci."}, "ans": ["b"]}, {"id": "J.7", "sec": "J", "secName": "Programare Orientată pe Obiecte (Java)", "text": "În limbajul Java tipurile simple de date pot fi definite:", "opts": {"a": "În mod identic cu programele procedurale;", "b": "Sub forma unor clase;", "c": "În ambele moduri."}, "ans": ["a", "b", "c"]}, {"id": "J.8", "sec": "J", "secName": "Programare Orientată pe Obiecte (Java)", "text": "După compilare clasele Java se vor găsi plasate în:", "opts": {"a": "Fișierul Java inițial;", "b": "Un fișier executabil cu extensia \".exe\";", "c": "În fișiere cu extensia \".class\" separate."}, "ans": ["c"]}, {"id": "J.9", "sec": "J", "secName": "Programare Orientată pe Obiecte (Java)", "text": "Limbajul Java este independent de platformă fiindcă:", "opts": {"a": "Este pur obiectual;", "b": "Rulează pe o mașină virtuală emulată;", "c": "Nu folosește biblioteci de funcții."}, "ans": ["b"]}, {"id": "J.10", "sec": "J", "secName": "Programare Orientată pe Obiecte (Java)", "text": "Pentru scrierea unui applet Java sunt obligatoriu necesare:", "opts": {"a": "Biblioteci de clase Java;", "b": "Editoare de fișiere java și html;", "c": "Un browser compatibil Java."}, "ans": ["b", "c"]}, {"id": "J.11", "sec": "J", "secName": "Programare Orientată pe Obiecte (Java)", "text": "Un bloc de testare a apariției unei excepții conține obligatoriu:", "opts": {"a": "Instrucțiunea \"if\";", "b": "Instrucțiunea \"try\";", "c": "Instrucțiunea \"finally\"."}, "ans": ["b"]}, {"id": "J.12", "sec": "J", "secName": "Programare Orientată pe Obiecte (Java)", "text": "Limbajul Java permite scrierea de:", "opts": {"a": "Clase de erori proprii;", "b": "Clase de excepții proprii;", "c": "Blocuri de testare multiple."}, "ans": ["a", "b", "c"]}, {"id": "J.13", "sec": "J", "secName": "Programare Orientată pe Obiecte (Java)", "text": "O clasă proprie de excepții se declară:", "opts": {"a": "Cu sintaxa valabilă pentru orice clasă;", "b": "În interiorul unui bloc \"try.catch\";", "c": "Nu se declară."}, "ans": ["a", "b"]}, {"id": "J.14", "sec": "J", "secName": "Programare Orientată pe Obiecte (Java)", "text": "Un bloc \"try.catch\" pentru mai multe tipuri de erori cuprinde obligatoriu:", "opts": {"a": "O singură instrucțiune \"try\";", "b": "Câte o instrucțiune \"catch\" pentru fiecare eroare;", "c": "O instrucțiune \"finally\"."}, "ans": ["a", "b"]}, {"id": "J.15", "sec": "J", "secName": "Programare Orientată pe Obiecte (Java)", "text": "O metodă a cărei acțiune poate produce excepții trebuie să fie:", "opts": {"a": "Eliminată din start;", "b": "Modificată pentru a elimina orice risc;", "c": "Declarată ca fiind susceptibilă să facă acest lucru."}, "ans": ["c"]}, {"id": "J.16", "sec": "J", "secName": "Programare Orientată pe Obiecte (Java)", "text": "Conceptul de multitasking înseamnă:", "opts": {"a": "Execuția simultană a mai multor sarcini;", "b": "Multiplexarea în timp a sarcinilor de executat;", "c": "Execuția sarcinilor pe mai multe procesoare paralele."}, "ans": ["b"]}, {"id": "J.17", "sec": "J", "secName": "Programare Orientată pe Obiecte (Java)", "text": "Un fir de execuție se comportă în timpul rulării ca:", "opts": {"a": "Un bloc al programului;", "b": "Un pachet de clase;", "c": "O aplicație autonomă."}, "ans": ["c"]}, {"id": "J.18", "sec": "J", "secName": "Programare Orientată pe Obiecte (Java)", "text": "Un fir intră în execuție atunci când:", "opts": {"a": "Se naște;", "b": "Are prioritate;", "c": "Primește comanda start()."}, "ans": ["b", "c"]}, {"id": "J.19", "sec": "J", "secName": "Programare Orientată pe Obiecte (Java)", "text": "Un fir de execuție este blocat dacă primește comanda:", "opts": {"a": "sleep();", "b": "wait();", "c": "stop()."}, "ans": ["a", "b"]}, {"id": "J.20", "sec": "J", "secName": "Programare Orientată pe Obiecte (Java)", "text": "Un fir de execuție este oprit dacă:", "opts": {"a": "Este întrerupt de alt fir concurent;", "b": "S-au executat toate acțiunile aferente lui;", "c": "Întreaga execuție a programului este oprită."}, "ans": ["a", "b", "c"]}, {"id": "J.21", "sec": "J", "secName": "Programare Orientată pe Obiecte (Java)", "text": "Într-un program scris în Java o constantă poate fi:", "opts": {"a": "Declarată;", "b": "Inițializată;", "c": "Asignată."}, "ans": ["a", "b"]}, {"id": "J.22", "sec": "J", "secName": "Programare Orientată pe Obiecte (Java)", "text": "Care din secvențele de mai jos sunt corecte:", "opts": {"a": "final int A=0;", "b": "final int A=0; x=A;", "c": "final int A=0; A=A+1;"}, "ans": ["a", "b"]}, {"id": "J.23", "sec": "J", "secName": "Programare Orientată pe Obiecte (Java)", "text": "Care din acțiunile de mai jos sunt semnalate ca erori la compilare:", "opts": {"a": "Asignarea unei variabile cu valoarea unei constante;", "b": "Reutilizarea unei constante în același fișier;", "c": "Adunarea unei constante la o variabilă."}, "ans": ["b"]}, {"id": "J.24", "sec": "J", "secName": "Programare Orientată pe Obiecte (Java)", "text": "O constantă se poate utiliza pentru a stabili:", "opts": {"a": "Un prag de comparație;", "b": "Un număr de repetări ale unui ciclu;", "c": "O contorizare."}, "ans": ["a", "b"]}, {"id": "J.25", "sec": "J", "secName": "Programare Orientată pe Obiecte (Java)", "text": "Diferența între o constantă și o variabilă în Java este:", "opts": {"a": "Nici una;", "b": "Modul de inițializare;", "c": "Stabilitatea valorii."}, "ans": ["c"]}, {"id": "J.26", "sec": "J", "secName": "Programare Orientată pe Obiecte (Java)", "text": "Vectorii diferă față de tabele prin faptul că:", "opts": {"a": "Acceptă ca elemente doar obiectele;", "b": "Permit alocarea dinamică;", "c": "Permit introducerea și eliminarea unor elemente."}, "ans": ["a", "b", "c"]}, {"id": "J.27", "sec": "J", "secName": "Programare Orientată pe Obiecte (Java)", "text": "Sintaxa de declarare a unui vector este:", "opts": {"a": "Vector nume_vector = new Vector();", "b": "Vector = new Vector(nume_vector);", "c": "Vector nume_vector = new Vector(int nr_locatii)."}, "ans": ["a"]}, {"id": "J.28", "sec": "J", "secName": "Programare Orientată pe Obiecte (Java)", "text": "Extragerea unui obiect din vector se face cu metoda:", "opts": {"a": "final synchronized Object elementAt(Object ob);", "b": "final synchronized int indexOf(Object ob);", "c": "final synchronized Object get(Object ob)."}, "ans": ["a"]}, {"id": "J.29", "sec": "J", "secName": "Programare Orientată pe Obiecte (Java)", "text": "Determinarea poziției unui obiect din vector se face cu:", "opts": {"a": "final synchronized Object elementAt(Object ob);", "b": "final synchronized int indexOf(Object ob);", "c": "final synchronized Object get(Object ob)."}, "ans": ["b"]}, {"id": "J.30", "sec": "J", "secName": "Programare Orientată pe Obiecte (Java)", "text": "Găsirea ultimului element al unui vector se face cu:", "opts": {"a": "final synchronized Object firstElement();", "b": "final synchronized Object lastElement();", "c": "final synchronized Object finalElement()."}, "ans": ["b"]}, {"id": "J.31", "sec": "J", "secName": "Programare Orientată pe Obiecte (Java)", "text": "Instrucțiunea \"switch\" se recomandă pentru:", "opts": {"a": "Secvențe cu o unică condiție de test;", "b": "Secvențe cu două condiții de test;", "c": "Secvențe cu mai multe-condiții de test."}, "ans": ["c"]}, {"id": "J.32", "sec": "J", "secName": "Programare Orientată pe Obiecte (Java)", "text": "În limbajul Java se poate înlocui \"if...else if\" cu:", "opts": {"a": "Instrucțiunea \"for\";", "b": "Instrucțiunea \"?:\";", "c": "Instrucțiunea \"switch\"."}, "ans": ["c"]}, {"id": "J.33", "sec": "J", "secName": "Programare Orientată pe Obiecte (Java)", "text": "Instrucțiunea \"for\" devine buclă infinită dacă lipsește:", "opts": {"a": "Expresia de test", "b": "Valoarea inițială a contorului;", "c": "Incrementarea contorului."}, "ans": ["a", "c"]}, {"id": "J.34", "sec": "J", "secName": "Programare Orientată pe Obiecte (Java)", "text": "Particula \"while\" din \"do...while\" reprezintă:", "opts": {"a": "Începutul buclei;", "b": "Punctul de test;", "c": "Sfârșitul buclei."}, "ans": ["b", "c"]}, {"id": "J.35", "sec": "J", "secName": "Programare Orientată pe Obiecte (Java)", "text": "Instrucțiunile \"do...while\" și \"for\" sunt:", "opts": {"a": "Instrucțiuni de control al fluxului;", "b": "Echivalente;", "c": "Ne-echivalente."}, "ans": ["a", "b"]}, {"id": "J.36", "sec": "J", "secName": "Programare Orientată pe Obiecte (Java)", "text": "În limbajul Java declarația unei clase cuprinde:", "opts": {"a": "Numele clasei;", "b": "Datele membre;", "c": "Funcțiile membre."}, "ans": ["a", "b", "c"]}, {"id": "J.37", "sec": "J", "secName": "Programare Orientată pe Obiecte (Java)", "text": "În limbajul Java funcțiile membre sunt:", "opts": {"a": "Declarate în interiorul clasei;", "b": "Declarate în afara clasei;", "c": "În ambele moduri."}, "ans": ["a"]}, {"id": "J.38", "sec": "J", "secName": "Programare Orientată pe Obiecte (Java)", "text": "Diferențele esențiale între clase și structuri sunt:", "opts": {"a": "Clasele conțin în plus date membre;", "b": "Clasele conțin în plus funcții membre;", "c": "Clasele asigură încapsularea."}, "ans": ["b", "c"]}, {"id": "J.39", "sec": "J", "secName": "Programare Orientată pe Obiecte (Java)", "text": "În limbajul Java obiectele sunt:", "opts": {"a": "Alternative ale claselor;", "b": "Instanțe ale claselor;", "c": "Structuri de clase înrudite."}, "ans": ["b"]}, {"id": "J.40", "sec": "J", "secName": "Programare Orientată pe Obiecte (Java)", "text": "Proprietatea de încapsulare a datelor constă în faptul că într-o clasă Java:", "opts": {"a": "Se găsesc date membre și funcții membre;", "b": "Funcțiile membre sunt numai \"in line\";", "c": "Doar funcțiile membre pot accesa datele."}, "ans": ["c"]}, {"id": "J.41", "sec": "J", "secName": "Programare Orientată pe Obiecte (Java)", "text": "Sintaxa de utilizare a unui constructor este:", "opts": {"a": "nume_obiect = new constructor;", "b": "nume_clasa nume_obiect = new constructor;", "c": "nume_clasa nume_obiect = constructor."}, "ans": ["b"]}, {"id": "J.42", "sec": "J", "secName": "Programare Orientată pe Obiecte (Java)", "text": "Dintr-o clasă se instanțiază obiecte prin:", "opts": {"a": "Utilizarea metodei \"main()\";", "b": "Asignarea datelor membre ale clasei;", "c": "Utilizarea constructorului."}, "ans": ["c"]}, {"id": "J.43", "sec": "J", "secName": "Programare Orientată pe Obiecte (Java)", "text": "Constructorul în Java:", "opts": {"a": "Nu are tip de valoare de retur;", "b": "Poate fi implicit;", "c": "Are același nume cu clasa."}, "ans": ["a", "b", "c"]}, {"id": "J.44", "sec": "J", "secName": "Programare Orientată pe Obiecte (Java)", "text": "Un obiect creat de un constructor este:", "opts": {"a": "Dotat cu aceleași datele membre ca și clasa;", "b": "Dotat cu aceleași funcții membre ca și clasa;", "c": "Dotat cu elemente suplimentare față de clasă."}, "ans": ["a", "b"]}, {"id": "J.45", "sec": "J", "secName": "Programare Orientată pe Obiecte (Java)", "text": "Două date membre ale aceluiași obiect sunt:", "opts": {"a": "Plasate în aceiași structura de date;", "b": "Accesibile acelorași metode;", "c": "Sunt inițializate la instanțierea obiectului."}, "ans": ["a", "b", "c"]}, {"id": "J.46", "sec": "J", "secName": "Programare Orientată pe Obiecte (Java)", "text": "Interfețele în Java:", "opts": {"a": "Au rolul de a înlocui moștenirea multiplă;", "b": "Funcționează ca niște clase abstracte;", "c": "Conțin date abstracte."}, "ans": ["a", "b"]}, {"id": "J.47", "sec": "J", "secName": "Programare Orientată pe Obiecte (Java)", "text": "Sintaxa de declarare a unei interfețe este:", "opts": {"a": "nume [extends intf_par] {[date și metode]};", "b": "interface nume {[date și metode]};", "c": "interface nume [extends intf_par] {[date și metode]}."}, "ans": ["b", "c"]}, {"id": "J.48", "sec": "J", "secName": "Programare Orientată pe Obiecte (Java)", "text": "O clasă poate să:", "opts": {"a": "Moștenească mai multe clase părinte;", "b": "Implementeze mai multe interfețe;", "c": "Să implementeze doar o singură interfață."}, "ans": ["b"]}, {"id": "J.49", "sec": "J", "secName": "Programare Orientată pe Obiecte (Java)", "text": "Sintaxa de declarare a unei interfețe moștenitor este:", "opts": {"a": "interface nume_intf [extends intf_par];", "b": "interface nume_intf {[date și metode]};", "c": "interface nume_intf [extends intf_par]{[date și metode]}."}, "ans": ["a", "b"]}, {"id": "J.50", "sec": "J", "secName": "Programare Orientată pe Obiecte (Java)", "text": "Implementarea unei interfețe de către o clasă se face cu sintaxa:", "opts": {"a": "nume_cls num_intf {[date și metode]};", "b": "class num_cls extends num_intf {[date și metode]};", "c": "class num_cls implements num_intf {[date și metode]}."}, "ans": ["c"]}, {"id": "S.1", "sec": "S", "secName": "Securitate informatică", "text": "Care algoritm se încadrează în categoria algoritmilor de cifrare polialfabetici?", "opts": {"a": "Caesar;", "b": "Viginere;", "c": "Playfair."}, "ans": ["b"]}, {"id": "S.2", "sec": "S", "secName": "Securitate informatică", "text": "Care algoritm se încadrează în categoria algoritmilor de cifrare poligramici?", "opts": {"a": "Viginere;", "b": "Polybius;", "c": "Playfair."}, "ans": ["c"]}, {"id": "S.3", "sec": "S", "secName": "Securitate informatică", "text": "Care algoritm de criptare este algoritm asimetric?", "opts": {"a": "RSA;", "b": "Diffie-Hellman;", "c": "DES;", "d": "AES."}, "ans": ["a"]}, {"id": "S.4", "sec": "S", "secName": "Securitate informatică", "text": "Algoritmul DES criptează blocuri de:", "opts": {"a": "32 biți;", "b": "64 biți;", "c": "128 biți;", "d": "16 biți."}, "ans": ["b"]}, {"id": "S.5", "sec": "S", "secName": "Securitate informatică", "text": "Algoritmul DSA (Digital Signature Algorithm) este un algoritm care:", "opts": {"a": "Folosește cheie publică;", "b": "Folosește cheie publică și cheie secretă;", "c": "Folosește cheie secretă."}, "ans": ["b"]}, {"id": "S.6", "sec": "S", "secName": "Securitate informatică", "text": "Câți algoritmi cuprind în general schemele semnăturilor digitale:", "opts": {"a": "3;", "b": "2;", "c": "1."}, "ans": ["a"]}, {"id": "S.7", "sec": "S", "secName": "Securitate informatică", "text": "AES utilizează o dimensiune a cheii de biți de ____.", "opts": {"a": "64, 128 sau 192;", "b": "192 sau 256;", "c": "128, 192 sau 256;", "d": "64 sau 256."}, "ans": ["c"]}, {"id": "S.8", "sec": "S", "secName": "Securitate informatică", "text": "Câte chei sunt necesare pentru criptarea și decriptarea datelor atunci când folosim un cifru asimetric?", "opts": {"a": "0;", "b": "1;", "c": "2;", "d": "3."}, "ans": ["c"]}, {"id": "S.9", "sec": "S", "secName": "Securitate informatică", "text": "Care din următoarele opțiuni definește corect atacul de forță brută (Brute force attack)?", "opts": {"a": "Forțând brutal utilizatorul să partajeze informații utile, cum ar fi coduri și parole;", "b": "O entitate pretinde a fi o altă entitate;", "c": "Încercarea tuturor cheilor posibile pentru a decripta mesajul;", "d": "Mesajul sau informația este modificată înainte de a le trimite către destinatar."}, "ans": ["c"]}, {"id": "S.10", "sec": "S", "secName": "Securitate informatică", "text": "O funcție hash este o funcție:", "opts": {"a": "Care primește ca intrare mesaje de dimensiune fixă din care mesajul inițial nu poate fi recuperat;", "b": "Care primește ca intrare mesaje de dimensiune fixă și returnează un mesaj de lungime fixă din care mesajul inițial poate fi recuperat;", "c": "Care primește ca intrare mesaje de dimensiune variabilă și returnează un mesaj de lungime fixă din care mesajul inițial nu poate fi recuperat."}, "ans": ["c"]}, {"id": "S.11", "sec": "S", "secName": "Securitate informatică", "text": "Ce reprezintă securitatea informației?", "opts": {"a": "Protejarea informațiilor împotriva accesului, modificării și distrugerii neautorizate;", "b": "Un proces de testare a performanței aplicațiilor;", "c": "O metodă de optimizare a rețelelor;", "d": "Un sistem de arhivare a datelor."}, "ans": ["a"]}, {"id": "S.12", "sec": "S", "secName": "Securitate informatică", "text": "Care dintre următoarele este un atac pasiv?", "opts": {"a": "Interceptarea mesajelor;", "b": "Modificarea conținutului mesajelor;", "c": "Injectarea de cod SQL;", "d": "Ransomware."}, "ans": ["a"]}, {"id": "S.13", "sec": "S", "secName": "Securitate informatică", "text": "Ce tip de atac vizează indisponibilizarea unui serviciu prin supraîncărcarea acestuia?", "opts": {"a": "Phishing;", "b": "Man-in-the-Middle;", "c": "Denial-of-Service (DoS);", "d": "Inginerie socială."}, "ans": ["c"]}, {"id": "S.14", "sec": "S", "secName": "Securitate informatică", "text": "Ce atac presupune manipularea utilizatorilor pentru a divulga informații sensibile?", "opts": {"a": "Inginerie socială;", "b": "SQL Injection;", "c": "Denial-of-Service (DoS);", "d": "Phishing."}, "ans": ["a"]}, {"id": "S.15", "sec": "S", "secName": "Securitate informatică", "text": "Ce reprezintă atacul de tip „Man-in-the-Middle\" (MitM)?", "opts": {"a": "Un atac în care un hacker interceptează și modifică comunicațiile între două părți fără ca acestea să știe;", "b": "O metodă prin care un atacator inundă rețeaua cu trafic inutil;", "c": "O tehnică de criptare a comunicațiilor;", "d": "Un atac ce presupune ghicirea parolelor utilizatorilor."}, "ans": ["a"]}, {"id": "S.16", "sec": "S", "secName": "Securitate informatică", "text": "Cum poate fi prevenit un atac MitM (Man-in-the-Middle)?", "opts": {"a": "Folosind HTTP în loc de HTTPS;", "b": "Folosind parole slabe;", "c": "Evitând actualizările software;", "d": "Utilizând certificate SSL/TLS și criptarea comunicațiilor."}, "ans": ["d"]}, {"id": "S.17", "sec": "S", "secName": "Securitate informatică", "text": "Ce este atacul Cross-Site Scripting (XSS)?", "opts": {"a": "O vulnerabilitate care permite injectarea de cod JavaScript într-o pagină web;", "b": "Un mecanism de autentificare;", "c": "Un tip de criptare a mesajelor;", "d": "Un atac ce modifică rutele de rețea."}, "ans": ["a"]}, {"id": "S.18", "sec": "S", "secName": "Securitate informatică", "text": "Cum poate fi prevenit un atac Cross-Site Scripting (XSS)?", "opts": {"a": "Prin validarea inputului utilizatorului;", "b": "Prin dezactivarea protecției web;", "c": "Prin utilizarea unei parole slabe;", "d": "Prin trimiterea parolelor prin e-mail."}, "ans": ["a"]}, {"id": "S.19", "sec": "S", "secName": "Securitate informatică", "text": "Ce rol are Politica de Securitate a Conținutului (CSP) în prevenirea atacurilor XSS?", "opts": {"a": "Criptează datele transmise între server și browser;", "b": "Limitează sursele de scripturi pe care browserul le poate încărca;", "c": "Blochează accesul neautorizat la server;", "d": "Monitorizează traficul de rețea pentru activități suspecte."}, "ans": ["b"]}, {"id": "S.20", "sec": "S", "secName": "Securitate informatică", "text": "Ce este un atac de tip ransomware?", "opts": {"a": "Un atac în care datele victimei sunt criptate și se cere o răscumpărare pentru decriptare;", "b": "O metodă de protecție a datelor;", "c": "Un atac prin care sunt interceptate mesajele;", "d": "O tehnică de creștere a performanței sistemului."}, "ans": ["a"]}, {"id": "S.21", "sec": "S", "secName": "Securitate informatică", "text": "Ce reprezintă atacurile de tip Zero-Day?", "opts": {"a": "Atacuri care exploatează vulnerabilități necunoscute;", "b": "Un mecanism de apărare împotriva malware-ului;", "c": "Un tip de criptare simetrică;", "d": "O metodă de optimizare a rețelelor."}, "ans": ["a"]}, {"id": "S.22", "sec": "S", "secName": "Securitate informatică", "text": "Ce protocol securizat este utilizat pentru accesul la distanță pe un server?", "opts": {"a": "FTP;", "b": "Telnet;", "c": "SSH;", "d": "HTTP."}, "ans": ["c"]}, {"id": "S.23", "sec": "S", "secName": "Securitate informatică", "text": "Care dintre următoarele atacuri se bazează pe trimiterea unui volum mare de trafic pentru a bloca un server?", "opts": {"a": "SQL Injection;", "b": "Phishing;", "c": "Denial of Service (DoS);", "d": "Cross-Site Scripting (XSS)."}, "ans": ["c"]}, {"id": "S.24", "sec": "S", "secName": "Securitate informatică", "text": "Ce înseamnă VPN în securitatea rețelelor?", "opts": {"a": "Virtual Personal Name;", "b": "Virtual Private Network;", "c": "Virtual Public Node;", "d": "Verified Private Network."}, "ans": ["b"]}, {"id": "S.25", "sec": "S", "secName": "Securitate informatică", "text": "Ce reprezintă un atac de tip „phishing\"?", "opts": {"a": "Un atac prin care un hacker ghicește parolele utilizatorilor;", "b": "O tehnică de inginerie socială prin care atacatorii încearcă să obțină date sensibile prin mesaje frauduloase;", "c": "Un atac de interceptare a pachetelor în rețea;", "d": "Un tip de atac fizic asupra echipamentelor IT."}, "ans": ["b"]}, {"id": "S.26", "sec": "S", "secName": "Securitate informatică", "text": "Ce protocol este utilizat pentru transmiterea securizată a paginilor web?", "opts": {"a": "HTTP;", "b": "FTP;", "c": "HTTPS;", "d": "SSH."}, "ans": ["c"]}, {"id": "S.27", "sec": "S", "secName": "Securitate informatică", "text": "Ce rol are un firewall într-o rețea?", "opts": {"a": "Criptează datele utilizatorului pentru securitate maximă;", "b": "Blochează accesul neautorizat și filtrează traficul în funcție de reguli predefinite;", "c": "Permite oricărui dispozitiv să acceseze internetul fără restricții;", "d": "Scanează toate fișierele dintr-un calculator pentru viruși."}, "ans": ["b"]}, {"id": "S.28", "sec": "S", "secName": "Securitate informatică", "text": "Ce tip de criptare utilizează aceeași cheie pentru criptare și decriptare?", "opts": {"a": "Criptarea asimetrică;", "b": "Criptarea simetrică;", "c": "Funcții hash;", "d": "Algoritmii cu cheie publică."}, "ans": ["b"]}, {"id": "S.29", "sec": "S", "secName": "Securitate informatică", "text": "Ce proprietate trebuie să aibă o funcție hash pentru a fi considerată sigură?", "opts": {"a": "Să fie reversibilă;", "b": "Să aibă coliziuni frecvente;", "c": "Să fie deterministă și rezistentă la coliziuni;", "d": "Să folosească criptografie asimetrică."}, "ans": ["c"]}, {"id": "S.30", "sec": "S", "secName": "Securitate informatică", "text": "Ce lungime a cheii este considerată sigură pentru RSA în zilele noastre?", "opts": {"a": "512 biți;", "b": "1024 biți;", "c": "2048 biți;", "d": "256 biți."}, "ans": ["c"]}, {"id": "S.31", "sec": "S", "secName": "Securitate informatică", "text": "Care este principalul avantaj al criptografiei asimetrice față de cea simetrică?", "opts": {"a": "Este mai rapidă;", "b": "Nu necesită partajarea unei chei secrete;", "c": "Folosește mai puțină memorie;", "d": "Are un proces de criptare mai simplu."}, "ans": ["b"]}, {"id": "S.32", "sec": "S", "secName": "Securitate informatică", "text": "Ce algoritm este utilizat în protocolul SSL/TLS pentru criptarea sesiunilor?", "opts": {"a": "RSA;", "b": "AES;", "c": "SHA-1;", "d": "DES."}, "ans": ["b"]}, {"id": "S.33", "sec": "S", "secName": "Securitate informatică", "text": "Care dintre următoarele atacuri vizează slăbiciunile funcțiilor hash?", "opts": {"a": "Atacul de tip „Man-in-the-Middle\";", "b": "Atacul cu dicționar;", "c": "Atacul de coliziune;", "d": "SQL Injection."}, "ans": ["c"]}, {"id": "S.34", "sec": "S", "secName": "Securitate informatică", "text": "Care este principalul avantaj al algoritmului AES față de DES?", "opts": {"a": "Utilizează chei mai scurte;", "b": "Are un număr fix de runde de criptare;", "c": "Este mai rapid și mai sigur;", "d": "Utilizează criptografie asimetrică."}, "ans": ["c"]}, {"id": "S.35", "sec": "S", "secName": "Securitate informatică", "text": "Care dintre următoarele afirmații despre algoritmul RSA este adevărată?", "opts": {"a": "Se bazează pe dificultatea factorizării numerelor mari;", "b": "Utilizează criptografie simetrică;", "c": "Este mai rapid decât AES;", "d": "Folosește funcții hash pentru criptare."}, "ans": ["a"]}, {"id": "S.36", "sec": "S", "secName": "Securitate informatică", "text": "Ce înseamnă atacul „padding oracle\" în criptografie?", "opts": {"a": "O metodă de exploatare a unui sistem de criptare pe baza erorilor generate la decriptare;", "b": "Un atac asupra funcțiilor hash;", "c": "O metodă de modificare a pachetelor de rețea;", "d": "O tehnică de criptare avansată."}, "ans": ["a"]}, {"id": "S.37", "sec": "S", "secName": "Securitate informatică", "text": "Ce este securitatea aplicațiilor?", "opts": {"a": "Procesul de testare a performanței aplicațiilor;", "b": "Ansamblul de practici și tehnologii folosite pentru protejarea aplicațiilor împotriva vulnerabilităților și atacurilor;", "c": "O metodă de îmbunătățire a interfeței utilizatorului;", "d": "Un tip de firewall."}, "ans": ["b"]}, {"id": "S.38", "sec": "S", "secName": "Securitate informatică", "text": "Ce este atacul de tip SQL Injection?", "opts": {"a": "Un atac care forțează aplicația să ruleze interogări SQL malițioase;", "b": "O metodă de criptare a datelor;", "c": "Un atac bazat pe interceptarea traficului de rețea;", "d": "O tehnică de inginerie socială."}, "ans": ["a"]}, {"id": "S.39", "sec": "S", "secName": "Securitate informatică", "text": "Care dintre următoarele este o metodă eficientă de prevenire a atacurilor SQL Injection?", "opts": {"a": "Validarea inputului utilizatorului;", "b": "Utilizarea interogărilor parametrizate;", "c": "Dezactivarea bazei de date;", "d": "Folosirea unui VPN."}, "ans": ["b"]}, {"id": "S.40", "sec": "S", "secName": "Securitate informatică", "text": "Ce sunt cookie-urile HTTP?", "opts": {"a": "Fișiere utilizate pentru stocarea datelor de sesiune ale utilizatorilor;", "b": "Un tip de malware;", "c": "O tehnică de criptare;", "d": "Un protocol de comunicare între servere."}, "ans": ["a"]}, {"id": "S.41", "sec": "S", "secName": "Securitate informatică", "text": "Ce reprezintă „spoofing\"-ul în securitatea rețelei?", "opts": {"a": "Criptarea fișierelor;", "b": "Crearea unei copii de rezervă;", "c": "Falsificarea identității unei surse;", "d": "Încercarea repetată de parole."}, "ans": ["c"]}, {"id": "S.42", "sec": "S", "secName": "Securitate informatică", "text": "Ce este o saltare VLAN?", "opts": {"a": "Migrarea între rețele virtuale;", "b": "Un mod de criptare VLAN;", "c": "Configurarea mai multor VLAN-uri simultan;", "d": "Un atac care permite trecerea între VLAN-uri."}, "ans": ["d"]}, {"id": "S.43", "sec": "S", "secName": "Securitate informatică", "text": "Ce roluri sunt IPS (Sistem de prevenire a intruziunilor)?", "opts": {"a": "Permite traficul necunoscut;", "b": "Detectează și previne atacurile;", "c": "Face backup la fișierele sistemului;", "d": "Monitorizează utilizatorii activi."}, "ans": ["b"]}, {"id": "S.44", "sec": "S", "secName": "Securitate informatică", "text": "Ce este NAT în contextul securității?", "opts": {"a": "Un sistem de detectare a intruziunilor;", "b": "O adresare de ascundere a IP private;", "c": "O aplicație de analiză rețea;", "d": "Tehnologia de tip VPN."}, "ans": ["b"]}, {"id": "S.45", "sec": "S", "secName": "Securitate informatică", "text": "Folosind cifrul Cezar, cu o cheie de 4 care este criptarea cuvântului \"STUDENT\"?", "opts": {"a": "VXYHGQX;", "b": "VWXGHQW;", "c": "WXYHIRX."}, "ans": ["c"]}, {"id": "S.46", "sec": "S", "secName": "Securitate informatică", "text": "Ce este un atac de adulmecare?", "opts": {"a": "O încercare de phishing prin e-mail;", "b": "Un atac asupra parolelor stocate local;", "c": "Un vârf de firewall;", "d": "Interceptarea traficului de rețea pentru a obține date."}, "ans": ["d"]}, {"id": "S.47", "sec": "S", "secName": "Securitate informatică", "text": "Următorul cuvânt a fost criptat folosind un cifru Cezar cu o cheie de 2: ecguct. Ce cuvânt este?", "opts": {"a": "ceaser;", "b": "caezar;", "c": "caesar."}, "ans": ["c"]}, {"id": "S.48", "sec": "S", "secName": "Securitate informatică", "text": "Folosind cifrul Cezar, cu o cheie de 3 care este criptarea cuvântului \"STUDENT\"?", "opts": {"a": "VXYHGQX;", "b": "VWXGHQW;", "c": "VWYHGQV."}, "ans": ["b"]}, {"id": "S.49", "sec": "S", "secName": "Securitate informatică", "text": "Un utilizator al sistemului de criptare asimetric RSA (Rivest-Shamir-Adleman) are cheia publică (n,e)=(35,11). Care este cheia secretă x?", "opts": {"a": "x=7;", "b": "x=9;", "c": "x=11;", "d": "x=5."}, "ans": ["c"]}, {"id": "S.50", "sec": "S", "secName": "Securitate informatică", "text": "Considerăm x exponentul de decriptare, e exponentul de criptare, iar p și q două numere prime în algoritmul asimetric RSA (Rivest-Shamir-Adleman). Pentru p=3, q=5 și e=13, să se determine x.", "opts": {"a": "x=5;", "b": "x=7;", "c": "x=11;", "d": "x=13."}, "ans": ["a"]}];
 
-const TEST_DEFS = [["A.26", "A.24", "A.20", "A.12", "A.5", "A.46", "A.27", "A.10", "BD.43", "BD.42", "BD.14", "BD.10", "BD.20", "BD.30", "BD.2", "BD.1", "J.23", "J.19", "J.11", "J.15", "J.18", "J.20", "J.7", "J.31", "S.49", "S.29", "S.6", "S.14", "S.38", "S.25", "S.23", "S.42"], ["A.30", "A.17", "A.32", "A.22", "A.13", "A.4", "A.40", "A.39", "BD.16", "BD.4", "BD.29", "BD.11", "BD.39", "BD.23", "BD.17", "BD.46", "J.24", "J.1", "J.27", "J.22", "J.38", "J.41", "J.40", "J.33", "S.28", "S.18", "S.15", "S.9", "S.22", "S.35", "S.46", "S.5"], ["A.11", "A.25", "A.36", "A.1", "A.44", "A.19", "A.34", "A.49", "BD.49", "BD.18", "BD.26", "BD.38", "BD.31", "BD.22", "BD.33", "BD.32", "J.13", "J.44", "J.48", "J.6", "J.47", "J.29", "J.4", "J.2", "S.32", "S.31", "S.40", "S.3", "S.19", "S.36", "S.2", "S.8"], ["A.42", "A.31", "A.29", "A.21", "A.23", "A.43", "A.47", "A.37", "BD.28", "BD.50", "BD.12", "BD.27", "BD.21", "BD.34", "BD.9", "BD.48", "J.25", "J.3", "J.49", "J.34", "J.5", "J.8", "J.12", "J.43", "S.37", "S.26", "S.27", "S.44", "S.4", "S.39", "S.16", "S.21"], ["A.33", "A.45", "A.14", "A.50", "A.48", "A.3", "A.28", "A.38", "BD.7", "BD.44", "BD.47", "BD.45", "BD.15", "BD.3", "BD.5", "BD.13", "J.28", "J.39", "J.35", "J.36", "J.16", "J.9", "J.17", "J.10", "S.48", "S.34", "S.50", "S.24", "S.10", "S.13", "S.43", "S.20"], ["A.6", "A.35", "A.7", "A.9", "A.15", "A.16", "A.18", "A.2", "BD.37", "BD.24", "BD.40", "BD.41", "BD.19", "BD.36", "BD.6", "BD.25", "J.30", "J.45", "J.26", "J.32", "J.42", "J.50", "J.21", "J.46", "S.41", "S.7", "S.45", "S.12", "S.33", "S.17", "S.47", "S.1"], ["A.8", "A.41", "A.26", "A.24", "A.20", "A.12", "A.5", "A.46", "BD.8", "BD.35", "BD.43", "BD.42", "BD.14", "BD.10", "BD.20", "BD.30", "J.37", "J.14", "J.23", "J.19", "J.11", "J.15", "J.18", "J.20", "S.30", "S.11", "S.49", "S.29", "S.6", "S.14", "S.38", "S.25"]];
+const TEST_DEFS = [["A.26", "A.24", "A.20", "A.12", "A.5", "A.46", "A.27", "A.10", "BD.43", "BD.42", "BD.14", "BD.10", "BD.20", "BD.30", "BD.2", "BD.1", "J.23", "J.19", "J.11", "J.15", "J.18", "J.20", "J.7", "J.31", "S.49", "S.29", "S.6", "S.14", "S.38", "S.25", "S.23", "S.42"], ["A.30", "A.17", "A.32", "A.22", "A.13", "A.4", "A.40", "A.39", "BD.16", "BD.4", "BD.29", "BD.11", "BD.39", "BD.23", "BD.17", "BD.46", "J.24", "J.1", "J.27", "J.22", "J.38", "J.41", "J.40", "J.33", "S.28", "S.18", "S.15", "S.9", "S.22", "S.35", "S.46", "S.5"], ["A.11", "A.25", "A.36", "A.1", "A.44", "A.19", "A.34", "A.49", "BD.49", "BD.18", "BD.26", "BD.38", "BD.31", "BD.22", "BD.33", "BD.32", "J.13", "J.44", "J.48", "J.6", "J.47", "J.29", "J.4", "J.2", "S.32", "S.31", "S.40", "S.3", "S.19", "S.36", "S.2", "S.8"], ["A.42", "A.31", "A.29", "A.21", "A.23", "A.43", "A.47", "A.37", "BD.28", "BD.50", "BD.12", "BD.27", "BD.21", "BD.34", "BD.9", "BD.48", "J.25", "J.3", "J.49", "J.34", "J.5", "J.8", "J.12", "J.43", "S.37", "S.26", "S.27", "S.44", "S.4", "S.39", "S.16", "S.21"], ["A.33", "A.45", "A.14", "A.50", "A.48", "A.3", "A.28", "A.38", "BD.7", "BD.44", "BD.47", "BD.45", "BD.15", "BD.3", "BD.5", "BD.13", "J.28", "J.39", "J.35", "J.36", "J.16", "J.9", "J.17", "J.10", "S.48", "S.34", "S.50", "S.24", "S.10", "S.13", "S.43", "S.20"], ["A.6", "A.35", "A.7", "A.9", "A.15", "A.16", "A.18", "A.2", "BD.37", "BD.24", "BD.40", "BD.41", "BD.19", "BD.36", "BD.6", "BD.25", "J.30", "J.45", "J.26", "J.32", "J.42", "J.50", "J.21", "J.46", "S.41", "S.7", "S.45", "S.12", "S.33", "S.17", "S.47", "S.1"], ["A.8", "A.41", "A.26", "A.24", "A.20", "A.12", "A.5", "A.46", "BD.8", "BD.35", "BD.43", "BD.42", "BD.14", "BD.10", "BD.20", "BD.30", "J.37", "J.14", "J.23", "J.19", "J.11", "J.15", "J.18", "J.20", "S.30", "S.11", "S.49", "S.29", "S.6", "S.14", "S.38", "S.25"]];;
 
 
 const SECTIONS = [
@@ -346,9 +450,12 @@ const SECTIONS = [
 const QMAP = {};
 QUESTIONS.forEach(q => QMAP[q.id] = q);
 
-// ---- Persistence ----
+// --- Constants ---
+const EXAM_QUESTION_COUNT = 50;
+const EXAM_TIME_MINUTES = 60;
 const STORAGE_KEY = 'grile_licenta_state';
 
+// --- Persistence ---
 function loadPersisted(){
   try{
     const raw = localStorage.getItem(STORAGE_KEY);
@@ -356,25 +463,25 @@ function loadPersisted(){
   }catch(e){}
   return null;
 }
-
 function savePersisted(){
   try{
-    const data = {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify({
       completedTests: [...state.completedTests],
       history: state.history,
       darkMode: state.darkMode,
       instantFeedback: state.instantFeedback,
-      sectionAttempts: state.sectionAttempts
-    };
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+      sectionAttempts: state.sectionAttempts,
+      examAttempts: state.examAttempts
+    }));
   }catch(e){}
 }
 
+// --- State ---
 let state = {
   screen: 'home',
   darkMode: window.matchMedia('(prefers-color-scheme: dark)').matches,
   instantFeedback: true,
-  quizMode: null, // 'test' or 'section'
+  quizMode: null, // 'test' | 'section' | 'exam'
   testIndex: null,
   sectionCode: null,
   sectionCount: 10,
@@ -386,11 +493,12 @@ let state = {
   completedTests: new Set(),
   history: [],
   sectionAttempts: {},
+  examAttempts: [],
   timerStarted: null,
-  timerInterval: null
+  timerInterval: null,
+  countdownTotal: null
 };
 
-// Restore persisted state
 const saved = loadPersisted();
 if(saved){
   if(saved.completedTests) state.completedTests = new Set(saved.completedTests);
@@ -398,367 +506,435 @@ if(saved){
   if(saved.darkMode !== undefined) state.darkMode = saved.darkMode;
   if(saved.instantFeedback !== undefined) state.instantFeedback = saved.instantFeedback;
   if(saved.sectionAttempts) state.sectionAttempts = saved.sectionAttempts;
+  if(saved.examAttempts) state.examAttempts = saved.examAttempts;
 }
 
 function setTheme(){
   document.documentElement.setAttribute('data-theme', state.darkMode ? 'dark' : 'light');
   const meta = document.querySelector('meta[name=theme-color]');
-  if(meta){
-    meta.content = state.darkMode ? '#161B2B' : '#F2EEE2';
-  }
+  if(meta) meta.content = state.darkMode ? '#0F1421' : '#F2EEE2';
 }
 setTheme();
 
-// ---- Helpers ----
-function esc(s){
-  const d = document.createElement('div');
-  d.innerText = s;
-  return d.innerHTML;
+// --- Helpers ---
+function esc(s){const d=document.createElement('div');d.innerText=s;return d.innerHTML}
+function shuffle(a){const r=a.slice();for(let i=r.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[r[i],r[j]]=[r[j],r[i]]}return r}
+function arraysEqualAsSets(a,b){if(a.length!==b.length)return false;const sa=a.slice().sort(),sb=b.slice().sort();return sa.every((v,i)=>v===sb[i])}
+function formatTime(ms){const s=Math.floor(Math.abs(ms)/1000),m=Math.floor(s/60),sec=s%60;return m+':'+(sec<10?'0':'')+sec}
+function formatCountdown(sec){const m=Math.floor(sec/60),s=sec%60;return m+':'+(s<10?'0':'')+s}
+
+// --- Modal system ---
+function showModal(title, bodyHTML, buttons){
+  const overlay = document.createElement('div');
+  overlay.className = 'modal-overlay';
+  overlay.innerHTML = `<div class="modal">
+    <div class="modal-title">${title}</div>
+    <div class="modal-body">${bodyHTML}</div>
+    <div class="modal-actions ${buttons.length > 2 ? 'row' : ''}" id="modalActions"></div>
+  </div>`;
+  document.body.appendChild(overlay);
+  const actions = overlay.querySelector('#modalActions');
+  buttons.forEach((b, i) => {
+    const btn = document.createElement('button');
+    btn.className = b.primary ? 'btn-primary' : 'btn-secondary';
+    if(b.danger) btn.className = 'btn-primary red';
+    if(b.gold) btn.className = 'btn-primary gold';
+    btn.textContent = b.label;
+    btn.onclick = () => { overlay.remove(); if(b.action) b.action(); };
+    actions.appendChild(btn);
+  });
+  // Close on overlay tap (only if not on modal)
+  overlay.onclick = e => { if(e.target === overlay && buttons.length <= 2){ overlay.remove(); if(b.altClose) b.altClose(); } };
 }
 
-function shuffle(arr){
-  const a = arr.slice();
-  for(let i=a.length-1; i>0; i--){
-    const j = Math.floor(Math.random()*(i+1));
-    [a[i],a[j]] = [a[j],a[i]];
-  }
-  return a;
+function closeModal(){
+  const m = document.querySelector('.modal-overlay');
+  if(m) m.remove();
 }
 
-function arraysEqualAsSets(a,b){
-  if(a.length !== b.length) return false;
-  const sa = a.slice().sort(), sb = b.slice().sort();
-  return sa.every((v,i)=>v===sb[i]);
-}
-
-function formatTime(ms){
-  const s = Math.floor(ms/1000);
-  const m = Math.floor(s/60);
-  const sec = s%60;
-  return m + ':' + (sec<10?'0':'') + sec;
-}
-
-// ---- Navigation ----
+// --- Navigation ---
 function goHome(){
-  state.screen = 'home';
   if(state.timerInterval){clearInterval(state.timerInterval);state.timerInterval=null}
-  render();
+  state.screen='home';render();
 }
 
-function goToTests(){
-  state.screen = 'tests';
-  render();
-}
-
-function goToSectionPicker(){
-  state.screen = 'section-picker';
-  render();
-}
-
-function goToStats(){
-  state.screen = 'stats';
-  render();
-}
-
-// ---- Screen rendering ----
+// --- Screen routing ---
 function render(){
-  const app = document.getElementById('app');
+  const app=document.getElementById('app');
   switch(state.screen){
-    case 'home': renderHome(app); break;
-    case 'tests': renderTestList(app); break;
-    case 'section-picker': renderSectionPicker(app); break;
-    case 'quiz': renderQuiz(app); break;
-    case 'results': renderResults(app); break;
-    case 'stats': renderStats(app); break;
+    case 'home':renderHome(app);break;
+    case 'tests':renderTestList(app);break;
+    case 'section-picker':renderSectionPicker(app);break;
+    case 'quiz':renderQuiz(app);break;
+    case 'results':renderResults(app);break;
+    case 'stats':renderStats(app);break;
   }
 }
 
+// ---------- HOME ----------
 function renderHome(app){
+  const totalAnswered = getTotalAnswered();
+  const examCount = state.examAttempts.length;
   app.innerHTML = `
     <div class="top-bar">
       <div>
         <p class="eyebrow">Teste grilă · Licență 2026</p>
-        <h2>Pregătire examen</h2>
+        <h2 style="font-family:var(--serif);font-weight:600;font-size:20px;color:var(--ink)">Pregătire examen</h2>
       </div>
-      <div style="display:flex;gap:8px">
-        <button class="btn-icon" id="themeBtn" aria-label="Schimbă tema">${state.darkMode?'☀':'☾'}</button>
+      <div class="tb-end">
+        <button class="btn-icon" id="themeBtn" aria-label="Temă">${state.darkMode?'☀':'☾'}</button>
       </div>
     </div>
-    <p class="sub">${state.history.length} teste finalizate · ${getTotalAnswered()} întrebări rezolvate</p>
+    <p class="sub">${examCount>0?examCount+' simulări date · ':''}${totalAnswered} întrebări rezolvate</p>
     <div class="home-menu">
+      <button class="menu-btn animate" id="examBtn">
+        <div class="icon" style="background:linear-gradient(135deg,var(--gold-soft),#FAE8C8);color:var(--gold-bright)">🎓</div>
+        <div><div class="mtitle">Simulare examen <span class="mbadge">50 de întrebări</span></div>
+        <div class="mdesc">Testează-te în condiții reale: 50 de întrebări din toate secțiunile, timer 60 min</div></div>
+      </button>
       <button class="menu-btn animate" id="testsBtn">
         <div class="icon">📋</div>
-        <div><div class="mtitle">Teste complete</div><div class="mdesc">7 teste fixe, 32 de întrebări fiecare</div></div>
+        <div><div class="mtitle">Teste complete</div><div class="mdesc">7 teste fixe de 32 de întrebări conform regulamentului</div></div>
       </button>
       <button class="menu-btn animate" id="sectionBtn">
-        <div class="icon">🎯</div><div>
-        <div class="mtitle">Antrenament pe secțiuni</div><div class="mdesc">Alege o secțiune și nr. de întrebări</div></div>
+        <div class="icon">🎯</div>
+        <div><div class="mtitle">Antrenament pe secțiuni</div><div class="mdesc">Exersează o singură secțiune la alegere</div></div>
       </button>
       <button class="menu-btn animate" id="statsBtn">
         <div class="icon">📊</div>
-        <div><div class="mtitle">Statistici</div><div class="mdesc">Evoluția ta și performanța pe secțiuni</div></div>
+        <div><div class="mtitle">Statistici</div><div class="mdesc">Evoluția ta și performanța detaliată</div></div>
       </button>
     </div>
   `;
-  app.querySelector('#themeBtn').onclick = ()=>{
-    state.darkMode = !state.darkMode;
-    setTheme();
-    savePersisted();
-    render();
-  };
-  app.querySelector('#testsBtn').onclick = goToTests;
-  app.querySelector('#sectionBtn').onclick = goToSectionPicker;
-  app.querySelector('#statsBtn').onclick = goToStats;
+  app.querySelector('#themeBtn').onclick=()=>{state.darkMode=!state.darkMode;setTheme();savePersisted();render()};
+  app.querySelector('#examBtn').onclick=startExam;
+  app.querySelector('#testsBtn').onclick=()=>{state.screen='tests';render()};
+  app.querySelector('#sectionBtn').onclick=()=>{state.screen='section-picker';render()};
+  app.querySelector('#statsBtn').onclick=()=>{state.screen='stats';render()};
 }
 
 function getTotalAnswered(){
-  let t = 0;
-  state.history.forEach(h => t += h.total);
-  for(const k in state.sectionAttempts){
-    state.sectionAttempts[k].forEach(a => t += a.total);
-  }
+  let t=0;
+  state.history.forEach(h=>t+=h.total);
+  for(const k in state.sectionAttempts) state.sectionAttempts[k].forEach(a=>t+=a.total);
+  state.examAttempts.forEach(a=>t+=a.total);
   return t;
 }
 
+// ---------- TEST LIST ----------
 function renderTestList(app){
   app.innerHTML = `
     <div class="top-bar">
-      <button class="btn-icon" id="backBtn">‹</button>
-      <h2>Teste complete</h2>
-      <div style="width:44px"></div>
+      <div class="tb-start"><button class="btn-icon" id="backBtn">‹</button></div>
+      <h2 class="tb-label">Teste complete</h2>
+      <div class="tb-end"><div style="width:44px"></div></div>
     </div>
-    <p class="sub">7 teste conforme cu regulamentul oficial. Fiecare test are 32 de întrebări (8×4 secțiuni).</p>
+    <p class="sub">7 teste conforme cu regulamentul oficial. Fiecare test: 32 de întrebări (8×4 secțiuni).</p>
     <div class="card">
       <div class="toggle-row">
-        <div>
-          <div class="ttitle">Corectare imediată</div>
-          <div class="tdesc">Vezi pe loc dacă răspunsul e corect</div>
-        </div>
-        <label class="switch">
-          <input type="checkbox" id="feedbackToggle" ${state.instantFeedback?'checked':''}>
-          <span class="slider-el"></span>
-        </label>
+        <div><div class="ttitle">Corectare imediată</div><div class="tdesc">Vezi imediat dacă răspunsul e corect</div></div>
+        <label class="switch"><input type="checkbox" id="feedbackToggle" ${state.instantFeedback?'checked':''}><span class="slider-el"></span></label>
       </div>
     </div>
-    <div style="height:16px"></div>
+    <div style="height:18px"></div>
     <div class="test-list" id="testList"></div>
   `;
-  app.querySelector('#backBtn').onclick = goHome;
-  app.querySelector('#feedbackToggle').onchange = e => {
-    state.instantFeedback = e.target.checked;
-    savePersisted();
-  };
-
-  const list = app.querySelector('#testList');
-  TEST_DEFS.forEach((ids, i)=>{
-    const div = document.createElement('div');
-    div.className = 'test-opt animate';
-    const done = state.completedTests.has(i);
-    div.innerHTML = `
-      <div class="tnum">#${i+1}</div>
-      <div class="tinfo">
-        <div class="ttitle">Testul ${i+1}</div>
-        <div class="tdesc">32 întrebări (8 A · 8 BD · 8 J · 8 S)</div>
-      </div>
-      ${done ? '<div class="check done">✓</div>' : '<div class="check"></div>'}
-    `;
-    div.onclick = () => startTest(i);
+  app.querySelector('#backBtn').onclick=goHome;
+  app.querySelector('#feedbackToggle').onchange=e=>{state.instantFeedback=e.target.checked;savePersisted()};
+  const list=app.querySelector('#testList');
+  TEST_DEFS.forEach((ids,i)=>{
+    const div=document.createElement('div');
+    div.className='test-opt animate';
+    const done=state.completedTests.has(i);
+    div.innerHTML=`<div class="tnum">#${i+1}</div>
+      <div class="tinfo"><div class="ttitle">Testul ${i+1}</div><div class="tdesc">32 întrebări (8 A · 8 BD · 8 J · 8 S)</div></div>
+      ${done?'<div class="check done">✓</div>':'<div class="check"></div>'}`;
+    div.onclick=()=>startTest(i);
     list.appendChild(div);
   });
 }
 
+// ---------- SECTION PICKER ----------
 function renderSectionPicker(app){
   app.innerHTML = `
     <div class="top-bar">
-      <button class="btn-icon" id="backBtn">‹</button>
-      <h2>Antrenament</h2>
-      <div style="width:44px"></div>
+      <div class="tb-start"><button class="btn-icon" id="backBtn">‹</button></div>
+      <h2 class="tb-label">Antrenament</h2>
+      <div class="tb-end"><div style="width:44px"></div></div>
     </div>
-    <p class="sub">Alege o secțiune și numărul de întrebări cu care vrei să exersezi.</p>
+    <p class="sub">Alege o secțiune și numărul de întrebări.</p>
     <div class="card">
-      <p class="group-title" style="font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-soft);margin-bottom:14px;">Secțiunea</p>
+      <div class="card-header">Secțiunea</div>
       <div class="sec-grid" id="secGrid"></div>
       <div class="range-row">
-        <label for="qCount">Întrebări:</label>
+        <label>Întrebări:</label>
         <input type="range" id="qCount" min="4" max="50" step="2" value="${state.sectionCount}">
         <span class="rangeval" id="qCountVal">${state.sectionCount}</span>
       </div>
       <button class="btn-primary" id="startSectionBtn">Începe antrenamentul</button>
     </div>
   `;
-  app.querySelector('#backBtn').onclick = goHome;
-
-  const grid = app.querySelector('#secGrid');
-  SECTIONS.forEach(s => {
-    const div = document.createElement('div');
-    div.className = 'sec-card' + (state.sectionCode === s.code ? ' active' : '');
-    div.innerHTML = `<div class="sec-code">${s.code}</div><div class="sec-name">${s.name.split('.')[0]}</div>`;
-    div.onclick = () => {
-      state.sectionCode = s.code;
-      renderSectionPicker(app);
-    };
+  app.querySelector('#backBtn').onclick=goHome;
+  const grid=app.querySelector('#secGrid');
+  if(!state.sectionCode) state.sectionCode=SECTIONS[0].code;
+  SECTIONS.forEach(s=>{
+    const div=document.createElement('div');
+    div.className='sec-card'+(state.sectionCode===s.code?' active':'');
+    div.innerHTML=`<div class="sec-code">${s.code}</div><div class="sec-name">${s.name.split('.')[0]}</div>`;
+    div.onclick=()=>{state.sectionCode=s.code;renderSectionPicker(app)};
     grid.appendChild(div);
   });
-
-  if(!state.sectionCode) state.sectionCode = SECTIONS[0].code;
-
-  const range = app.querySelector('#qCount');
-  const rangeVal = app.querySelector('#qCountVal');
-  range.oninput = () => {
-    state.sectionCount = parseInt(range.value);
-    rangeVal.textContent = state.sectionCount;
-  };
-
-  app.querySelector('#startSectionBtn').onclick = () => {
-    if(!state.sectionCode) return;
-    startSectionPractice();
-  };
+  const range=app.querySelector('#qCount');
+  const rv=app.querySelector('#qCountVal');
+  range.oninput=()=>{state.sectionCount=parseInt(range.value);rv.textContent=state.sectionCount};
+  app.querySelector('#startSectionBtn').onclick=()=>{if(state.sectionCode)startSectionPractice()};
 }
 
 function startSectionPractice(){
-  const questionsInSection = QUESTIONS.filter(q => q.sec === state.sectionCode);
-  const shuffled = shuffle(questionsInSection);
-  const count = Math.min(state.sectionCount, shuffled.length);
-  state.quiz = shuffled.slice(0, count);
-  state.quizMode = 'section';
-  state.sectionCode = state.sectionCode;
-  state.current = 0;
-  state.answers = new Array(state.quiz.length).fill(null);
-  state.currentSelection = [];
-  state.locked = false;
-  state.timerStarted = Date.now();
-  state.screen = 'quiz';
-  render();
+  const qs=QUESTIONS.filter(q=>q.sec===state.sectionCode);
+  const shuffled=shuffle(qs);
+  state.quiz=shuffled.slice(0,Math.min(state.sectionCount,shuffled.length));
+  state.quizMode='section';
+  state.current=0;
+  state.answers=new Array(state.quiz.length).fill(null);
+  state.currentSelection=[];
+  state.locked=false;
+  state.timerStarted=Date.now();
+  state.countdownTotal=null;
+  state.screen='quiz';render();
 }
 
 function startTest(idx){
-  state.testIndex = idx;
-  state.quiz = TEST_DEFS[idx].map(id => QMAP[id]);
-  state.quizMode = 'test';
+  state.testIndex=idx;
+  state.quiz=TEST_DEFS[idx].map(id=>QMAP[id]);
+  state.quizMode='test';
+  state.current=0;
+  state.answers=new Array(state.quiz.length).fill(null);
+  state.currentSelection=[];
+  state.locked=false;
+  state.timerStarted=Date.now();
+  state.countdownTotal=null;
+  state.screen='quiz';render();
+}
+
+// ---------- EXAM ----------
+function startExam(){
+  const asked = state.examAttempts.length > 0 ? ' (ai mai dat ' + state.examAttempts.length + ' simulări)' : '';
+  showModal('🎓 Simulare examen', 
+    '<strong>50 de întrebări</strong> din toate secțiunile, randomizate.<br>' +
+    '<strong>' + EXAM_TIME_MINUTES + ' minute</strong> la dispoziție.<br>' +
+    'Nu există corectare imediată — vezi rezultatul la final.' + asked,
+    [
+      {label:'Anulează', primary:false, action:()=>{}},
+      {label:'Începe examenul', primary:true, gold:true, action:()=>{
+        beginExam();
+      }}
+    ]
+  );
+}
+
+function beginExam(){
+  // Pick 50 questions proportionally from all sections
+  let pool = [];
+  SECTIONS.forEach(s =>{
+    const secQs = QUESTIONS.filter(q=>q.sec===s.code);
+    const shuffled = shuffle(secQs);
+    // Take ~12-13 per section to make 50
+    const perSec = Math.round(EXAM_QUESTION_COUNT / SECTIONS.length);
+    pool = pool.concat(shuffled.slice(0, perSec));
+  });
+  // If we have more than 50, trim; if less, fill randomly
+  const remaining = EXAM_QUESTION_COUNT - pool.length;
+  if(remaining > 0){
+    const used = new Set(pool.map(q=>q.id));
+    const extras = shuffle(QUESTIONS.filter(q=>!used.has(q.id))).slice(0, remaining);
+    pool = pool.concat(extras);
+  }
+  state.quiz = shuffle(pool).slice(0, EXAM_QUESTION_COUNT);
+  state.quizMode = 'exam';
   state.current = 0;
   state.answers = new Array(state.quiz.length).fill(null);
   state.currentSelection = [];
   state.locked = false;
   state.timerStarted = Date.now();
+  state.countdownTotal = EXAM_TIME_MINUTES * 60;
   if(state.timerInterval){clearInterval(state.timerInterval);state.timerInterval=null}
   state.screen = 'quiz';
   render();
 }
 
-// ---- Quiz ----
+// ---------- QUIZ ----------
 function renderQuiz(app){
   const q = state.quiz[state.current];
   if(!q) return;
+  const isExam = state.quizMode === 'exam';
   const isMulti = q.ans.length > 1;
-  const answered = state.answers[state.current];
-  const scoreSoFar = state.answers.filter(a=>a&&a.correct).length;
-  const answeredCount = state.answers.filter(a=>a).length;
-  const pct = Math.round((state.current/state.quiz.length)*100);
+  const saved = state.answers[state.current];
   const totalQ = state.quiz.length;
-  const elapsed = state.timerStarted ? Date.now() - state.timerStarted : 0;
+  const pct = Math.round((state.current/totalQ)*100);
+  const answeredCount = state.answers.filter(a=>a!==null).length;
+  const elapsed = state.timerStarted ? (Date.now()-state.timerStarted) : 0;
 
-  let label = state.quizMode === 'test' ? `Test ${state.testIndex+1}` : state.sectionCode;
+  // In exam mode: selection from saved answer, no feedback/locked
+  let currentSelection = state.currentSelection;
+  if(isExam && saved){
+    currentSelection = saved.selected || saved;
+  }
+
+  let label, badgeCls;
+  if(isExam){label='Simulare examen'; badgeCls='exam'}
+  else if(state.quizMode==='test'){label='Testul '+(state.testIndex+1); badgeCls='test'}
+  else {label='Secțiunea '+state.sectionCode; badgeCls='section'}
+
+  // Countdown for exam
+  const countdownSec = isExam && state.countdownTotal !== null
+    ? Math.max(0, state.countdownTotal - Math.floor(elapsed/1000))
+    : null;
+  const warn = countdownSec !== null && countdownSec < 300; // 5 min
+  const critical = countdownSec !== null && countdownSec < 60;
 
   app.innerHTML = `
     <div class="top-bar">
-      <button class="btn-icon" id="backBtn">✕</button>
-      <h2>${label}</h2>
-      <div style="width:44px"></div>
+      <div class="tb-start">
+        <button class="btn-icon" id="backBtn">${isExam ? '✕' : '‹'}</button>
+        <span class="badge ${badgeCls}">${isExam?'🎓':''} ${label}</span>
+      </div>
+      <div class="tb-end"${isExam?' style="min-width:70px;text-align:right"':''}>
+        ${isExam ? '<span style="font-family:var(--mono);font-size:14px;font-weight:600;color:'+(critical?'var(--red-bright)':warn?'var(--red)':'var(--ink-soft)')+'" id="countdownDisplay">'+formatCountdown(countdownSec)+'</span>' :
+        '<span class="qscore">' + state.answers.filter(a=>a&&a.correct).length + '/' + answeredCount + '</span>'}
+      </div>
     </div>
-    <div class="palette" id="palette"></div>
+    <div class="palette-wrap"><div class="palette" id="palette"></div></div>
     <div class="quiz-top">
-      <span class="qmeta">${state.current+1}/${totalQ} · ${q.sec}</span>
-      <span class="qscore">${scoreSoFar}/${answeredCount}</span>
+      <span class="qmeta">
+        <span>${state.current+1}/${totalQ}</span>
+        ${!isExam ? '<span>·</span><span>'+q.sec+'</span>' : ''}
+      </span>
+      ${!isExam ? '<span class="qscore">'+(state.answers.filter(a=>a&&a.correct).length)+'/'+(state.answers.filter(a=>a!==null).length)+'</span>' : '<span class="qscore">' + answeredCount + '/' + totalQ + ' răsp</span>'}
     </div>
-    <div class="progress-track"><div class="progress-fill" style="width:${pct}%"></div></div>
-    <div class="timer-bar" id="timer">${formatTime(elapsed)}</div>
+    <div class="progress-track"><div class="progress-fill ${isExam?'exam':''}" style="width:${pct}%"></div></div>
+    ${!isExam ? '<div class="timer-bar"><span class="timer-icon">⏱</span>'+formatTime(elapsed)+'</div>' : ''}
     <div class="card swipe-zone" id="quizCard">
       <p class="qid">${q.id}</p>
       <p class="qtext">${esc(q.text)}</p>
-      ${isMulti ? '<p class="multi-hint">Selectează toate variantele corecte</p>' : ''}
+      ${isMulti && !isExam ? '<p class="multi-hint">Selectează toate variantele corecte</p>' : ''}
+      ${isMulti && isExam ? '<p class="multi-hint">Selectează toate variantele corecte</p>' : ''}
       <div class="opts" id="opts"></div>
       <div id="feedbackArea"></div>
       <div class="actions" id="actionsArea"></div>
     </div>
+    ${isExam ? '<div class="submit-bar"><button class="btn-primary red" id="submitExamBtn">Trimite examenul</button></div>' : ''}
   `;
 
-  // Timer
-  if(state.timerInterval) clearInterval(state.timerInterval);
-  if(!answered || state.current < state.quiz.length-1){
+  // Countdown timer for exam
+  if(isExam){
+    if(state.timerInterval) clearInterval(state.timerInterval);
+    state.timerInterval = setInterval(() => {
+      const el = document.getElementById('countdownDisplay');
+      if(!el){clearInterval(state.timerInterval);return}
+      const sec = Math.max(0, state.countdownTotal - Math.floor((Date.now()-state.timerStarted)/1000));
+      el.textContent = formatCountdown(sec);
+      if(sec < 60) el.style.color = 'var(--red-bright)';
+      else if(sec < 300) el.style.color = 'var(--red)';
+      if(sec <= 0) { clearInterval(state.timerInterval); autoSubmitExam(); }
+    }, 500);
+  } else {
+    if(state.timerInterval) clearInterval(state.timerInterval);
     state.timerInterval = setInterval(()=>{
-      const el = document.getElementById('timer');
-      if(el) el.textContent = formatTime(Date.now()-state.timerStarted);
-    }, 1000);
+      const el=document.getElementById('timer');
+      if(el) el.innerHTML='<span class="timer-icon">⏱</span>'+formatTime(Date.now()-state.timerStarted);
+    },1000);
   }
 
   // Palette
   const palette = app.querySelector('#palette');
   state.answers.forEach((a, i)=>{
-    const dot = document.createElement('div');
-    let cls = 'palette-dot';
-    if(i === state.current) cls += ' current';
-    if(a){
-      cls += ' answered';
-      cls += a.correct ? ' correct' : ' wrong';
+    const dot=document.createElement('div');
+    let cls='palette-dot';
+    if(i===state.current) cls+=' current';
+    if(a!==null){
+      if(isExam){ cls+=' exam-saved'; }
+      else {
+        cls+=' answered';
+        cls+= a.correct ? ' correct' : ' wrong';
+      }
     }
-    dot.className = cls;
-    dot.title = `Întrebarea ${i+1}`;
+    dot.className=cls;
+    dot.textContent=i+1;
+    dot.onclick=()=>{state.current=i;state.currentSelection=[];state.locked=false;render()};
     palette.appendChild(dot);
   });
 
   // Options
-  const opts = app.querySelector('#opts');
+  const opts=app.querySelector('#opts');
   Object.keys(q.opts).forEach(letter=>{
-    const div = document.createElement('div');
-    let cls = 'opt';
-    const isSelected = (answered ? answered.selected : state.currentSelection).includes(letter);
-    if(isSelected) cls += ' selected';
-    if(answered){
-      cls += ' locked';
-      const isCorrectLetter = q.ans.includes(letter);
-      if(isCorrectLetter && isSelected) cls += ' correct';
-      else if(!isCorrectLetter && isSelected) cls += ' incorrect';
-      else if(isCorrectLetter && !isSelected) cls += ' missed';
+    const div=document.createElement('div');
+    let cls='opt';
+    const sel = isExam
+      ? (saved ? (Array.isArray(saved.selected||saved) && (saved.selected||saved).includes(letter)) : currentSelection.includes(letter))
+      : (saved ? saved.selected.includes(letter) : currentSelection.includes(letter));
+    if(sel) cls += isExam ? ' exam-selected' : ' selected';
+    if(saved && !isExam){
+      cls+=' locked';
+      const isCorrectLetter=q.ans.includes(letter);
+      if(isCorrectLetter && sel) cls+=' correct';
+      else if(!isCorrectLetter && sel) cls+=' incorrect';
+      else if(isCorrectLetter && !sel) cls+=' missed';
     }
-    div.className = cls;
-    div.innerHTML = `<div class="bubble">${letter.toUpperCase()}</div><div class="opt-text">${esc(q.opts[letter])}</div>`;
-    if(!answered){
-      div.onclick = () => toggleOption(letter);
+    div.className=cls;
+    div.innerHTML='<div class="bubble">'+letter.toUpperCase()+'</div><div class="opt-text">'+esc(q.opts[letter])+'</div>';
+    if(!saved || isExam){
+      div.onclick=()=>examToggleOption(letter);
     }
     opts.appendChild(div);
   });
 
-  // Feedback & actions
-  const feedbackArea = app.querySelector('#feedbackArea');
-  const actionsArea = app.querySelector('#actionsArea');
-  if(answered){
-    const fb = document.createElement('div');
-    fb.className = 'feedback ' + (answered.correct ? 'ok' : 'bad');
-    fb.innerText = answered.correct
-      ? '✓ Corect.'
-      : '✗ Greșit. Răspuns corect: ' + q.ans.join(', ').toUpperCase() + '.';
-    if(state.instantFeedback) feedbackArea.appendChild(fb);
-
-    const nextBtn = document.createElement('button');
-    nextBtn.className = 'btn-primary';
-    nextBtn.innerText = state.current < state.quiz.length-1 ? 'Următoarea →' : 'Vezi rezultatul';
-    nextBtn.onclick = nextQuestion;
-    actionsArea.appendChild(nextBtn);
-  } else if(isMulti){
-    const submitBtn = document.createElement('button');
-    submitBtn.className = 'btn-primary';
-    submitBtn.innerText = 'Verifică';
-    submitBtn.disabled = state.currentSelection.length === 0;
-    submitBtn.onclick = submitAnswer;
-    actionsArea.appendChild(submitBtn);
+  // Feedback & actions (non-exam)
+  const feedbackArea=app.querySelector('#feedbackArea');
+  const actionsArea=app.querySelector('#actionsArea');
+  if(!isExam){
+    if(saved){
+      const fb=document.createElement('div');
+      fb.className='feedback '+(saved.correct?'ok':'bad');
+      fb.innerText=saved.correct?'✓ Corect.' : '✗ Greșit. Răspuns corect: '+q.ans.join(', ').toUpperCase()+'.';
+      if(state.instantFeedback) feedbackArea.appendChild(fb);
+      const nb=document.createElement('button');
+      nb.className='btn-primary';
+      nb.innerText=state.current<state.quiz.length-1?'Continuă →':'Vezi rezultatul';
+      nb.onclick=nextQuestion;
+      actionsArea.appendChild(nb);
+    } else if(isMulti){
+      const sb=document.createElement('button');
+      sb.className='btn-primary';
+      sb.innerText='Verifică';
+      sb.disabled=currentSelection.length===0;
+      sb.onclick=submitAnswer;
+      actionsArea.appendChild(sb);
+    } else {
+      // Single select with instant feedback auto-submits in toggleOption
+    }
+  } else {
+    // Exam: show navigation
+    if(state.current < state.quiz.length-1){
+      const nb=document.createElement('button');
+      nb.className='btn-primary';
+      nb.innerText='Următoarea →';
+      nb.onclick=()=>{state.current++;state.currentSelection=[];render()};
+      actionsArea.appendChild(nb);
+    }
+    // Submit exam
+    app.querySelector('#submitExamBtn').onclick=confirmSubmitExam;
   }
 
-  // Back = quit
-  app.querySelector('#backBtn').onclick = ()=>{
-    if(state.timerInterval) clearInterval(state.timerInterval);
-    state.timerInterval = null;
-    if(confirm('Renunți la acest test?')){
-      goHome();
+  // Back
+  app.querySelector('#backBtn').onclick=()=>{
+    if(state.timerInterval){clearInterval(state.timerInterval);state.timerInterval=null}
+    if(isExam){
+      showModal('Renunți la examen?','Vei pierde progresul curent. Poți începe unul nou oricând.',
+        [{label:'Continuă examenul',primary:false,action:()=>{}},
+         {label:'Renunță',primary:true,danger:true,action:goHome}]);
+    } else {
+      if(confirm('Renunți la acest test?')) goHome();
     }
   };
 
@@ -766,283 +942,313 @@ function renderQuiz(app){
   setupSwipe(app.querySelector('#quizCard'));
 }
 
-function setupSwipe(el){
-  let startX = 0, startY = 0;
-  el.addEventListener('touchstart', e => {
-    startX = e.touches[0].clientX;
-    startY = e.touches[0].clientY;
-  }, {passive: true});
-  el.addEventListener('touchend', e => {
-    const dx = e.changedTouches[0].clientX - startX;
-    const dy = e.changedTouches[0].clientY - startY;
-    if(Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 60){
-      if(dx < 0) goNext();
-      else goPrev();
-    }
-  }, {passive: true});
-}
-
-function goNext(){
-  if(state.current < state.quiz.length-1 && state.answers[state.current]){
-    state.current++;
-    state.currentSelection = [];
-    state.locked = false;
-    render();
-  }
-}
-
-function goPrev(){
-  if(state.current > 0){
-    state.current--;
-    state.currentSelection = [];
-    state.locked = false;
-    render();
-  }
-}
-
-function toggleOption(letter){
-  if(state.locked) return;
-  const q = state.quiz[state.current];
-  const isMulti = q.ans.length > 1;
+// Exam toggle: save directly to answers
+function examToggleOption(letter){
+  const q=state.quiz[state.current];
+  const isMulti=q.ans.length>1;
+  let saved=state.answers[state.current];
+  let sel = saved ? (Array.isArray(saved.selected||saved) ? [...(saved.selected||saved)] : []) : [];
+  if(!saved) saved={selected:[],correct:null};
   if(isMulti){
-    const idx = state.currentSelection.indexOf(letter);
-    if(idx >= 0) state.currentSelection.splice(idx,1);
-    else state.currentSelection.push(letter);
+    const idx=sel.indexOf(letter);
+    if(idx>=0) sel.splice(idx,1); else sel.push(letter);
   } else {
-    state.currentSelection = [letter];
-    if(state.instantFeedback){
-      submitAnswer();
-      return;
-    }
+    sel = sel[0]===letter ? [] : [letter];
+  }
+  state.answers[state.current] = {selected:sel,correct:null};
+  state.currentSelection=sel;
+  // Auto-advance for single select in exam
+  if(!isMulti && sel.length>0 && state.current<state.quiz.length-1){
+    state.current++;
+    state.currentSelection=[];
   }
   render();
 }
 
+function setupSwipe(el){
+  if(!el) return;
+  let sx=0,sy=0;
+  el.addEventListener('touchstart',e=>{sx=e.touches[0].clientX;sy=e.touches[0].clientY},{passive:true});
+  el.addEventListener('touchend',e=>{
+    const dx=e.changedTouches[0].clientX-sx,dy=e.changedTouches[0].clientY-sy;
+    if(Math.abs(dx)>Math.abs(dy)&&Math.abs(dx)>60){
+      if(dx<0&&state.current<state.quiz.length-1&&state.answers[state.current]!==null&&state.quizMode!=='exam'){state.current++;state.currentSelection=[];state.locked=false;render()}
+      else if(dx<0&&state.quizMode==='exam'&&state.current<state.quiz.length-1){state.current++;state.currentSelection=[];render()}
+      else if(dx>0&&state.current>0){state.current--;state.currentSelection=[];state.locked=false;render()}
+    }
+  },{passive:true});
+}
+
+// Non-exam submission
 function submitAnswer(){
-  if(state.currentSelection.length === 0) return;
-  const q = state.quiz[state.current];
-  const correct = arraysEqualAsSets(state.currentSelection, q.ans);
-  state.answers[state.current] = {selected: state.currentSelection.slice(), correct};
-  state.locked = true;
-  if(state.timerInterval) clearInterval(state.timerInterval);
-  state.timerInterval = null;
+  if(state.currentSelection.length===0) return;
+  const q=state.quiz[state.current];
+  const correct=arraysEqualAsSets(state.currentSelection,q.ans);
+  state.answers[state.current]={selected:state.currentSelection.slice(),correct};
+  state.locked=true;
   render();
 }
 
 function nextQuestion(){
-  if(state.current < state.quiz.length-1){
-    state.current++;
-    state.currentSelection = [];
-    state.locked = false;
-    render();
+  if(state.current<state.quiz.length-1){state.current++;state.currentSelection=[];state.locked=false;render()}
+  else finishQuiz();
+}
+
+function confirmSubmitExam(){
+  const unanswered = state.answers.filter(a=>a===null||!a.selected||a.selected.length===0).length;
+  const total = state.quiz.length;
+  const answered = total - unanswered;
+  if(unanswered > 0){
+    showModal('Trimite examenul?',
+      'Ai răspuns la <strong>' + answered + '/' + total + '</strong> întrebări.<br>' +
+      (unanswered > 0 ? '<span style="color:var(--red)">' + unanswered + ' întrebări fără răspuns.</span>' : ''),
+      [
+        {label:'Mai verifică', primary:false, action:()=>{}},
+        {label:'Trimite acum', primary:true, danger:unanswered>0, action:submitExam}
+      ]
+    );
   } else {
-    finishQuiz();
+    showModal('Trimite examenul?', 'Ai răspuns la toate cele <strong>' + total + '</strong> întrebări.',
+      [
+        {label:'Mai verifică', primary:false, action:()=>{}},
+        {label:'Trimite acum', primary:true, gold:true, action:submitExam}
+      ]
+    );
   }
+}
+
+function submitExam(){
+  if(state.timerInterval){clearInterval(state.timerInterval);state.timerInterval=null}
+  const total=state.quiz.length;
+  let correct=0;
+  state.quiz.forEach((q,i)=>{
+    const a=state.answers[i];
+    const sel = a ? (Array.isArray(a.selected||a) ? (a.selected||a) : []) : [];
+    const isCorrect = arraysEqualAsSets(sel, q.ans);
+    state.answers[i] = {selected:sel, correct:isCorrect};
+    if(isCorrect) correct++;
+  });
+  const elapsed = state.timerStarted ? Date.now()-state.timerStarted : 0;
+  state.examAttempts.push({
+    type:'exam',
+    label:'Simulare',
+    total,correct,elapsed,
+    date:Date.now()
+  });
+  savePersisted();
+  state.screen='results';
+  render();
+}
+
+function autoSubmitExam(){
+  if(state.screen!=='quiz') return;
+  showModal('⏰ Timpul a expirat!',
+    'Examenul se trimite automat.',
+    [{label:'Vezi rezultatul',primary:true,gold:true,action:submitExam}]
+  );
 }
 
 function finishQuiz(){
   if(state.timerInterval){clearInterval(state.timerInterval);state.timerInterval=null}
-  const elapsed = state.timerStarted ? Date.now() - state.timerStarted : 0;
-  const total = state.quiz.length;
-  const correct = state.answers.filter(a=>a&&a.correct).length;
-
-  const entry = {
-    type: state.quizMode,
-    label: state.quizMode === 'test' ? `Test ${state.testIndex+1}` : state.sectionCode,
-    total,
-    correct,
-    elapsed,
-    date: Date.now()
-  };
-
-  if(state.quizMode === 'test'){
-    state.completedTests.add(state.testIndex);
-    state.history.push(entry);
-  } else {
-    if(!state.sectionAttempts[state.sectionCode]) state.sectionAttempts[state.sectionCode] = [];
+  const elapsed = state.timerStarted ? Date.now()-state.timerStarted : 0;
+  const total=state.quiz.length;
+  const correct=state.answers.filter(a=>a&&a.correct).length;
+  const entry={type:state.quizMode,label:state.quizMode==='test'?'Test '+(state.testIndex+1):'Secțiunea '+state.sectionCode,total,correct,elapsed,date:Date.now()};
+  if(state.quizMode==='test'){state.completedTests.add(state.testIndex);state.history.push(entry)}
+  else {
+    if(!state.sectionAttempts[state.sectionCode]) state.sectionAttempts[state.sectionCode]=[];
     state.sectionAttempts[state.sectionCode].push(entry);
   }
-
   savePersisted();
-  state.screen = 'results';
-  render();
+  state.screen='results';render();
 }
 
 function retryQuiz(){
-  state.current = 0;
-  state.answers = new Array(state.quiz.length).fill(null);
-  state.currentSelection = [];
-  state.locked = false;
-  state.timerStarted = Date.now();
-  state.screen = 'quiz';
-  render();
+  state.current=0;
+  state.answers=new Array(state.quiz.length).fill(null);
+  state.currentSelection=[];
+  state.locked=false;
+  state.timerStarted=Date.now();
+  state.screen='quiz';render();
 }
 
-// ---- Results ----
+// ---------- RESULTS ----------
 function renderResults(app){
-  const total = state.quiz.length;
-  const correct = state.answers.filter(a=>a&&a.correct).length;
-  const pct = Math.round((correct/total)*100);
+  const total=state.quiz.length;
+  const correct=state.answers.filter(a=>a&&a.correct).length;
+  const pct=Math.round((correct/total)*100);
+  const bySec={};
+  let label, isExamRes=false;
+  if(state.quizMode==='exam'){label='Simulare examen';isExamRes=true}
+  else if(state.quizMode==='test') label='Testul '+(state.testIndex+1);
+  else label='Secțiunea '+state.sectionCode;
 
-  const bySec = {};
   state.quiz.forEach((q,i)=>{
-    if(!bySec[q.sec]) bySec[q.sec] = {correct:0,total:0};
+    if(!bySec[q.sec]) bySec[q.sec]={correct:0,total:0};
     bySec[q.sec].total++;
     if(state.answers[i]&&state.answers[i].correct) bySec[q.sec].correct++;
   });
 
-  let label = state.quizMode === 'test' ? `Test ${state.testIndex+1}` : `Secțiunea ${state.sectionCode}`;
+  const isExcellent = pct >= 80;
+  const isGood = pct >= 60;
 
   app.innerHTML = `
     <div class="top-bar">
-      <button class="btn-icon" id="homeBtn">‹</button>
-      <h2>Rezultat</h2>
-      <div style="width:44px"></div>
+      <div class="tb-start"><button class="btn-icon" id="homeBtn">‹</button>
+        <span class="badge ${isExamRes?'exam':state.quizMode==='test'?'test':'section'}">${isExamRes?'🎓':''} ${label}</span>
+      </div>
+      <div class="tb-end"><div style="width:44px"></div></div>
     </div>
     <div class="card">
-      <p class="eyebrow">${label}</p>
       <div class="score-hero">
-        <div class="score-num">${correct}/${total}</div>
+        <div class="score-num ${isExcellent?'excellent':''}">${correct}<span style="font-size:24px;opacity:.5;font-weight:500">/${total}</span></div>
         <div class="score-label">${pct}% răspunsuri corecte</div>
       </div>
+      ${isExcellent ? '<div style="text-align:center;font-size:13px;color:var(--gold);font-weight:500;margin-top:4px">Excelent! 🎉</div>' : isGood ? '<div style="text-align:center;font-size:13px;color:var(--green);font-weight:500;margin-top:4px">Bun! Continuă antrenamentul.</div>' : '<div style="text-align:center;font-size:13px;color:var(--ink-soft);font-weight:400;margin-top:4px">Mai exersează pentru a îmbunătăți rezultatul.</div>'}
       <div class="breakdown" id="breakdown"></div>
-      <button class="btn-primary" id="retryBtn">Reia</button>
-      <button class="btn-secondary" id="homeBtn2" style="margin-top:10px">Înapoi la meniu</button>
+      <button class="btn-primary" id="retryBtn">${isExamRes?'Simulează din nou':'Reia'}</button>
+      <div style="display:flex;gap:10px;margin-top:10px">
+        <button class="btn-secondary" id="homeBtn2" style="flex:1">Meniu</button>
+        ${isExamRes ? '<button class="btn-secondary" id="reviewBtn" style="flex:1">Revizuiește</button>' : ''}
+      </div>
     </div>
     <div class="card" style="margin-top:16px" id="reviewCard"></div>
   `;
 
-  const breakdown = app.querySelector('#breakdown');
-  Object.keys(bySec).forEach(sec => {
-    const b = bySec[sec];
-    const div = document.createElement('div');
-    div.className = 'bd-item';
-    div.innerHTML = `<div class="bname">${sec}</div><div class="bscore">${b.correct}/${b.total}</div>`;
+  const breakdown=app.querySelector('#breakdown');
+  Object.keys(bySec).forEach(sec=>{
+    const b=bySec[sec];
+    const div=document.createElement('div');div.className='bd-item';
+    div.innerHTML='<div class="bname">'+sec+'</div><div class="bscore">'+b.correct+'/'+b.total+'</div>';
     breakdown.appendChild(div);
   });
 
-  app.querySelector('#retryBtn').onclick = retryQuiz;
-  app.querySelector('#homeBtn').onclick = goHome;
-  app.querySelector('#homeBtn2').onclick = goHome;
+  app.querySelector('#retryBtn').onclick=retryQuiz;
+  app.querySelector('#homeBtn').onclick=goHome;
+  app.querySelector('#homeBtn2').onclick=goHome;
 
-  const reviewCard = app.querySelector('#reviewCard');
-  const wrongOnes = state.quiz.map((q,i)=>({q,a:state.answers[i]})).filter(x=>!x.a||!x.a.correct);
-  if(wrongOnes.length === 0){
-    reviewCard.innerHTML = '<p class="group-title" style="font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-soft);margin-bottom:8px;">Recapitulare</p><p style="font-size:14px;color:var(--ink-soft)">Toate răspunsurile au fost corecte! 🎉</p>';
+  // Review
+  const reviewCard=app.querySelector('#reviewCard');
+  const wrongOnes=state.quiz.map((q,i)=>({q,a:state.answers[i]})).filter(x=>!x.a||!x.a.correct);
+  if(wrongOnes.length===0){
+    reviewCard.innerHTML='<div class="card-header">Recapitulare</div><p style="font-size:14px;color:var(--ink-soft)">Toate răspunsurile au fost corecte!</p>';
   } else {
-    let html = '<p class="group-title" style="font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-soft);margin-bottom:8px;">De revizuit ('+wrongOnes.length+')</p>';
+    let html='<div class="card-header">De revizuit ('+wrongOnes.length+')</div><div class="review-list">';
     wrongOnes.forEach(x=>{
-      const q = x.q;
-      const selected = x.a ? x.a.selected.join(', ').toUpperCase() : '—';
-      html += '<div class="review-item">' +
-        '<p class="qid">'+q.id+'</p>' +
-        '<p class="review-q">'+esc(q.text)+'</p>' +
-        '<p class="review-line wrong-ans">Răspunsul tău: '+selected+'</p>' +
-        '<p class="review-line correct-ans">Corect: '+q.ans.join(', ').toUpperCase()+' — '+q.ans.map(l=>esc(q.opts[l])).join(' ')+'</p>' +
+      const q=x.q;
+      const sel=x.a?x.a.selected.join(', ').toUpperCase():'—';
+      html+='<div class="review-item">'+
+        '<p class="qid">'+q.id+'</p>'+
+        '<p class="review-q">'+esc(q.text)+'</p>'+
+        '<p class="review-line wrong-ans"><span class="rl">Răspuns:</span> '+sel+'</p>'+
+        '<p class="review-line correct-ans"><span class="rl">Corect:</span> '+q.ans.join(', ').toUpperCase()+' — '+q.ans.map(l=>esc(q.opts[l])).join(' ')+'</p>'+
       '</div>';
     });
-    reviewCard.innerHTML = html;
+    html+='</div>';
+    reviewCard.innerHTML=html;
   }
+
+  // Confetti for excellent
+  if(isExcellent) launchConfetti();
 }
 
-// ---- Stats ----
-function renderStats(app){
-  const allAttempts = [...state.history];
-  for(const k in state.sectionAttempts){
-    state.sectionAttempts[k].forEach(a => allAttempts.push(a));
+function launchConfetti(){
+  const container=document.createElement('div');
+  container.className='confetti-container';
+  document.body.appendChild(container);
+  const colors=['var(--gold)','var(--green)','var(--blue)','var(--gold-bright)','#E8A87C','#95E1D3'];
+  for(let i=0;i<40;i++){
+    const piece=document.createElement('div');
+    piece.className='confetti-piece';
+    piece.style.left=Math.random()*100+'%';
+    piece.style.background=colors[Math.floor(Math.random()*colors.length)];
+    piece.style.width=(4+Math.random()*6)+'px';
+    piece.style.height=(4+Math.random()*6)+'px';
+    piece.style.animationDuration=(1.5+Math.random()*2)+'s';
+    piece.style.animationDelay=(Math.random()*1.5)+'s';
+    piece.style.borderRadius=Math.random()>.5?'50%':'2px';
+    container.appendChild(piece);
   }
+  setTimeout(()=>container.remove(),4000);
+}
 
-  const totalQ = allAttempts.reduce((s,a)=>s+a.total, 0);
-  const correctQ = allAttempts.reduce((s,a)=>s+a.correct, 0);
-  const overallPct = totalQ > 0 ? Math.round((correctQ/totalQ)*100) : 0;
-  const totalTests = allAttempts.length;
+// ---------- STATS ----------
+function renderStats(app){
+  const all=[...state.history,...state.examAttempts];
+  for(const k in state.sectionAttempts) state.sectionAttempts[k].forEach(a=>all.push(a));
+  const totalQ=all.reduce((s,a)=>s+a.total,0);
+  const correctQ=all.reduce((s,a)=>s+a.correct,0);
+  const overallPct=totalQ>0?Math.round((correctQ/totalQ)*100):0;
+  const recent=all.slice(-15).reverse();
+  const examCount=state.examAttempts.length;
 
-  // Per section stats
-  const secStats = {};
-  SECTIONS.forEach(s => secStats[s.code] = {correct:0,total:0});
-  // Also consider individual test results broken by section if we track that... 
-  // For simplicity, we just track overall per-section from history
-  // Actually we need mode-detailed data. Let's compute from sectionAttempts and from completed tests
-  // For completed tests, we don't have per-section data in history, but we can approximate
-  // Let's use sectionAttempts data and also derive from test history if available
-  // For simplicity, we'll just show overall and let sectionAttempts provide per-section detail
-
-  const recent = allAttempts.slice(-10).reverse();
+  // Per-section from sectionAttempts
+  const sData={};SECTIONS.forEach(s=>sData[s.code]={correct:0,total:0});
+  for(const k in state.sectionAttempts){if(sData[k]) state.sectionAttempts[k].forEach(a=>{sData[k].correct+=a.correct;sData[k].total+=a.total})}
 
   app.innerHTML = `
     <div class="top-bar">
-      <button class="btn-icon" id="backBtn">‹</button>
-      <h2>Statistici</h2>
-      <div style="width:44px"></div>
+      <div class="tb-start"><button class="btn-icon" id="backBtn">‹</button></div>
+      <h2 class="tb-label">Statistici</h2>
+      <div class="tb-end"><div style="width:44px"></div></div>
     </div>
-    ${allAttempts.length === 0 ? '<div class="empty-state">Încă nu ai completat niciun test. Începe un test pentru a vedea statistici!</div>' : `
-    <div class="stats-grid">
-      <div class="stat-card animate"><div class="stat-num">${totalTests}</div><div class="stat-label">Teste date</div></div>
+    ${all.length===0?'<div class="empty-state">Încă nu ai completat niciun test.<br>Începe un test pentru a vedea statistici!</div>':`
+    <div class="stat-grid">
+      <div class="stat-card animate"><div class="stat-num">${all.length}</div><div class="stat-label">Teste date</div></div>
       <div class="stat-card animate"><div class="stat-num">${overallPct}%</div><div class="stat-label">Procentaj</div></div>
       <div class="stat-card animate"><div class="stat-num">${totalQ}</div><div class="stat-label">Întrebări</div></div>
-      <div class="stat-card animate"><div class="stat-num">${correctQ}/${totalQ}</div><div class="stat-label">Corecte</div></div>
+      <div class="stat-card animate"><div class="stat-num">${correctQ}<span style="font-size:16px;opacity:.5;font-weight:400">/${totalQ}</span></div><div class="stat-label">Corecte</div></div>
     </div>
-    <div class="card">
-      <p class="group-title" style="font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-soft);margin-bottom:14px;">Performanță pe secțiuni</p>
-      <div class="section-stats" id="secStats"></div>
-    </div>
-    ${recent.length > 0 ? `
-    <div class="card" style="margin-top:16px">
-      <p class="group-title" style="font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-soft);margin-bottom:8px;">Istoric recent</p>
-      <div id="historyList">${recent.map(h => `
-        <div class="history-item">
-          <span class="hname">${h.label}</span>
-          <span class="hscore">${h.correct}/${h.total} (${Math.round((h.correct/h.total)*100)}%)</span>
+    ${examCount>0?`<div class="card" style="margin-bottom:16px"><div class="card-header">Simulări examen</div>
+      <div style="text-align:center;padding:8px 0">
+        <span style="font-size:42px;font-weight:700;font-family:var(--serif);color:var(--gold)">${examCount}</span>
+        <span style="font-size:14px;color:var(--ink-soft);display:block;margin-top:2px">simulări date</span>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+        <div style="text-align:center;padding:12px;background:var(--paper);border-radius:var(--radius-sm);border:1px solid var(--line)">
+          <div style="font-size:24px;font-weight:700;font-family:var(--serif);color:var(--green)">${Math.round(state.examAttempts.reduce((s,a)=>s+a.correct/a.total*100,0)/Math.max(1,examCount))}%</div>
+          <div style="font-size:10px;color:var(--ink-soft);font-family:var(--mono);text-transform:uppercase;margin-top:2px">Medie</div>
         </div>
-      `).join('')}</div>
-    </div>` : ''}
+        <div style="text-align:center;padding:12px;background:var(--paper);border-radius:var(--radius-sm);border:1px solid var(--line)">
+          <div style="font-size:24px;font-weight:700;font-family:var(--serif);color:var(--gold)">${Math.max(...state.examAttempts.map(a=>a.correct))}<span style="font-size:14px;opacity:.5;font-weight:400">/${EXAM_QUESTION_COUNT}</span></div>
+          <div style="font-size:10px;color:var(--ink-soft);font-family:var(--mono);text-transform:uppercase;margin-top:2px">Cel mai bun</div>
+        </div>
+      </div>
+    </div>`:''}
+    <div class="card">
+      <div class="card-header">Performanță pe secțiuni</div>
+      <div class="sec-stats" id="secStats"></div>
+    </div>
+    ${recent.length>0?`<div class="card" style="margin-top:16px">
+      <div class="card-header">Istoric</div>
+      ${recent.map(h=>`<div class="history-item">
+        <div class="hleft">
+          ${h.type==='exam'?'<span class="hbadge">🎓</span>':h.type==='section'?'<span class="hbadge" style="background:var(--blue-bg);color:var(--blue)">'+h.label.replace('Secțiunea ','')+'</span>':'<span class="hbadge" style="background:var(--green-bg);color:var(--green)">T</span>'}
+          <span class="hname">${h.type==='exam'?'Simulare':h.label}</span>
+        </div>
+        <span class="hscore">${h.correct}/${h.total} (${Math.round((h.correct/h.total)*100)}%)</span>
+      </div>`).join('')}
+    </div>`:''}
     `}
   `;
+  app.querySelector('#backBtn').onclick=goHome;
 
-  app.querySelector('#backBtn').onclick = goHome;
-
-  if(allAttempts.length > 0){
-    const secStatsEl = app.querySelector('#secStats');
-    // Compute per-section from sectionAttempts
-    const sData = {};
-    SECTIONS.forEach(s => sData[s.code] = {correct:0,total:0});
-    for(const k in state.sectionAttempts){
-      if(sData[k]){
-        state.sectionAttempts[k].forEach(a => {
-          sData[k].correct += a.correct;
-          sData[k].total += a.total;
-        });
-      }
-    }
-    // Also estimate from completed tests (assume 8 questions per section per test)
-    state.history.forEach(h => {
-      if(h.type === 'test'){
-        // We don't have per-section breakdown for tests, skip
+  if(all.length>0){
+    const secEl=app.querySelector('#secStats');
+    SECTIONS.forEach(s=>{
+      const d=sData[s.code];
+      const p=d.total>0?Math.round((d.correct/d.total)*100):0;
+      if(d.total>0){
+        const div=document.createElement('div');div.className='sec-stat-row';
+        div.innerHTML='<span class="slabel">'+s.code+'</span><div class="sbar"><div class="sbar-fill" style="width:'+p+'%"></div></div><span class="spct">'+d.correct+'/'+d.total+'</span>';
+        secEl.appendChild(div);
       }
     });
-
-    SECTIONS.forEach(s => {
-      const d = sData[s.code];
-      const pct = d.total > 0 ? Math.round((d.correct/d.total)*100) : 0;
-      if(d.total > 0){
-        const div = document.createElement('div');
-        div.className = 'section-stat';
-        div.innerHTML = `
-          <span class="sname">${s.code}</span>
-          <div class="sbar"><div class="sbar-fill" style="width:${pct}%"></div></div>
-          <span class="spct">${d.correct}/${d.total}</span>
-        `;
-        secStatsEl.appendChild(div);
-      }
-    });
-
-    if(secStatsEl.children.length === 0){
-      secStatsEl.innerHTML = '<div style="font-size:13px;color:var(--ink-soft)">Completează un antrenament pe secțiuni pentru a vedea statistici detaliate.</div>';
-    }
+    if(secEl.children.length===0) secEl.innerHTML='<div style="font-size:13px;color:var(--ink-soft)">Folosește "Antrenament pe secțiuni" pentru statistici detaliate.</div>';
   }
 }
 
-// ---- Init ----
+// --- Init ---
 render();
 </script>
 </body>
