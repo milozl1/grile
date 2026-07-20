@@ -556,6 +556,12 @@ function goHome(){
   if(state.timerInterval){clearInterval(state.timerInterval);state.timerInterval=null}
   state.screen='home';render();
 }
+function goBackToOrigin(){
+  if(state.timerInterval){clearInterval(state.timerInterval);state.timerInterval=null}
+  if(state.quizMode==='section'){state.screen='section-picker';render();return}
+  if(state.quizMode==='test'){state.screen='tests';render();return}
+  state.screen='home';render();
+}
 
 // --- Screen routing ---
 function render(){
@@ -661,7 +667,7 @@ function renderSectionPicker(app){
       <h2 class="tb-label">Antrenament</h2>
       <div class="tb-end"><div style="width:44px"></div></div>
     </div>
-    <p class="sub">Alege o secțiune și numărul de întrebări.</p>
+    <p class="sub">Alege o secțiune și numărul de întrebări. Poți bifa corectarea imediată pentru a vedea răspunsul după fiecare întrebare.</p>
     <div class="card">
       <div class="card-header">Secțiunea</div>
       <div class="sec-grid" id="secGrid"></div>
@@ -670,10 +676,15 @@ function renderSectionPicker(app){
         <input type="range" id="qCount" min="4" max="50" step="2" value="${state.sectionCount}">
         <span class="rangeval" id="qCountVal">${state.sectionCount}</span>
       </div>
+      <div class="toggle-row" style="margin-top:4px">
+        <div><div class="ttitle">Corectare imediată</div><div class="tdesc">Vezi după fiecare răspuns dacă e corect</div></div>
+        <label class="switch"><input type="checkbox" id="sectionFeedbackToggle" ${state.instantFeedback?'checked':''}><span class="slider-el"></span></label>
+      </div>
       <button class="btn-primary" id="startSectionBtn">Începe antrenamentul</button>
     </div>
   `;
   app.querySelector('#backBtn').onclick=goHome;
+  app.querySelector('#sectionFeedbackToggle').onchange=e=>{state.instantFeedback=e.target.checked;savePersisted()};
   const grid=app.querySelector('#secGrid');
   if(!state.sectionCode) state.sectionCode=SECTIONS[0].code;
   SECTIONS.forEach(s=>{
@@ -938,6 +949,10 @@ function renderQuiz(app){
       showModal('Renunți la examen?','Vei pierde progresul curent. Poți începe unul nou oricând.',
         [{label:'Continuă examenul',primary:false,action:()=>{}},
          {label:'Renunță',primary:true,danger:true,action:goHome}]);
+    } else if(state.quizMode==='section'){
+      showModal('Renunți la antrenament?','Progresul la această sesiune se va pierde.',
+        [{label:'Continuă',primary:false,action:()=>{}},
+         {label:'Renunță',primary:true,danger:true,action:()=>{state.screen='section-picker';render()}}]);
     } else {
       showModal('Renunți la test?','Progresul la acest test se va pierde.',
         [{label:'Continuă testul',primary:false,action:()=>{}},
@@ -993,8 +1008,7 @@ function setupSwipe(el){
   el.addEventListener('touchend',e=>{
     const dx=e.changedTouches[0].clientX-sx,dy=e.changedTouches[0].clientY-sy;
     if(Math.abs(dx)>Math.abs(dy)&&Math.abs(dx)>60){
-      if(dx<0&&state.current<state.quiz.length-1&&state.answers[state.current]!==null&&state.quizMode!=='exam'){state.current++;state.currentSelection=[];state.locked=false;render()}
-      else if(dx<0&&state.quizMode==='exam'&&state.current<state.quiz.length-1){state.current++;state.currentSelection=[];render()}
+      if(dx<0&&state.current<state.quiz.length-1&&state.quizMode==='exam'){state.current++;state.currentSelection=[];render()}
       else if(dx>0&&state.current>0){state.current--;state.currentSelection=[];state.locked=false;render()}
     }
   },{passive:true});
@@ -1074,7 +1088,7 @@ function finishQuiz(){
   const elapsed = state.timerStarted ? Date.now()-state.timerStarted : 0;
   const total=state.quiz.length;
   const correct=state.answers.filter(a=>a&&a.correct).length;
-  const entry={type:state.quizMode,label:state.quizMode==='test'?'Test '+(state.testIndex+1):'Secțiunea '+state.sectionCode,total,correct,elapsed,date:Date.now()};
+  const entry={type:state.quizMode,label:state.quizMode==='test'?'Test '+(state.testIndex+1):'Sec. '+state.sectionCode,total,correct,elapsed,date:Date.now()};
   if(state.quizMode==='test'){state.completedTests.add(state.testIndex);state.history.push(entry)}
   else {
     if(!state.sectionAttempts[state.sectionCode]) state.sectionAttempts[state.sectionCode]=[];
@@ -1129,7 +1143,7 @@ function renderResults(app){
       <div class="breakdown" id="breakdown"></div>
       <button class="btn-primary" id="retryBtn">${isExamRes?'Simulează din nou':'Reia'}</button>
       <div style="display:flex;gap:10px;margin-top:10px">
-        <button class="btn-secondary" id="homeBtn2" style="flex:1">Meniu</button>
+        <button class="btn-secondary" id="homeBtn2" style="flex:1">${state.quizMode==='section'?'Alte secțiuni':state.quizMode==='test'?'Alte teste':'Meniu'}</button>
         ${isExamRes ? '<button class="btn-secondary" id="reviewBtn" style="flex:1">Revizuiește</button>' : ''}
       </div>
     </div>
@@ -1145,8 +1159,8 @@ function renderResults(app){
   });
 
   app.querySelector('#retryBtn').onclick=retryQuiz;
-  app.querySelector('#homeBtn').onclick=goHome;
-  app.querySelector('#homeBtn2').onclick=goHome;
+  app.querySelector('#homeBtn').onclick=goBackToOrigin;
+  app.querySelector('#homeBtn2').onclick=goBackToOrigin;
 
   // Review
   const reviewCard=app.querySelector('#reviewCard');
