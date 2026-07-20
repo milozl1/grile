@@ -964,7 +964,7 @@ function renderQuiz(app){
   setupSwipe(app.querySelector('#quizCard'));
 }
 
-// Non-exam mode: user taps an option
+// Non-exam mode: user taps an option, always requires explicit "Confirmă" / "Verifică"
 function toggleOption(letter){
   if(state.locked) return;
   const q=state.quiz[state.current];
@@ -975,10 +975,6 @@ function toggleOption(letter){
     else state.currentSelection.push(letter);
   } else {
     state.currentSelection=[letter];
-    if(state.instantFeedback){
-      submitAnswer();
-      return;
-    }
   }
   render();
 }
