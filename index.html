@@ -827,8 +827,7 @@ function renderQuiz(app){
     <div class="card swipe-zone" id="quizCard">
       <p class="qid">${q.id}</p>
       <p class="qtext">${esc(q.text)}</p>
-      ${isMulti && !isExam ? '<p class="multi-hint">Selectează toate variantele corecte</p>' : ''}
-      ${isMulti && isExam ? '<p class="multi-hint">Selectează toate variantele corecte</p>' : ''}
+      <p class="multi-hint">Poți selecta una sau mai multe variante, apoi verifică</p>
       <div class="opts" id="opts"></div>
       <div id="feedbackArea"></div>
       <div class="actions" id="actionsArea"></div>
@@ -915,19 +914,12 @@ function renderQuiz(app){
       nb.innerText=state.current<state.quiz.length-1?'Continuă →':'Vezi rezultatul';
       nb.onclick=nextQuestion;
       actionsArea.appendChild(nb);
-    } else if(isMulti){
+    } else if(state.currentSelection.length > 0){
       const sb=document.createElement('button');
       sb.className='btn-primary';
       sb.innerText='Verifică';
-      sb.disabled=currentSelection.length===0;
       sb.onclick=submitAnswer;
       actionsArea.appendChild(sb);
-    } else if(state.currentSelection.length > 0){
-      const cb=document.createElement('button');
-      cb.className='btn-primary';
-      cb.innerText='Confirmă';
-      cb.onclick=submitAnswer;
-      actionsArea.appendChild(cb);
     }
   } else {
     // Exam: show navigation
@@ -964,34 +956,22 @@ function renderQuiz(app){
   setupSwipe(app.querySelector('#quizCard'));
 }
 
-// Non-exam mode: user taps an option, always requires explicit "Confirmă" / "Verifică"
+// Non-exam mode: user taps to toggle any option on/off
 function toggleOption(letter){
   if(state.locked) return;
-  const q=state.quiz[state.current];
-  const isMulti=q.ans.length>1;
-  if(isMulti){
-    const idx=state.currentSelection.indexOf(letter);
-    if(idx>=0) state.currentSelection.splice(idx,1);
-    else state.currentSelection.push(letter);
-  } else {
-    state.currentSelection=[letter];
-  }
+  const idx=state.currentSelection.indexOf(letter);
+  if(idx>=0) state.currentSelection.splice(idx,1);
+  else state.currentSelection.push(letter);
   render();
 }
 
-// Exam mode: save selection without computing correctness, no auto-advance
+// Exam mode: save selection without computing correctness
 function examToggleOption(letter){
-  const q=state.quiz[state.current];
-  const isMulti=q.ans.length>1;
   let saved=state.answers[state.current];
   let sel = saved ? (Array.isArray(saved.selected||saved) ? [...(saved.selected||saved)] : []) : [];
   if(!saved) saved={selected:[],correct:null};
-  if(isMulti){
-    const idx=sel.indexOf(letter);
-    if(idx>=0) sel.splice(idx,1); else sel.push(letter);
-  } else {
-    sel = sel[0]===letter ? [] : [letter];
-  }
+  const idx=sel.indexOf(letter);
+  if(idx>=0) sel.splice(idx,1); else sel.push(letter);
   state.answers[state.current] = {selected:sel,correct:null};
   state.currentSelection=sel;
   render();
