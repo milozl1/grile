@@ -2,250 +2,330 @@
 <html lang="ro">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#F2EEE2" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#161B2B" media="(prefers-color-scheme: dark)">
 <title>Teste grilă — Licență 2026</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,500;8..60,600&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-  :root{
-    --paper:#F2EEE2;
-    --paper-card:#FBF9F3;
-    --ink:#1E2A44;
-    --ink-soft:#4C5670;
-    --line:#D8D2C0;
-    --gold:#B8912B;
-    --gold-soft:#EFE2BC;
-    --green:#2E6B4E;
-    --green-bg:#E1EEE4;
-    --red:#AC3B2E;
-    --red-bg:#F5E1DD;
-    --mono:'IBM Plex Mono', monospace;
-    --serif:'Source Serif 4', Georgia, serif;
-    --sans:'Inter', -apple-system, sans-serif;
-  }
-  *{box-sizing:border-box;}
-  body{
-    margin:0;
-    background:var(--paper);
-    color:var(--ink);
-    font-family:var(--sans);
-    -webkit-font-smoothing:antialiased;
-  }
-  #app{
-    max-width:760px;
-    margin:0 auto;
-    padding:32px 20px 80px;
-  }
-  .eyebrow{
-    font-family:var(--mono);
-    font-size:12px;
-    letter-spacing:0.08em;
-    text-transform:uppercase;
-    color:var(--gold);
-    margin:0 0 6px;
-  }
-  h1{
-    font-family:var(--serif);
-    font-weight:600;
-    font-size:32px;
-    margin:0 0 8px;
-    color:var(--ink);
-  }
-  .sub{
-    color:var(--ink-soft);
-    font-size:15px;
-    line-height:1.5;
-    margin:0 0 28px;
-    max-width:52ch;
-  }
-  .card{
-    background:var(--paper-card);
-    border:1px solid var(--line);
-    border-radius:4px;
-    padding:24px;
-    position:relative;
-  }
-  .card::before{
-    content:"";
-    position:absolute;
-    left:14px; top:0; bottom:0;
-    width:1px;
-    background:repeating-linear-gradient(to bottom, var(--line) 0 6px, transparent 6px 12px);
-    opacity:0.5;
-  }
-  section-block{display:block;}
-  .group-title{
-    font-family:var(--mono);
-    font-size:12px;
-    text-transform:uppercase;
-    letter-spacing:0.06em;
-    color:var(--ink-soft);
-    margin:0 0 12px;
-  }
-  .chips{
-    display:flex; flex-wrap:wrap; gap:8px; margin-bottom:24px;
-  }
-  .chip{
-    font-family:var(--sans);
-    font-size:14px;
-    font-weight:500;
-    padding:8px 14px;
-    border:1.5px solid var(--line);
-    border-radius:20px;
-    background:transparent;
-    color:var(--ink);
-    cursor:pointer;
-    transition:all .12s ease;
-  }
-  .chip:hover{border-color:var(--ink-soft);}
-  .chip.active{
-    background:var(--ink);
-    border-color:var(--ink);
-    color:var(--paper-card);
-  }
-  .modes{display:flex; flex-direction:column; gap:10px; margin-bottom:24px;}
-  .mode-opt{
-    display:flex; align-items:flex-start; gap:12px;
-    padding:14px 16px;
-    border:1.5px solid var(--line);
-    border-radius:6px;
-    cursor:pointer;
-    transition:border-color .12s ease, background .12s ease;
-  }
-  .mode-opt:hover{border-color:var(--ink-soft);}
-  .mode-opt.active{border-color:var(--gold); background:var(--gold-soft);}
-  .mode-opt input{margin-top:3px;}
-  .mode-opt .mtitle{font-weight:600; font-size:14.5px;}
-  .mode-opt .mdesc{font-size:13px; color:var(--ink-soft); margin-top:2px;}
-  .row{display:flex; align-items:center; gap:14px; margin-bottom:24px;}
-  .row label{font-size:14px; font-weight:500; min-width:150px;}
-  input[type=range]{flex:1; accent-color:var(--gold);}
-  .rangeval{font-family:var(--mono); font-weight:600; min-width:32px; text-align:right;}
-  .toggle-row{display:flex; align-items:center; justify-content:space-between; padding:12px 0; border-top:1px solid var(--line); margin-top:4px;}
-  .toggle-row .ttitle{font-size:14px; font-weight:500;}
-  .toggle-row .tdesc{font-size:12.5px; color:var(--ink-soft); margin-top:2px;}
-  .switch{position:relative; width:42px; height:24px; flex-shrink:0;}
-  .switch input{opacity:0; width:0; height:0;}
-  .slider-el{position:absolute; inset:0; background:#CFC9B7; border-radius:24px; cursor:pointer; transition:.15s;}
-  .slider-el:before{content:""; position:absolute; width:18px; height:18px; left:3px; top:3px; background:#fff; border-radius:50%; transition:.15s;}
-  input:checked + .slider-el{background:var(--gold);}
-  input:checked + .slider-el:before{transform:translateX(18px);}
-  button.primary{
-    width:100%;
-    padding:14px;
-    background:var(--ink);
-    color:var(--paper-card);
-    border:none;
-    border-radius:6px;
-    font-family:var(--sans);
-    font-size:15px;
-    font-weight:600;
-    cursor:pointer;
-    margin-top:8px;
-    transition:opacity .12s ease;
-  }
-  button.primary:hover{opacity:0.88;}
-  button.ghost{
-    width:100%;
-    padding:12px;
-    background:transparent;
-    color:var(--ink);
-    border:1.5px solid var(--line);
-    border-radius:6px;
-    font-family:var(--sans);
-    font-size:14px;
-    font-weight:500;
-    cursor:pointer;
-    margin-top:10px;
-  }
-  button.ghost:hover{border-color:var(--ink-soft);}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --paper:#F2EEE2;
+  --paper-card:#FBF9F3;
+  --ink:#1E2A44;
+  --ink-soft:#4C5670;
+  --line:#D8D2C0;
+  --gold:#B8912B;
+  --gold-soft:#EFE2BC;
+  --green:#2E6B4E;
+  --green-bg:#E1EEE4;
+  --red:#AC3B2E;
+  --red-bg:#F5E1DD;
+  --mono:'IBM Plex Mono',monospace;
+  --serif:'Source Serif 4',Georgia,serif;
+  --sans:'Inter',-apple-system,sans-serif;
+  --radius:12px;
+  --shadow:0 1px 3px rgba(0,0,0,.06),0 1px 2px rgba(0,0,0,.04);
+  --safe-bottom:env(safe-area-inset-bottom,0px);
+}
+[data-theme=dark]{
+  --paper:#161B2B;
+  --paper-card:#1E2740;
+  --ink:#E8E4D8;
+  --ink-soft:#9DA3B5;
+  --line:#2E3854;
+  --gold:#D4A843;
+  --gold-soft:#2E2A1A;
+  --green:#4CAF7A;
+  --green-bg:#1A2E22;
+  --red:#E06050;
+  --red-bg:#2E1A18;
+}
+html{height:100%;-webkit-tap-highlight-color:transparent}
+body{
+  margin:0;min-height:100%;background:var(--paper);color:var(--ink);
+  font-family:var(--sans);-webkit-font-smoothing:antialiased;
+  transition:background .25s ease,color .25s ease;
+}
+#app{
+  max-width:760px;margin:0 auto;padding:24px 16px calc(80px + var(--safe-bottom));
+  animation:fadeIn .2s ease;
+}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+@keyframes slideUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+@keyframes scaleIn{from{transform:scale(.95);opacity:0}to{transform:scale(1);opacity:1}}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
+.animate{animation:slideUp .25s ease forwards;opacity:0}
+.animate:nth-child(1){animation-delay:0s}
+.animate:nth-child(2){animation-delay:.06s}
+.animate:nth-child(3){animation-delay:.12s}
+.animate:nth-child(4){animation-delay:.18s}
+.animate:nth-child(5){animation-delay:.24s}
+.animate:nth-child(6){animation-delay:.30s}
 
-  /* quiz screen */
-  .quiz-top{display:flex; align-items:center; justify-content:space-between; margin-bottom:16px;}
-  .qmeta{font-family:var(--mono); font-size:12.5px; color:var(--ink-soft);}
-  .qscore{font-family:var(--mono); font-size:12.5px; color:var(--ink-soft);}
-  .progress-track{height:6px; background:var(--line); border-radius:3px; overflow:hidden; margin-bottom:24px;}
-  .progress-fill{height:100%; background:var(--gold); transition:width .2s ease;}
-  .qid{font-family:var(--mono); font-size:12px; color:var(--gold); margin-bottom:6px; letter-spacing:.04em;}
-  .qtext{
-    font-family:var(--serif);
-    font-size:18px;
-    line-height:1.5;
-    white-space:pre-wrap;
-    margin:0 0 20px;
-    color:var(--ink);
-  }
-  .qtext code, .code-block{
-    font-family:var(--mono);
-    font-size:14px;
-    background:#EDE7D6;
-    display:block;
-    padding:10px 12px;
-    border-radius:4px;
-    margin:8px 0;
-    white-space:pre-wrap;
-  }
-  .multi-hint{font-size:12.5px; color:var(--ink-soft); font-style:italic; margin:-12px 0 16px;}
-  .opts{display:flex; flex-direction:column; gap:10px;}
-  .opt{
-    display:flex; align-items:flex-start; gap:12px;
-    padding:12px 14px;
-    border:1.5px solid var(--line);
-    border-radius:6px;
-    cursor:pointer;
-    background:var(--paper-card);
-    transition:border-color .12s ease, background .12s ease;
-  }
-  .opt:hover:not(.locked){border-color:var(--ink-soft);}
-  .bubble{
-    flex-shrink:0;
-    width:26px; height:26px;
-    border-radius:50%;
-    border:1.5px solid var(--ink-soft);
-    display:flex; align-items:center; justify-content:center;
-    font-family:var(--mono);
-    font-size:13px;
-    font-weight:600;
-    color:var(--ink-soft);
-    transition:all .12s ease;
-  }
-  .opt.selected .bubble{background:var(--ink); border-color:var(--ink); color:var(--paper-card);}
-  .opt.correct{border-color:var(--green); background:var(--green-bg);}
-  .opt.correct .bubble{background:var(--green); border-color:var(--green); color:#fff;}
-  .opt.incorrect{border-color:var(--red); background:var(--red-bg);}
-  .opt.incorrect .bubble{background:var(--red); border-color:var(--red); color:#fff;}
-  .opt.missed{border-color:var(--green); border-style:dashed;}
-  .opt-text{font-size:14.5px; line-height:1.45; padding-top:3px;}
-  .feedback{
-    margin-top:18px;
-    padding:14px 16px;
-    border-radius:6px;
-    font-size:14px;
-    line-height:1.5;
-  }
-  .feedback.ok{background:var(--green-bg); color:var(--green);}
-  .feedback.bad{background:var(--red-bg); color:var(--red);}
-  .actions{display:flex; gap:10px; margin-top:20px;}
-  .actions button{flex:1;}
+/* Header */
+.top-bar{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:8px 0 16px;
+}
+.top-bar h2{
+  font-family:var(--serif);font-size:20px;font-weight:600;color:var(--ink);
+}
+.btn-icon{
+  width:44px;height:44px;display:flex;align-items:center;justify-content:center;
+  border:none;background:var(--paper-card);color:var(--ink-soft);font-size:20px;
+  border-radius:50%;cursor:pointer;transition:all .15s ease;border:1px solid var(--line);
+}
+.btn-icon:hover,.btn-icon:focus-visible{color:var(--ink);border-color:var(--ink-soft)}
 
-  /* results */
-  .score-hero{text-align:center; padding:20px 0 8px;}
-  .score-num{font-family:var(--serif); font-size:56px; font-weight:600; color:var(--ink);}
-  .score-label{font-size:13px; color:var(--ink-soft); font-family:var(--mono); text-transform:uppercase; letter-spacing:.06em;}
-  .breakdown{display:grid; grid-template-columns:repeat(auto-fit,minmax(140px,1fr)); gap:10px; margin:24px 0;}
-  .bd-item{background:var(--paper); border:1px solid var(--line); border-radius:6px; padding:12px 14px;}
-  .bd-item .bname{font-size:12px; color:var(--ink-soft); font-family:var(--mono); margin-bottom:4px;}
-  .bd-item .bscore{font-size:20px; font-weight:600;}
-  .review-item{border-top:1px solid var(--line); padding:16px 0;}
-  .review-item:first-child{border-top:none;}
-  .review-q{font-family:var(--serif); font-size:15px; margin:0 0 8px; white-space:pre-wrap;}
-  .review-line{font-size:13.5px; margin:2px 0;}
-  .review-line.correct-ans{color:var(--green);}
-  .review-line.wrong-ans{color:var(--red);}
-  @media (max-width:480px){
-    .qtext{font-size:16.5px;}
-    .score-num{font-size:44px;}
-  }
+/* Cards */
+.card{
+  background:var(--paper-card);border:1px solid var(--line);border-radius:var(--radius);
+  padding:24px;position:relative;transition:background .25s ease,border-color .25s ease;
+  animation:scaleIn .2s ease;
+}
+.eyebrow{
+  font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--gold);margin:0 0 6px;
+}
+h1{
+  font-family:var(--serif);font-weight:600;font-size:28px;margin:0 0 6px;color:var(--ink);
+  line-height:1.2;
+}
+.sub{
+  color:var(--ink-soft);font-size:15px;line-height:1.5;margin:0 0 24px;max-width:52ch;
+}
+
+/* Home menu */
+.home-menu{display:flex;flex-direction:column;gap:12px}
+.menu-btn{
+  display:flex;align-items:center;gap:16px;
+  padding:18px 20px;border:1.5px solid var(--line);border-radius:var(--radius);
+  background:var(--paper-card);cursor:pointer;transition:all .15s ease;text-align:left;
+  width:100%;font-family:var(--sans);
+}
+.menu-btn:hover,.menu-btn:focus-visible{border-color:var(--gold);transform:translateX(4px)}
+.menu-btn .icon{
+  width:44px;height:44px;border-radius:12px;display:flex;align-items:center;
+  justify-content:center;font-size:20px;flex-shrink:0;
+  background:var(--gold-soft);color:var(--gold);transition:background .25s ease;
+}
+.menu-btn .mtitle{font-weight:600;font-size:15px;color:var(--ink);margin-bottom:2px}
+.menu-btn .mdesc{font-size:13px;color:var(--ink-soft)}
+
+/* Toggle row in card */
+.toggle-row{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:14px 0;border-top:1px solid var(--line);margin-top:8px;
+}
+.toggle-row .ttitle{font-size:14px;font-weight:500}
+.toggle-row .tdesc{font-size:12px;color:var(--ink-soft);margin-top:2px}
+
+/* Switch */
+.switch{position:relative;width:44px;height:26px;flex-shrink:0}
+.switch input{opacity:0;width:0;height:0}
+.slider-el{
+  position:absolute;inset:0;background:var(--line);border-radius:26px;
+  cursor:pointer;transition:background .2s ease;
+}
+.slider-el::before{
+  content:"";position:absolute;width:20px;height:20px;left:3px;top:3px;
+  background:#fff;border-radius:50%;transition:transform .2s ease;
+}
+input:checked+.slider-el{background:var(--gold)}
+input:checked+.slider-el::before{transform:translateX(18px)}
+
+/* Section picker */
+.sec-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px}
+.sec-card{
+  padding:16px;border:1.5px solid var(--line);border-radius:var(--radius);
+  cursor:pointer;transition:all .15s ease;text-align:center;background:var(--paper-card);
+}
+.sec-card:hover{border-color:var(--ink-soft)}
+.sec-card.active{border-color:var(--gold);background:var(--gold-soft)}
+.sec-card .sec-code{
+  font-family:var(--mono);font-weight:600;font-size:18px;color:var(--gold);
+}
+.sec-card .sec-name{font-size:11px;color:var(--ink-soft);margin-top:4px}
+.range-row{display:flex;align-items:center;gap:12px;margin-bottom:20px}
+.range-row label{font-size:13px;font-weight:500;white-space:nowrap}
+input[type=range]{flex:1;accent-color:var(--gold);height:6px;cursor:pointer}
+.rangeval{font-family:var(--mono);font-weight:600;font-size:14px;min-width:36px;text-align:right}
+
+/* Test list */
+.test-list{display:flex;flex-direction:column;gap:8px}
+.test-opt{
+  display:flex;align-items:center;gap:14px;
+  padding:16px;border:1.5px solid var(--line);border-radius:var(--radius);
+  cursor:pointer;transition:all .15s ease;background:var(--paper-card);
+}
+.test-opt:hover{border-color:var(--ink-soft)}
+.test-opt .tnum{
+  font-family:var(--mono);font-weight:600;font-size:16px;color:var(--gold);
+  min-width:40px;
+}
+.test-opt .tinfo .ttitle{font-weight:600;font-size:14px;color:var(--ink)}
+.test-opt .tinfo .tdesc{font-size:12px;color:var(--ink-soft);margin-top:2px}
+.test-opt .check{
+  margin-left:auto;width:24px;height:24px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+}
+.test-opt .check.done{background:var(--green);color:#fff;font-size:13px}
+
+/* Buttons */
+button{font-family:var(--sans);-webkit-tap-highlight-color:transparent}
+.btn-primary{
+  width:100%;padding:16px;background:var(--ink);color:var(--paper-card);
+  border:none;border-radius:var(--radius);font-size:15px;font-weight:600;
+  cursor:pointer;transition:opacity .15s ease,transform .1s ease;
+}
+.btn-primary:active{transform:scale(.98)}
+.btn-primary:hover{opacity:.88}
+.btn-primary:disabled{opacity:.4;cursor:default}
+.btn-secondary{
+  width:100%;padding:14px;background:transparent;color:var(--ink);
+  border:1.5px solid var(--line);border-radius:var(--radius);font-size:14px;
+  font-weight:500;cursor:pointer;transition:all .15s ease;display:flex;
+  align-items:center;justify-content:center;gap:8px;
+}
+.btn-secondary:hover{border-color:var(--ink-soft)}
+.btn-small{
+  padding:10px 16px;border:1.5px solid var(--line);border-radius:8px;
+  background:transparent;color:var(--ink-soft);font-size:13px;font-weight:500;
+  cursor:pointer;transition:all .15s ease;font-family:var(--sans);
+}
+.btn-small:hover{border-color:var(--ink-soft);color:var(--ink)}
+
+/* Quiz */
+.quiz-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;gap:8px}
+.quiz-top .qmeta{font-family:var(--mono);font-size:11px;color:var(--ink-soft)}
+.quiz-top .qscore{font-family:var(--mono);font-size:11px;color:var(--ink-soft)}
+.progress-track{
+  height:4px;background:var(--line);border-radius:2px;overflow:hidden;margin-bottom:16px;
+}
+.progress-fill{height:100%;background:var(--gold);transition:width .3s ease}
+
+/* Palette dots */
+.palette{display:flex;gap:4px;margin-bottom:16px;overflow-x:auto;padding:4px 0}
+.palette-dot{
+  width:20px;height:20px;border-radius:4px;border:1.5px solid var(--line);
+  flex-shrink:0;cursor:pointer;transition:all .15s ease;position:relative;
+  display:flex;align-items:center;justify-content:center;
+}
+.palette-dot.current{border-color:var(--gold)}
+.palette-dot.answered{border-color:var(--ink-soft);background:var(--ink-soft)}
+.palette-dot.answered.wrong{border-color:var(--red);background:var(--red)}
+.palette-dot.answered.correct{border-color:var(--green);background:var(--green)}
+
+.qid{font-family:var(--mono);font-size:11px;color:var(--gold);margin-bottom:8px;letter-spacing:.04em}
+.qtext{
+  font-family:var(--serif);font-size:17px;line-height:1.55;
+  white-space:pre-wrap;margin:0 0 20px;color:var(--ink);
+}
+.qtext code,.code-block{
+  font-family:var(--mono);font-size:13px;background:var(--line);
+  display:block;padding:10px 12px;border-radius:6px;margin:10px 0;white-space:pre-wrap;
+}
+.multi-hint{font-size:12px;color:var(--ink-soft);font-style:italic;margin:-12px 0 14px}
+
+/* Options */
+.opts{display:flex;flex-direction:column;gap:10px}
+.opt{
+  display:flex;align-items:flex-start;gap:14px;
+  padding:14px 16px;border:1.5px solid var(--line);border-radius:var(--radius);
+  cursor:pointer;background:var(--paper-card);transition:all .15s ease;
+  min-height:56px;
+}
+.opt:hover:not(.locked):not(.disabled){border-color:var(--ink-soft)}
+.opt:active:not(.locked){transform:scale(.99)}
+.opt .bubble{
+  flex-shrink:0;width:28px;height:28px;border-radius:50%;
+  border:1.5px solid var(--ink-soft);display:flex;align-items:center;
+  justify-content:center;font-family:var(--mono);font-size:13px;font-weight:600;
+  color:var(--ink-soft);transition:all .15s ease;margin-top:1px;
+}
+.opt.selected .bubble{background:var(--ink);border-color:var(--ink);color:var(--paper-card)}
+.opt.correct{border-color:var(--green);background:var(--green-bg)}
+.opt.correct .bubble{background:var(--green);border-color:var(--green);color:#fff}
+.opt.incorrect{border-color:var(--red);background:var(--red-bg)}
+.opt.incorrect .bubble{background:var(--red);border-color:var(--red);color:#fff}
+.opt.missed{border-color:var(--green);border-style:dashed}
+.opt-text{font-size:14px;line-height:1.45;padding-top:2px;flex:1}
+
+/* Feedback */
+.feedback{
+  margin-top:16px;padding:14px 16px;border-radius:var(--radius);
+  font-size:14px;line-height:1.5;animation:slideUp .2s ease;
+}
+.feedback.ok{background:var(--green-bg);color:var(--green)}
+.feedback.bad{background:var(--red-bg);color:var(--red)}
+
+.actions{display:flex;gap:10px;margin-top:16px}
+.actions button{flex:1}
+
+/* Results */
+.score-hero{text-align:center;padding:16px 0 4px}
+.score-num{font-family:var(--serif);font-size:52px;font-weight:600;color:var(--ink)}
+.score-label{font-size:12px;color:var(--ink-soft);font-family:var(--mono);text-transform:uppercase;letter-spacing:.06em}
+.breakdown{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin:20px 0}
+.bd-item{background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:12px 14px}
+.bd-item .bname{font-size:11px;color:var(--ink-soft);font-family:var(--mono);margin-bottom:4px}
+.bd-item .bscore{font-size:18px;font-weight:600}
+.review-item{border-top:1px solid var(--line);padding:16px 0}
+.review-item:first-child{border-top:none}
+.review-q{font-family:var(--serif);font-size:14px;margin:0 0 8px;white-space:pre-wrap}
+.review-line{font-size:13px;margin:2px 0}
+.review-line.correct-ans{color:var(--green)}
+.review-line.wrong-ans{color:var(--red)}
+
+/* Stats */
+.stat-card{padding:16px;text-align:center;border:1px solid var(--line);border-radius:var(--radius);background:var(--paper)}
+.stat-card .stat-num{font-family:var(--serif);font-size:32px;font-weight:600;color:var(--ink)}
+.stat-card .stat-label{font-size:11px;color:var(--ink-soft);font-family:var(--mono);text-transform:uppercase;margin-top:2px}
+.stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px}
+.section-stats{display:flex;flex-direction:column;gap:8px}
+.section-stat{display:flex;align-items:center;gap:12px;padding:10px 12px}
+.section-stat .sname{font-size:12px;font-weight:500;min-width:30px}
+.section-stat .sbar{flex:1;height:8px;background:var(--line);border-radius:4px;overflow:hidden}
+.section-stat .sbar-fill{height:100%;background:var(--gold);border-radius:4px;transition:width .3s ease}
+.section-stat .spct{font-family:var(--mono);font-size:11px;color:var(--ink-soft);min-width:36px;text-align:right}
+
+.history-item{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:12px 0;border-top:1px solid var(--line);
+}
+.history-item .hname{font-size:13px;font-weight:500}
+.history-item .hscore{font-family:var(--mono);font-size:13px}
+
+/* Timer */
+.timer-bar{
+  display:flex;align-items:center;justify-content:center;gap:6px;
+  font-family:var(--mono);font-size:12px;color:var(--ink-soft);padding:4px 0 12px;
+}
+
+/* Swipe zone */
+.swipe-zone{position:relative}
+
+/* Empty state */
+.empty-state{text-align:center;padding:32px 16px;color:var(--ink-soft);font-size:14px}
+
+/* Responsive */
+@media(max-width:480px){
+  #app{padding:16px 12px calc(70px + var(--safe-bottom))}
+  h1{font-size:24px}
+  .card{padding:18px}
+  .qtext{font-size:16px}
+  .score-num{font-size:42px}
+  .menu-btn{padding:14px 16px}
+  .opt{padding:12px 14px;min-height:50px}
+  .sec-grid{grid-template-columns:1fr 1fr;gap:8px}
+  .sec-card{padding:14px}
+  .stats-grid{grid-template-columns:1fr 1fr;gap:8px}
+}
+@media(min-width:481px){
+  .sec-grid{grid-template-columns:repeat(4,1fr)}
+}
 </style>
 </head>
 <body>
@@ -255,8 +335,7 @@ const QUESTIONS = [{"id": "A.1", "sec": "A", "secName": "Algoritmi. Programare. 
 
 const TEST_DEFS = [["A.26", "A.24", "A.20", "A.12", "A.5", "A.46", "A.27", "A.10", "BD.43", "BD.42", "BD.14", "BD.10", "BD.20", "BD.30", "BD.2", "BD.1", "J.23", "J.19", "J.11", "J.15", "J.18", "J.20", "J.7", "J.31", "S.49", "S.29", "S.6", "S.14", "S.38", "S.25", "S.23", "S.42"], ["A.30", "A.17", "A.32", "A.22", "A.13", "A.4", "A.40", "A.39", "BD.16", "BD.4", "BD.29", "BD.11", "BD.39", "BD.23", "BD.17", "BD.46", "J.24", "J.1", "J.27", "J.22", "J.38", "J.41", "J.40", "J.33", "S.28", "S.18", "S.15", "S.9", "S.22", "S.35", "S.46", "S.5"], ["A.11", "A.25", "A.36", "A.1", "A.44", "A.19", "A.34", "A.49", "BD.49", "BD.18", "BD.26", "BD.38", "BD.31", "BD.22", "BD.33", "BD.32", "J.13", "J.44", "J.48", "J.6", "J.47", "J.29", "J.4", "J.2", "S.32", "S.31", "S.40", "S.3", "S.19", "S.36", "S.2", "S.8"], ["A.42", "A.31", "A.29", "A.21", "A.23", "A.43", "A.47", "A.37", "BD.28", "BD.50", "BD.12", "BD.27", "BD.21", "BD.34", "BD.9", "BD.48", "J.25", "J.3", "J.49", "J.34", "J.5", "J.8", "J.12", "J.43", "S.37", "S.26", "S.27", "S.44", "S.4", "S.39", "S.16", "S.21"], ["A.33", "A.45", "A.14", "A.50", "A.48", "A.3", "A.28", "A.38", "BD.7", "BD.44", "BD.47", "BD.45", "BD.15", "BD.3", "BD.5", "BD.13", "J.28", "J.39", "J.35", "J.36", "J.16", "J.9", "J.17", "J.10", "S.48", "S.34", "S.50", "S.24", "S.10", "S.13", "S.43", "S.20"], ["A.6", "A.35", "A.7", "A.9", "A.15", "A.16", "A.18", "A.2", "BD.37", "BD.24", "BD.40", "BD.41", "BD.19", "BD.36", "BD.6", "BD.25", "J.30", "J.45", "J.26", "J.32", "J.42", "J.50", "J.21", "J.46", "S.41", "S.7", "S.45", "S.12", "S.33", "S.17", "S.47", "S.1"], ["A.8", "A.41", "A.26", "A.24", "A.20", "A.12", "A.5", "A.46", "BD.8", "BD.35", "BD.43", "BD.42", "BD.14", "BD.10", "BD.20", "BD.30", "J.37", "J.14", "J.23", "J.19", "J.11", "J.15", "J.18", "J.20", "S.30", "S.11", "S.49", "S.29", "S.6", "S.14", "S.38", "S.25"]];
 
-</script>
-<script>
+
 const SECTIONS = [
   {code:'A', name:'Algoritmi. Programare. Structuri de date'},
   {code:'BD', name:'Baze de date'},
@@ -267,32 +346,458 @@ const SECTIONS = [
 const QMAP = {};
 QUESTIONS.forEach(q => QMAP[q.id] = q);
 
+// ---- Persistence ----
+const STORAGE_KEY = 'grile_licenta_state';
+
+function loadPersisted(){
+  try{
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if(raw) return JSON.parse(raw);
+  }catch(e){}
+  return null;
+}
+
+function savePersisted(){
+  try{
+    const data = {
+      completedTests: [...state.completedTests],
+      history: state.history,
+      darkMode: state.darkMode,
+      instantFeedback: state.instantFeedback,
+      sectionAttempts: state.sectionAttempts
+    };
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+  }catch(e){}
+}
+
 let state = {
-  screen: 'setup',
+  screen: 'home',
+  darkMode: window.matchMedia('(prefers-color-scheme: dark)').matches,
   instantFeedback: true,
+  quizMode: null, // 'test' or 'section'
   testIndex: null,
+  sectionCode: null,
+  sectionCount: 10,
   quiz: [],
   current: 0,
   answers: [],
   currentSelection: [],
-  locked: false
+  locked: false,
+  completedTests: new Set(),
+  history: [],
+  sectionAttempts: {},
+  timerStarted: null,
+  timerInterval: null
 };
 
-// progress across tests, persisted only in-memory for this session
-let completedTests = new Set();
+// Restore persisted state
+const saved = loadPersisted();
+if(saved){
+  if(saved.completedTests) state.completedTests = new Set(saved.completedTests);
+  if(saved.history) state.history = saved.history;
+  if(saved.darkMode !== undefined) state.darkMode = saved.darkMode;
+  if(saved.instantFeedback !== undefined) state.instantFeedback = saved.instantFeedback;
+  if(saved.sectionAttempts) state.sectionAttempts = saved.sectionAttempts;
+}
 
-function letters(){ return ['a','b','c','d','e']; }
+function setTheme(){
+  document.documentElement.setAttribute('data-theme', state.darkMode ? 'dark' : 'light');
+  const meta = document.querySelector('meta[name=theme-color]');
+  if(meta){
+    meta.content = state.darkMode ? '#161B2B' : '#F2EEE2';
+  }
+}
+setTheme();
 
-function startTest(idx){
-  state.testIndex = idx;
-  const ids = TEST_DEFS[idx];
-  state.quiz = ids.map(id => QMAP[id]);
+// ---- Helpers ----
+function esc(s){
+  const d = document.createElement('div');
+  d.innerText = s;
+  return d.innerHTML;
+}
+
+function shuffle(arr){
+  const a = arr.slice();
+  for(let i=a.length-1; i>0; i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [a[i],a[j]] = [a[j],a[i]];
+  }
+  return a;
+}
+
+function arraysEqualAsSets(a,b){
+  if(a.length !== b.length) return false;
+  const sa = a.slice().sort(), sb = b.slice().sort();
+  return sa.every((v,i)=>v===sb[i]);
+}
+
+function formatTime(ms){
+  const s = Math.floor(ms/1000);
+  const m = Math.floor(s/60);
+  const sec = s%60;
+  return m + ':' + (sec<10?'0':'') + sec;
+}
+
+// ---- Navigation ----
+function goHome(){
+  state.screen = 'home';
+  if(state.timerInterval){clearInterval(state.timerInterval);state.timerInterval=null}
+  render();
+}
+
+function goToTests(){
+  state.screen = 'tests';
+  render();
+}
+
+function goToSectionPicker(){
+  state.screen = 'section-picker';
+  render();
+}
+
+function goToStats(){
+  state.screen = 'stats';
+  render();
+}
+
+// ---- Screen rendering ----
+function render(){
+  const app = document.getElementById('app');
+  switch(state.screen){
+    case 'home': renderHome(app); break;
+    case 'tests': renderTestList(app); break;
+    case 'section-picker': renderSectionPicker(app); break;
+    case 'quiz': renderQuiz(app); break;
+    case 'results': renderResults(app); break;
+    case 'stats': renderStats(app); break;
+  }
+}
+
+function renderHome(app){
+  app.innerHTML = `
+    <div class="top-bar">
+      <div>
+        <p class="eyebrow">Teste grilă · Licență 2026</p>
+        <h2>Pregătire examen</h2>
+      </div>
+      <div style="display:flex;gap:8px">
+        <button class="btn-icon" id="themeBtn" aria-label="Schimbă tema">${state.darkMode?'☀':'☾'}</button>
+      </div>
+    </div>
+    <p class="sub">${state.history.length} teste finalizate · ${getTotalAnswered()} întrebări rezolvate</p>
+    <div class="home-menu">
+      <button class="menu-btn animate" id="testsBtn">
+        <div class="icon">📋</div>
+        <div><div class="mtitle">Teste complete</div><div class="mdesc">7 teste fixe, 32 de întrebări fiecare</div></div>
+      </button>
+      <button class="menu-btn animate" id="sectionBtn">
+        <div class="icon">🎯</div><div>
+        <div class="mtitle">Antrenament pe secțiuni</div><div class="mdesc">Alege o secțiune și nr. de întrebări</div></div>
+      </button>
+      <button class="menu-btn animate" id="statsBtn">
+        <div class="icon">📊</div>
+        <div><div class="mtitle">Statistici</div><div class="mdesc">Evoluția ta și performanța pe secțiuni</div></div>
+      </button>
+    </div>
+  `;
+  app.querySelector('#themeBtn').onclick = ()=>{
+    state.darkMode = !state.darkMode;
+    setTheme();
+    savePersisted();
+    render();
+  };
+  app.querySelector('#testsBtn').onclick = goToTests;
+  app.querySelector('#sectionBtn').onclick = goToSectionPicker;
+  app.querySelector('#statsBtn').onclick = goToStats;
+}
+
+function getTotalAnswered(){
+  let t = 0;
+  state.history.forEach(h => t += h.total);
+  for(const k in state.sectionAttempts){
+    state.sectionAttempts[k].forEach(a => t += a.total);
+  }
+  return t;
+}
+
+function renderTestList(app){
+  app.innerHTML = `
+    <div class="top-bar">
+      <button class="btn-icon" id="backBtn">‹</button>
+      <h2>Teste complete</h2>
+      <div style="width:44px"></div>
+    </div>
+    <p class="sub">7 teste conforme cu regulamentul oficial. Fiecare test are 32 de întrebări (8×4 secțiuni).</p>
+    <div class="card">
+      <div class="toggle-row">
+        <div>
+          <div class="ttitle">Corectare imediată</div>
+          <div class="tdesc">Vezi pe loc dacă răspunsul e corect</div>
+        </div>
+        <label class="switch">
+          <input type="checkbox" id="feedbackToggle" ${state.instantFeedback?'checked':''}>
+          <span class="slider-el"></span>
+        </label>
+      </div>
+    </div>
+    <div style="height:16px"></div>
+    <div class="test-list" id="testList"></div>
+  `;
+  app.querySelector('#backBtn').onclick = goHome;
+  app.querySelector('#feedbackToggle').onchange = e => {
+    state.instantFeedback = e.target.checked;
+    savePersisted();
+  };
+
+  const list = app.querySelector('#testList');
+  TEST_DEFS.forEach((ids, i)=>{
+    const div = document.createElement('div');
+    div.className = 'test-opt animate';
+    const done = state.completedTests.has(i);
+    div.innerHTML = `
+      <div class="tnum">#${i+1}</div>
+      <div class="tinfo">
+        <div class="ttitle">Testul ${i+1}</div>
+        <div class="tdesc">32 întrebări (8 A · 8 BD · 8 J · 8 S)</div>
+      </div>
+      ${done ? '<div class="check done">✓</div>' : '<div class="check"></div>'}
+    `;
+    div.onclick = () => startTest(i);
+    list.appendChild(div);
+  });
+}
+
+function renderSectionPicker(app){
+  app.innerHTML = `
+    <div class="top-bar">
+      <button class="btn-icon" id="backBtn">‹</button>
+      <h2>Antrenament</h2>
+      <div style="width:44px"></div>
+    </div>
+    <p class="sub">Alege o secțiune și numărul de întrebări cu care vrei să exersezi.</p>
+    <div class="card">
+      <p class="group-title" style="font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-soft);margin-bottom:14px;">Secțiunea</p>
+      <div class="sec-grid" id="secGrid"></div>
+      <div class="range-row">
+        <label for="qCount">Întrebări:</label>
+        <input type="range" id="qCount" min="4" max="50" step="2" value="${state.sectionCount}">
+        <span class="rangeval" id="qCountVal">${state.sectionCount}</span>
+      </div>
+      <button class="btn-primary" id="startSectionBtn">Începe antrenamentul</button>
+    </div>
+  `;
+  app.querySelector('#backBtn').onclick = goHome;
+
+  const grid = app.querySelector('#secGrid');
+  SECTIONS.forEach(s => {
+    const div = document.createElement('div');
+    div.className = 'sec-card' + (state.sectionCode === s.code ? ' active' : '');
+    div.innerHTML = `<div class="sec-code">${s.code}</div><div class="sec-name">${s.name.split('.')[0]}</div>`;
+    div.onclick = () => {
+      state.sectionCode = s.code;
+      renderSectionPicker(app);
+    };
+    grid.appendChild(div);
+  });
+
+  if(!state.sectionCode) state.sectionCode = SECTIONS[0].code;
+
+  const range = app.querySelector('#qCount');
+  const rangeVal = app.querySelector('#qCountVal');
+  range.oninput = () => {
+    state.sectionCount = parseInt(range.value);
+    rangeVal.textContent = state.sectionCount;
+  };
+
+  app.querySelector('#startSectionBtn').onclick = () => {
+    if(!state.sectionCode) return;
+    startSectionPractice();
+  };
+}
+
+function startSectionPractice(){
+  const questionsInSection = QUESTIONS.filter(q => q.sec === state.sectionCode);
+  const shuffled = shuffle(questionsInSection);
+  const count = Math.min(state.sectionCount, shuffled.length);
+  state.quiz = shuffled.slice(0, count);
+  state.quizMode = 'section';
+  state.sectionCode = state.sectionCode;
   state.current = 0;
   state.answers = new Array(state.quiz.length).fill(null);
   state.currentSelection = [];
   state.locked = false;
+  state.timerStarted = Date.now();
   state.screen = 'quiz';
   render();
+}
+
+function startTest(idx){
+  state.testIndex = idx;
+  state.quiz = TEST_DEFS[idx].map(id => QMAP[id]);
+  state.quizMode = 'test';
+  state.current = 0;
+  state.answers = new Array(state.quiz.length).fill(null);
+  state.currentSelection = [];
+  state.locked = false;
+  state.timerStarted = Date.now();
+  if(state.timerInterval){clearInterval(state.timerInterval);state.timerInterval=null}
+  state.screen = 'quiz';
+  render();
+}
+
+// ---- Quiz ----
+function renderQuiz(app){
+  const q = state.quiz[state.current];
+  if(!q) return;
+  const isMulti = q.ans.length > 1;
+  const answered = state.answers[state.current];
+  const scoreSoFar = state.answers.filter(a=>a&&a.correct).length;
+  const answeredCount = state.answers.filter(a=>a).length;
+  const pct = Math.round((state.current/state.quiz.length)*100);
+  const totalQ = state.quiz.length;
+  const elapsed = state.timerStarted ? Date.now() - state.timerStarted : 0;
+
+  let label = state.quizMode === 'test' ? `Test ${state.testIndex+1}` : state.sectionCode;
+
+  app.innerHTML = `
+    <div class="top-bar">
+      <button class="btn-icon" id="backBtn">✕</button>
+      <h2>${label}</h2>
+      <div style="width:44px"></div>
+    </div>
+    <div class="palette" id="palette"></div>
+    <div class="quiz-top">
+      <span class="qmeta">${state.current+1}/${totalQ} · ${q.sec}</span>
+      <span class="qscore">${scoreSoFar}/${answeredCount}</span>
+    </div>
+    <div class="progress-track"><div class="progress-fill" style="width:${pct}%"></div></div>
+    <div class="timer-bar" id="timer">${formatTime(elapsed)}</div>
+    <div class="card swipe-zone" id="quizCard">
+      <p class="qid">${q.id}</p>
+      <p class="qtext">${esc(q.text)}</p>
+      ${isMulti ? '<p class="multi-hint">Selectează toate variantele corecte</p>' : ''}
+      <div class="opts" id="opts"></div>
+      <div id="feedbackArea"></div>
+      <div class="actions" id="actionsArea"></div>
+    </div>
+  `;
+
+  // Timer
+  if(state.timerInterval) clearInterval(state.timerInterval);
+  if(!answered || state.current < state.quiz.length-1){
+    state.timerInterval = setInterval(()=>{
+      const el = document.getElementById('timer');
+      if(el) el.textContent = formatTime(Date.now()-state.timerStarted);
+    }, 1000);
+  }
+
+  // Palette
+  const palette = app.querySelector('#palette');
+  state.answers.forEach((a, i)=>{
+    const dot = document.createElement('div');
+    let cls = 'palette-dot';
+    if(i === state.current) cls += ' current';
+    if(a){
+      cls += ' answered';
+      cls += a.correct ? ' correct' : ' wrong';
+    }
+    dot.className = cls;
+    dot.title = `Întrebarea ${i+1}`;
+    palette.appendChild(dot);
+  });
+
+  // Options
+  const opts = app.querySelector('#opts');
+  Object.keys(q.opts).forEach(letter=>{
+    const div = document.createElement('div');
+    let cls = 'opt';
+    const isSelected = (answered ? answered.selected : state.currentSelection).includes(letter);
+    if(isSelected) cls += ' selected';
+    if(answered){
+      cls += ' locked';
+      const isCorrectLetter = q.ans.includes(letter);
+      if(isCorrectLetter && isSelected) cls += ' correct';
+      else if(!isCorrectLetter && isSelected) cls += ' incorrect';
+      else if(isCorrectLetter && !isSelected) cls += ' missed';
+    }
+    div.className = cls;
+    div.innerHTML = `<div class="bubble">${letter.toUpperCase()}</div><div class="opt-text">${esc(q.opts[letter])}</div>`;
+    if(!answered){
+      div.onclick = () => toggleOption(letter);
+    }
+    opts.appendChild(div);
+  });
+
+  // Feedback & actions
+  const feedbackArea = app.querySelector('#feedbackArea');
+  const actionsArea = app.querySelector('#actionsArea');
+  if(answered){
+    const fb = document.createElement('div');
+    fb.className = 'feedback ' + (answered.correct ? 'ok' : 'bad');
+    fb.innerText = answered.correct
+      ? '✓ Corect.'
+      : '✗ Greșit. Răspuns corect: ' + q.ans.join(', ').toUpperCase() + '.';
+    if(state.instantFeedback) feedbackArea.appendChild(fb);
+
+    const nextBtn = document.createElement('button');
+    nextBtn.className = 'btn-primary';
+    nextBtn.innerText = state.current < state.quiz.length-1 ? 'Următoarea →' : 'Vezi rezultatul';
+    nextBtn.onclick = nextQuestion;
+    actionsArea.appendChild(nextBtn);
+  } else if(isMulti){
+    const submitBtn = document.createElement('button');
+    submitBtn.className = 'btn-primary';
+    submitBtn.innerText = 'Verifică';
+    submitBtn.disabled = state.currentSelection.length === 0;
+    submitBtn.onclick = submitAnswer;
+    actionsArea.appendChild(submitBtn);
+  }
+
+  // Back = quit
+  app.querySelector('#backBtn').onclick = ()=>{
+    if(state.timerInterval) clearInterval(state.timerInterval);
+    state.timerInterval = null;
+    if(confirm('Renunți la acest test?')){
+      goHome();
+    }
+  };
+
+  // Swipe
+  setupSwipe(app.querySelector('#quizCard'));
+}
+
+function setupSwipe(el){
+  let startX = 0, startY = 0;
+  el.addEventListener('touchstart', e => {
+    startX = e.touches[0].clientX;
+    startY = e.touches[0].clientY;
+  }, {passive: true});
+  el.addEventListener('touchend', e => {
+    const dx = e.changedTouches[0].clientX - startX;
+    const dy = e.changedTouches[0].clientY - startY;
+    if(Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 60){
+      if(dx < 0) goNext();
+      else goPrev();
+    }
+  }, {passive: true});
+}
+
+function goNext(){
+  if(state.current < state.quiz.length-1 && state.answers[state.current]){
+    state.current++;
+    state.currentSelection = [];
+    state.locked = false;
+    render();
+  }
+}
+
+function goPrev(){
+  if(state.current > 0){
+    state.current--;
+    state.currentSelection = [];
+    state.locked = false;
+    render();
+  }
 }
 
 function toggleOption(letter){
@@ -313,196 +818,102 @@ function toggleOption(letter){
   render();
 }
 
-function arraysEqualAsSets(a,b){
-  if(a.length !== b.length) return false;
-  const sa = a.slice().sort();
-  const sb = b.slice().sort();
-  return sa.every((v,i)=>v===sb[i]);
-}
-
 function submitAnswer(){
   if(state.currentSelection.length === 0) return;
   const q = state.quiz[state.current];
   const correct = arraysEqualAsSets(state.currentSelection, q.ans);
-  state.answers[state.current] = {selected: state.currentSelection.slice(), correct: correct};
+  state.answers[state.current] = {selected: state.currentSelection.slice(), correct};
   state.locked = true;
+  if(state.timerInterval) clearInterval(state.timerInterval);
+  state.timerInterval = null;
   render();
 }
 
 function nextQuestion(){
-  if(state.current < state.quiz.length - 1){
+  if(state.current < state.quiz.length-1){
     state.current++;
     state.currentSelection = [];
     state.locked = false;
     render();
   } else {
-    completedTests.add(state.testIndex);
-    state.screen = 'results';
-    render();
+    finishQuiz();
   }
 }
 
-function restart(){
-  state.screen = 'setup';
+function finishQuiz(){
+  if(state.timerInterval){clearInterval(state.timerInterval);state.timerInterval=null}
+  const elapsed = state.timerStarted ? Date.now() - state.timerStarted : 0;
+  const total = state.quiz.length;
+  const correct = state.answers.filter(a=>a&&a.correct).length;
+
+  const entry = {
+    type: state.quizMode,
+    label: state.quizMode === 'test' ? `Test ${state.testIndex+1}` : state.sectionCode,
+    total,
+    correct,
+    elapsed,
+    date: Date.now()
+  };
+
+  if(state.quizMode === 'test'){
+    state.completedTests.add(state.testIndex);
+    state.history.push(entry);
+  } else {
+    if(!state.sectionAttempts[state.sectionCode]) state.sectionAttempts[state.sectionCode] = [];
+    state.sectionAttempts[state.sectionCode].push(entry);
+  }
+
+  savePersisted();
+  state.screen = 'results';
   render();
 }
 
-function retrySame(){
+function retryQuiz(){
   state.current = 0;
   state.answers = new Array(state.quiz.length).fill(null);
   state.currentSelection = [];
   state.locked = false;
+  state.timerStarted = Date.now();
   state.screen = 'quiz';
   render();
 }
 
-function esc(s){
-  const d = document.createElement('div');
-  d.innerText = s;
-  return d.innerHTML;
-}
-
-function renderSetup(){
-  const app = document.getElementById('app');
-  app.innerHTML = `
-    <p class="eyebrow">Teste grilă · Licență 2026</p>
-    <h1>Pregătire examen</h1>
-    <p class="sub">7 teste fixe, construite după regulamentul oficial: 32 de întrebări fiecare (8 din Algoritmi, 8 din Baze de date, 8 din Java, 8 din Securitate). Împreună, cele 7 teste acoperă toate cele 200 de întrebări din culegere.</p>
-    <div class="card">
-      <p class="group-title">Alege testul</p>
-      <div class="modes" id="testList"></div>
-
-      <div class="toggle-row">
-        <div>
-          <div class="ttitle">Corectare imediată</div>
-          <div class="tdesc">Vezi pe loc dacă răspunsul e corect, sau doar scorul final</div>
-        </div>
-        <label class="switch">
-          <input type="checkbox" id="feedbackToggle" ${state.instantFeedback ? 'checked' : ''}>
-          <span class="slider-el"></span>
-        </label>
-      </div>
-    </div>
-  `;
-
-  const testList = document.getElementById('testList');
-  TEST_DEFS.forEach((ids, i)=>{
-    const div = document.createElement('div');
-    const done = completedTests.has(i);
-    div.className = 'mode-opt' + (done ? ' active' : '');
-    const note = i === 6 ? ' · include câteva recapitulări, pentru acoperire completă' : '';
-    div.innerHTML = `<input type="radio" name="test" ${done?'checked':''}>
-      <div><div class="mtitle">Test ${i+1}${done ? ' — finalizat' : ''}</div><div class="mdesc">32 întrebări (8 A · 8 BD · 8 J · 8 S)${note}</div></div>`;
-    div.onclick = () => startTest(i);
-    testList.appendChild(div);
-  });
-
-  document.getElementById('feedbackToggle').onchange = (e)=>{
-    state.instantFeedback = e.target.checked;
-  };
-}
-
-function renderQuiz(){
-  const app = document.getElementById('app');
-  const q = state.quiz[state.current];
-  const isMulti = q.ans.length > 1;
-  const answered = state.answers[state.current];
-  const scoreSoFar = state.answers.filter(a=>a && a.correct).length;
-  const answeredCount = state.answers.filter(a=>a).length;
-  const pct = Math.round(((state.current) / state.quiz.length) * 100);
-
-  app.innerHTML = `
-    <div class="quiz-top">
-      <span class="qmeta">Test ${state.testIndex+1} · ${state.current+1} / ${state.quiz.length} · ${q.sec}</span>
-      <span class="qscore">Scor: ${scoreSoFar}/${answeredCount}</span>
-    </div>
-    <div class="progress-track"><div class="progress-fill" style="width:${pct}%"></div></div>
-    <div class="card">
-      <p class="qid">${q.id}</p>
-      <p class="qtext">${esc(q.text)}</p>
-      ${isMulti ? '<p class="multi-hint">Selectează toate variantele corecte</p>' : ''}
-      <div class="opts" id="opts"></div>
-      <div id="feedbackArea"></div>
-      <div class="actions" id="actionsArea"></div>
-    </div>
-  `;
-
-  const opts = document.getElementById('opts');
-  Object.keys(q.opts).forEach(letter=>{
-    const div = document.createElement('div');
-    let cls = 'opt';
-    const isSelected = (answered ? answered.selected : state.currentSelection).includes(letter);
-    if(isSelected) cls += ' selected';
-    if(answered){
-      cls += ' locked';
-      const isCorrectLetter = q.ans.includes(letter);
-      if(isCorrectLetter && isSelected) cls += ' correct';
-      else if(!isCorrectLetter && isSelected) cls += ' incorrect';
-      else if(isCorrectLetter && !isSelected) cls += ' missed';
-    }
-    div.className = cls;
-    div.innerHTML = `<div class="bubble">${letter}</div><div class="opt-text">${esc(q.opts[letter])}</div>`;
-    if(!answered){
-      div.onclick = () => toggleOption(letter);
-    }
-    opts.appendChild(div);
-  });
-
-  const feedbackArea = document.getElementById('feedbackArea');
-  const actionsArea = document.getElementById('actionsArea');
-  if(answered){
-    const fb = document.createElement('div');
-    fb.className = 'feedback ' + (answered.correct ? 'ok' : 'bad');
-    fb.innerText = answered.correct
-      ? 'Corect.'
-      : 'Greșit. Răspunsul corect este: ' + q.ans.join(', ').toUpperCase() + '.';
-    if(state.instantFeedback) feedbackArea.appendChild(fb);
-
-    const nextBtn = document.createElement('button');
-    nextBtn.className = 'primary';
-    nextBtn.innerText = state.current < state.quiz.length - 1 ? 'Următoarea întrebare' : 'Vezi rezultatul';
-    nextBtn.onclick = nextQuestion;
-    actionsArea.appendChild(nextBtn);
-  } else if(isMulti){
-    const submitBtn = document.createElement('button');
-    submitBtn.className = 'primary';
-    submitBtn.innerText = 'Verifică';
-    submitBtn.disabled = state.currentSelection.length === 0;
-    submitBtn.onclick = submitAnswer;
-    actionsArea.appendChild(submitBtn);
-  }
-}
-
-function renderResults(){
-  const app = document.getElementById('app');
+// ---- Results ----
+function renderResults(app){
   const total = state.quiz.length;
-  const correct = state.answers.filter(a=>a && a.correct).length;
+  const correct = state.answers.filter(a=>a&&a.correct).length;
   const pct = Math.round((correct/total)*100);
 
   const bySec = {};
   state.quiz.forEach((q,i)=>{
-    if(!bySec[q.sec]) bySec[q.sec] = {correct:0, total:0};
+    if(!bySec[q.sec]) bySec[q.sec] = {correct:0,total:0};
     bySec[q.sec].total++;
-    if(state.answers[i] && state.answers[i].correct) bySec[q.sec].correct++;
+    if(state.answers[i]&&state.answers[i].correct) bySec[q.sec].correct++;
   });
 
+  let label = state.quizMode === 'test' ? `Test ${state.testIndex+1}` : `Secțiunea ${state.sectionCode}`;
+
   app.innerHTML = `
-    <p class="eyebrow">Rezultat · Test ${state.testIndex+1}</p>
-    <h1>Test finalizat</h1>
+    <div class="top-bar">
+      <button class="btn-icon" id="homeBtn">‹</button>
+      <h2>Rezultat</h2>
+      <div style="width:44px"></div>
+    </div>
     <div class="card">
+      <p class="eyebrow">${label}</p>
       <div class="score-hero">
         <div class="score-num">${correct}/${total}</div>
         <div class="score-label">${pct}% răspunsuri corecte</div>
       </div>
       <div class="breakdown" id="breakdown"></div>
-      <button class="primary" id="retryBtn">Reia acest test</button>
-      <button class="ghost" id="newBtn">Înapoi la lista de teste</button>
+      <button class="btn-primary" id="retryBtn">Reia</button>
+      <button class="btn-secondary" id="homeBtn2" style="margin-top:10px">Înapoi la meniu</button>
     </div>
-    <div class="card" style="margin-top:16px;" id="reviewCard"></div>
+    <div class="card" style="margin-top:16px" id="reviewCard"></div>
   `;
 
-  const breakdown = document.getElementById('breakdown');
-  Object.keys(bySec).forEach(sec=>{
+  const breakdown = app.querySelector('#breakdown');
+  Object.keys(bySec).forEach(sec => {
     const b = bySec[sec];
     const div = document.createElement('div');
     div.className = 'bd-item';
@@ -510,37 +921,129 @@ function renderResults(){
     breakdown.appendChild(div);
   });
 
-  document.getElementById('retryBtn').onclick = retrySame;
-  document.getElementById('newBtn').onclick = restart;
+  app.querySelector('#retryBtn').onclick = retryQuiz;
+  app.querySelector('#homeBtn').onclick = goHome;
+  app.querySelector('#homeBtn2').onclick = goHome;
 
-  const reviewCard = document.getElementById('reviewCard');
-  const wrongOnes = state.quiz.map((q,i)=>({q, a: state.answers[i]})).filter(x => !x.a || !x.a.correct);
+  const reviewCard = app.querySelector('#reviewCard');
+  const wrongOnes = state.quiz.map((q,i)=>({q,a:state.answers[i]})).filter(x=>!x.a||!x.a.correct);
   if(wrongOnes.length === 0){
-    reviewCard.innerHTML = '<p class="group-title">Recapitulare</p><p style="font-size:14px;color:var(--ink-soft)">Toate răspunsurile au fost corecte.</p>';
+    reviewCard.innerHTML = '<p class="group-title" style="font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-soft);margin-bottom:8px;">Recapitulare</p><p style="font-size:14px;color:var(--ink-soft)">Toate răspunsurile au fost corecte! 🎉</p>';
   } else {
-    let html = '<p class="group-title">De revizuit ('+wrongOnes.length+')</p>';
+    let html = '<p class="group-title" style="font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-soft);margin-bottom:8px;">De revizuit ('+wrongOnes.length+')</p>';
     wrongOnes.forEach(x=>{
       const q = x.q;
       const selected = x.a ? x.a.selected.join(', ').toUpperCase() : '—';
-      html += `<div class="review-item">
-        <p class="qid">${q.id}</p>
-        <p class="review-q">${esc(q.text)}</p>
-        <p class="review-line wrong-ans">Răspunsul tău: ${selected}</p>
-        <p class="review-line correct-ans">Corect: ${q.ans.join(', ').toUpperCase()} — ${q.ans.map(l=>esc(q.opts[l])).join(' ')}</p>
-      </div>`;
+      html += '<div class="review-item">' +
+        '<p class="qid">'+q.id+'</p>' +
+        '<p class="review-q">'+esc(q.text)+'</p>' +
+        '<p class="review-line wrong-ans">Răspunsul tău: '+selected+'</p>' +
+        '<p class="review-line correct-ans">Corect: '+q.ans.join(', ').toUpperCase()+' — '+q.ans.map(l=>esc(q.opts[l])).join(' ')+'</p>' +
+      '</div>';
     });
     reviewCard.innerHTML = html;
   }
 }
 
-function render(){
-  if(state.screen === 'setup') renderSetup();
-  else if(state.screen === 'quiz') renderQuiz();
-  else if(state.screen === 'results') renderResults();
+// ---- Stats ----
+function renderStats(app){
+  const allAttempts = [...state.history];
+  for(const k in state.sectionAttempts){
+    state.sectionAttempts[k].forEach(a => allAttempts.push(a));
+  }
+
+  const totalQ = allAttempts.reduce((s,a)=>s+a.total, 0);
+  const correctQ = allAttempts.reduce((s,a)=>s+a.correct, 0);
+  const overallPct = totalQ > 0 ? Math.round((correctQ/totalQ)*100) : 0;
+  const totalTests = allAttempts.length;
+
+  // Per section stats
+  const secStats = {};
+  SECTIONS.forEach(s => secStats[s.code] = {correct:0,total:0});
+  // Also consider individual test results broken by section if we track that... 
+  // For simplicity, we just track overall per-section from history
+  // Actually we need mode-detailed data. Let's compute from sectionAttempts and from completed tests
+  // For completed tests, we don't have per-section data in history, but we can approximate
+  // Let's use sectionAttempts data and also derive from test history if available
+  // For simplicity, we'll just show overall and let sectionAttempts provide per-section detail
+
+  const recent = allAttempts.slice(-10).reverse();
+
+  app.innerHTML = `
+    <div class="top-bar">
+      <button class="btn-icon" id="backBtn">‹</button>
+      <h2>Statistici</h2>
+      <div style="width:44px"></div>
+    </div>
+    ${allAttempts.length === 0 ? '<div class="empty-state">Încă nu ai completat niciun test. Începe un test pentru a vedea statistici!</div>' : `
+    <div class="stats-grid">
+      <div class="stat-card animate"><div class="stat-num">${totalTests}</div><div class="stat-label">Teste date</div></div>
+      <div class="stat-card animate"><div class="stat-num">${overallPct}%</div><div class="stat-label">Procentaj</div></div>
+      <div class="stat-card animate"><div class="stat-num">${totalQ}</div><div class="stat-label">Întrebări</div></div>
+      <div class="stat-card animate"><div class="stat-num">${correctQ}/${totalQ}</div><div class="stat-label">Corecte</div></div>
+    </div>
+    <div class="card">
+      <p class="group-title" style="font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-soft);margin-bottom:14px;">Performanță pe secțiuni</p>
+      <div class="section-stats" id="secStats"></div>
+    </div>
+    ${recent.length > 0 ? `
+    <div class="card" style="margin-top:16px">
+      <p class="group-title" style="font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-soft);margin-bottom:8px;">Istoric recent</p>
+      <div id="historyList">${recent.map(h => `
+        <div class="history-item">
+          <span class="hname">${h.label}</span>
+          <span class="hscore">${h.correct}/${h.total} (${Math.round((h.correct/h.total)*100)}%)</span>
+        </div>
+      `).join('')}</div>
+    </div>` : ''}
+    `}
+  `;
+
+  app.querySelector('#backBtn').onclick = goHome;
+
+  if(allAttempts.length > 0){
+    const secStatsEl = app.querySelector('#secStats');
+    // Compute per-section from sectionAttempts
+    const sData = {};
+    SECTIONS.forEach(s => sData[s.code] = {correct:0,total:0});
+    for(const k in state.sectionAttempts){
+      if(sData[k]){
+        state.sectionAttempts[k].forEach(a => {
+          sData[k].correct += a.correct;
+          sData[k].total += a.total;
+        });
+      }
+    }
+    // Also estimate from completed tests (assume 8 questions per section per test)
+    state.history.forEach(h => {
+      if(h.type === 'test'){
+        // We don't have per-section breakdown for tests, skip
+      }
+    });
+
+    SECTIONS.forEach(s => {
+      const d = sData[s.code];
+      const pct = d.total > 0 ? Math.round((d.correct/d.total)*100) : 0;
+      if(d.total > 0){
+        const div = document.createElement('div');
+        div.className = 'section-stat';
+        div.innerHTML = `
+          <span class="sname">${s.code}</span>
+          <div class="sbar"><div class="sbar-fill" style="width:${pct}%"></div></div>
+          <span class="spct">${d.correct}/${d.total}</span>
+        `;
+        secStatsEl.appendChild(div);
+      }
+    });
+
+    if(secStatsEl.children.length === 0){
+      secStatsEl.innerHTML = '<div style="font-size:13px;color:var(--ink-soft)">Completează un antrenament pe secțiuni pentru a vedea statistici detaliate.</div>';
+    }
+  }
 }
 
+// ---- Init ----
 render();
-
 </script>
 </body>
 </html>
