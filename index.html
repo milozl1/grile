@@ -543,8 +543,7 @@ function showModal(title, bodyHTML, buttons){
     btn.onclick = () => { overlay.remove(); if(b.action) b.action(); };
     actions.appendChild(btn);
   });
-  // Close on overlay tap (only if not on modal)
-  overlay.onclick = e => { if(e.target === overlay && buttons.length <= 2){ overlay.remove(); if(b.altClose) b.altClose(); } };
+  overlay.onclick = e => { if(e.target === overlay) overlay.remove(); };
 }
 
 function closeModal(){
@@ -883,8 +882,10 @@ function renderQuiz(app){
     }
     div.className=cls;
     div.innerHTML='<div class="bubble">'+letter.toUpperCase()+'</div><div class="opt-text">'+esc(q.opts[letter])+'</div>';
-    if(!saved || isExam){
+    if(isExam){
       div.onclick=()=>examToggleOption(letter);
+    } else if(!saved){
+      div.onclick=()=>toggleOption(letter);
     }
     opts.appendChild(div);
   });
@@ -910,8 +911,12 @@ function renderQuiz(app){
       sb.disabled=currentSelection.length===0;
       sb.onclick=submitAnswer;
       actionsArea.appendChild(sb);
-    } else {
-      // Single select with instant feedback auto-submits in toggleOption
+    } else if(state.currentSelection.length > 0){
+      const cb=document.createElement('button');
+      cb.className='btn-primary';
+      cb.innerText='Confirmă';
+      cb.onclick=submitAnswer;
+      actionsArea.appendChild(cb);
     }
   } else {
     // Exam: show navigation
@@ -934,7 +939,9 @@ function renderQuiz(app){
         [{label:'Continuă examenul',primary:false,action:()=>{}},
          {label:'Renunță',primary:true,danger:true,action:goHome}]);
     } else {
-      if(confirm('Renunți la acest test?')) goHome();
+      showModal('Renunți la test?','Progresul la acest test se va pierde.',
+        [{label:'Continuă testul',primary:false,action:()=>{}},
+         {label:'Renunță',primary:true,danger:true,action:goHome}]);
     }
   };
 
@@ -942,7 +949,26 @@ function renderQuiz(app){
   setupSwipe(app.querySelector('#quizCard'));
 }
 
-// Exam toggle: save directly to answers
+// Non-exam mode: user taps an option
+function toggleOption(letter){
+  if(state.locked) return;
+  const q=state.quiz[state.current];
+  const isMulti=q.ans.length>1;
+  if(isMulti){
+    const idx=state.currentSelection.indexOf(letter);
+    if(idx>=0) state.currentSelection.splice(idx,1);
+    else state.currentSelection.push(letter);
+  } else {
+    state.currentSelection=[letter];
+    if(state.instantFeedback){
+      submitAnswer();
+      return;
+    }
+  }
+  render();
+}
+
+// Exam mode: save selection without computing correctness, no auto-advance
 function examToggleOption(letter){
   const q=state.quiz[state.current];
   const isMulti=q.ans.length>1;
@@ -957,11 +983,6 @@ function examToggleOption(letter){
   }
   state.answers[state.current] = {selected:sel,correct:null};
   state.currentSelection=sel;
-  // Auto-advance for single select in exam
-  if(!isMulti && sel.length>0 && state.current<state.quiz.length-1){
-    state.current++;
-    state.currentSelection=[];
-  }
   render();
 }
 
