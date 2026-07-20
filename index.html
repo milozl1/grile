@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Teste grilă — Licență 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,500;8..60,600&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F2EEE2;
+    --paper-card:#FBF9F3;
+    --ink:#1E2A44;
+    --ink-soft:#4C5670;
+    --line:#D8D2C0;
+    --gold:#B8912B;
+    --gold-soft:#EFE2BC;
+    --green:#2E6B4E;
+    --green-bg:#E1EEE4;
+    --red:#AC3B2E;
+    --red-bg:#F5E1DD;
+    --mono:'IBM Plex Mono', monospace;
+    --serif:'Source Serif 4', Georgia, serif;
+    --sans:'Inter', -apple-system, sans-serif;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:var(--sans);
+    -webkit-font-smoothing:antialiased;
+  }
+  #app{
+    max-width:760px;
+    margin:0 auto;
+    padding:32px 20px 80px;
+  }
+  .eyebrow{
+    font-family:var(--mono);
+    font-size:12px;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    color:var(--gold);
+    margin:0 0 6px;
+  }
+  h1{
+    font-family:var(--serif);
+    font-weight:600;
+    font-size:32px;
+    margin:0 0 8px;
+    color:var(--ink);
+  }
+  .sub{
+    color:var(--ink-soft);
+    font-size:15px;
+    line-height:1.5;
+    margin:0 0 28px;
+    max-width:52ch;
+  }
+  .card{
+    background:var(--paper-card);
+    border:1px solid var(--line);
+    border-radius:4px;
+    padding:24px;
+    position:relative;
+  }
+  .card::before{
+    content:"";
+    position:absolute;
+    left:14px; top:0; bottom:0;
+    width:1px;
+    background:repeating-linear-gradient(to bottom, var(--line) 0 6px, transparent 6px 12px);
+    opacity:0.5;
+  }
+  section-block{display:block;}
+  .group-title{
+    font-family:var(--mono);
+    font-size:12px;
+    text-transform:uppercase;
+    letter-spacing:0.06em;
+    color:var(--ink-soft);
+    margin:0 0 12px;
+  }
+  .chips{
+    display:flex; flex-wrap:wrap; gap:8px; margin-bottom:24px;
+  }
+  .chip{
+    font-family:var(--sans);
+    font-size:14px;
+    font-weight:500;
+    padding:8px 14px;
+    border:1.5px solid var(--line);
+    border-radius:20px;
+    background:transparent;
+    color:var(--ink);
+    cursor:pointer;
+    transition:all .12s ease;
+  }
+  .chip:hover{border-color:var(--ink-soft);}
+  .chip.active{
+    background:var(--ink);
+    border-color:var(--ink);
+    color:var(--paper-card);
+  }
+  .modes{display:flex; flex-direction:column; gap:10px; margin-bottom:24px;}
+  .mode-opt{
+    display:flex; align-items:flex-start; gap:12px;
+    padding:14px 16px;
+    border:1.5px solid var(--line);
+    border-radius:6px;
+    cursor:pointer;
+    transition:border-color .12s ease, background .12s ease;
+  }
+  .mode-opt:hover{border-color:var(--ink-soft);}
+  .mode-opt.active{border-color:var(--gold); background:var(--gold-soft);}
+  .mode-opt input{margin-top:3px;}
+  .mode-opt .mtitle{font-weight:600; font-size:14.5px;}
+  .mode-opt .mdesc{font-size:13px; color:var(--ink-soft); margin-top:2px;}
+  .row{display:flex; align-items:center; gap:14px; margin-bottom:24px;}
+  .row label{font-size:14px; font-weight:500; min-width:150px;}
+  input[type=range]{flex:1; accent-color:var(--gold);}
+  .rangeval{font-family:var(--mono); font-weight:600; min-width:32px; text-align:right;}
+  .toggle-row{display:flex; align-items:center; justify-content:space-between; padding:12px 0; border-top:1px solid var(--line); margin-top:4px;}
+  .toggle-row .ttitle{font-size:14px; font-weight:500;}
+  .toggle-row .tdesc{font-size:12.5px; color:var(--ink-soft); margin-top:2px;}
+  .switch{position:relative; width:42px; height:24px; flex-shrink:0;}
+  .switch input{opacity:0; width:0; height:0;}
+  .slider-el{position:absolute; inset:0; background:#CFC9B7; border-radius:24px; cursor:pointer; transition:.15s;}
+  .slider-el:before{content:""; position:absolute; width:18px; height:18px; left:3px; top:3px; background:#fff; border-radius:50%; transition:.15s;}
+  input:checked + .slider-el{background:var(--gold);}
+  input:checked + .slider-el:before{transform:translateX(18px);}
+  button.primary{
+    width:100%;
+    padding:14px;
+    background:var(--ink);
+    color:var(--paper-card);
+    border:none;
+    border-radius:6px;
+    font-family:var(--sans);
+    font-size:15px;
+    font-weight:600;
+    cursor:pointer;
+    margin-top:8px;
+    transition:opacity .12s ease;
+  }
+  button.primary:hover{opacity:0.88;}
+  button.ghost{
+    width:100%;
+    padding:12px;
+    background:transparent;
+    color:var(--ink);
+    border:1.5px solid var(--line);
+    border-radius:6px;
+    font-family:var(--sans);
+    font-size:14px;
+    font-weight:500;
+    cursor:pointer;
+    margin-top:10px;
+  }
+  button.ghost:hover{border-color:var(--ink-soft);}
+
+  /* quiz screen */
+  .quiz-top{display:flex; align-items:center; justify-content:space-between; margin-bottom:16px;}
+  .qmeta{font-family:var(--mono); font-size:12.5px; color:var(--ink-soft);}
+  .qscore{font-family:var(--mono); font-size:12.5px; color:var(--ink-soft);}
+  .progress-track{height:6px; background:var(--line); border-radius:3px; overflow:hidden; margin-bottom:24px;}
+  .progress-fill{height:100%; background:var(--gold); transition:width .2s ease;}
+  .qid{font-family:var(--mono); font-size:12px; color:var(--gold); margin-bottom:6px; letter-spacing:.04em;}
+  .qtext{
+    font-family:var(--serif);
+    font-size:18px;
+    line-height:1.5;
+    white-space:pre-wrap;
+    margin:0 0 20px;
+    color:var(--ink);
+  }
+  .qtext code, .code-block{
+    font-family:var(--mono);
+    font-size:14px;
+    background:#EDE7D6;
+    display:block;
+    padding:10px 12px;
+    border-radius:4px;
+    margin:8px 0;
+    white-space:pre-wrap;
+  }
+  .multi-hint{font-size:12.5px; color:var(--ink-soft); font-style:italic; margin:-12px 0 16px;}
+  .opts{display:flex; flex-direction:column; gap:10px;}
+  .opt{
+    display:flex; align-items:flex-start; gap:12px;
+    padding:12px 14px;
+    border:1.5px solid var(--line);
+    border-radius:6px;
+    cursor:pointer;
+    background:var(--paper-card);
+    transition:border-color .12s ease, background .12s ease;
+  }
+  .opt:hover:not(.locked){border-color:var(--ink-soft);}
+  .bubble{
+    flex-shrink:0;
+    width:26px; height:26px;
+    border-radius:50%;
+    border:1.5px solid var(--ink-soft);
+    display:flex; align-items:center; justify-content:center;
+    font-family:var(--mono);
+    font-size:13px;
+    font-weight:600;
+    color:var(--ink-soft);
+    transition:all .12s ease;
+  }
+  .opt.selected .bubble{background:var(--ink); border-color:var(--ink); color:var(--paper-card);}
+  .opt.correct{border-color:var(--green); background:var(--green-bg);}
+  .opt.correct .bubble{background:var(--green); border-color:var(--green); color:#fff;}
+  .opt.incorrect{border-color:var(--red); background:var(--red-bg);}
+  .opt.incorrect .bubble{background:var(--red); border-color:var(--red); color:#fff;}
+  .opt.missed{border-color:var(--green); border-style:dashed;}
+  .opt-text{font-size:14.5px; line-height:1.45; padding-top:3px;}
+  .feedback{
+    margin-top:18px;
+    padding:14px 16px;
+    border-radius:6px;
+    font-size:14px;
+    line-height:1.5;
+  }
+  .feedback.ok{background:var(--green-bg); color:var(--green);}
+  .feedback.bad{background:var(--red-bg); color:var(--red);}
+  .actions{display:flex; gap:10px; margin-top:20px;}
+  .actions button{flex:1;}
+
+  /* results */
+  .score-hero{text-align:center; padding:20px 0 8px;}
+  .score-num{font-family:var(--serif); font-size:56px; font-weight:600; color:var(--ink);}
+  .score-label{font-size:13px; color:var(--ink-soft); font-family:var(--mono); text-transform:uppercase; letter-spacing:.06em;}
+  .breakdown{display:grid; grid-template-columns:repeat(auto-fit,minmax(140px,1fr)); gap:10px; margin:24px 0;}
+  .bd-item{background:var(--paper); border:1px solid var(--line); border-radius:6px; padding:12px 14px;}
+  .bd-item .bname{font-size:12px; color:var(--ink-soft); font-family:var(--mono); margin-bottom:4px;}
+  .bd-item .bscore{font-size:20px; font-weight:600;}
+  .review-item{border-top:1px solid var(--line); padding:16px 0;}
+  .review-item:first-child{border-top:none;}
+  .review-q{font-family:var(--serif); font-size:15px; margin:0 0 8px; white-space:pre-wrap;}
+  .review-line{font-size:13.5px; margin:2px 0;}
+  .review-line.correct-ans{color:var(--green);}
+  .review-line.wrong-ans{color:var(--red);}
+  @media (max-width:480px){
+    .qtext{font-size:16.5px;}
+    .score-num{font-size:44px;}
+  }
+</style>
+</head>
+<body>
+<div id="app"></div>
+<script>
+const QUESTIONS = [{"id": "A.1", "sec": "A", "secName": "Algoritmi. Programare. Structuri de date", "text": "Ce anume se specifică prin tipul unei date?", "opts": {"a": "numai numărul de octeți ocupați;", "b": "numai spațiul necesar reprezentării și modul de reprezentare;", "c": "numai operațiile permise."}, "ans": ["b"]}, {"id": "A.2", "sec": "A", "secName": "Algoritmi. Programare. Structuri de date", "text": "Ce este o variabilă?", "opts": {"a": "litera care ține locul unor valori (de exemplu a, b, c sau x, y, z);", "b": "o valoare care se schimbă;", "c": "o zonă de memorie identificabilă în care se pot păstra valori."}, "ans": ["c"]}, {"id": "A.3", "sec": "A", "secName": "Algoritmi. Programare. Structuri de date", "text": "Ce caracteristică a unei variabile este precizată de clasa sa de memorare?", "opts": {"a": "locul unde poate fi folosită;", "b": "locul unde se creează;", "c": "locul unde este memorată."}, "ans": ["b"]}, {"id": "A.4", "sec": "A", "secName": "Algoritmi. Programare. Structuri de date", "text": "Domeniul identificatorilor de variabile globale ține din locul declarației până la:", "opts": {"a": "sfârșitul blocului;", "b": "sfârșitul programului;", "c": "sfârșitul textului sursă."}, "ans": ["c"]}, {"id": "A.5", "sec": "A", "secName": "Algoritmi. Programare. Structuri de date", "text": "Durata de viață a variabilelor globale este:", "opts": {"a": "cât timp sunt utilizate;", "b": "câteva minute;", "c": "cât durează execuția programului."}, "ans": ["c"]}, {"id": "A.6", "sec": "A", "secName": "Algoritmi. Programare. Structuri de date", "text": "Durata de viață a variabilelor locale este:", "opts": {"a": "cât timp sunt utilizate;", "b": "cât durează execuția subprogramului;", "c": "depinde de clasa lor de memorare."}, "ans": ["c"]}, {"id": "A.7", "sec": "A", "secName": "Algoritmi. Programare. Structuri de date", "text": "Care din următorii operatori admit operanzi reali?", "opts": {"a": "operatorii de incrementare/decrementare", "b": "operatorii logici", "c": "operatorii logici pe biți", "d": "operatorii de deplasare"}, "ans": ["a", "b"]}, {"id": "A.8", "sec": "A", "secName": "Algoritmi. Programare. Structuri de date", "text": "Când au loc conversii implicite de tip?", "opts": {"a": "la citirea datelor de intrare respectiv la afișarea rezultatelor;", "b": "când operanzii unei expresii au tipuri diferite;", "c": "când argumentul actual cu care se apelează o funcție are alt tip decât argumentul formal corespunzător."}, "ans": ["b", "c"]}, {"id": "A.9", "sec": "A", "secName": "Algoritmi. Programare. Structuri de date", "text": "Se consideră șirul lui Fibonacci dat de relația de recurență F0=0, F1=1 și Fn+1=Fn+Fn-1. De câte ori este evaluat F2 pentru a calcula F5 în cazul calculului termenului Fn în mod recursiv?", "opts": {"a": "de 3 ori", "b": "o dată", "c": "de 4 ori"}, "ans": ["a"]}, {"id": "A.10", "sec": "A", "secName": "Algoritmi. Programare. Structuri de date", "text": "Care este rezultatul numeric al evaluării unei expresii relaționale sau logice?", "opts": {"a": "FALSE sau TRUE;", "b": "0 sau 1;", "c": "0 sau diferit de 0."}, "ans": ["b"]}, {"id": "A.11", "sec": "A", "secName": "Algoritmi. Programare. Structuri de date", "text": "Dacă a=-2, b=-1 și c=0, care este rezultatul numeric al evaluării expresiei a<b<c?", "opts": {"a": "1;", "b": "depinde de declarația de tip a variabilelor a, b, c;", "c": "0."}, "ans": ["c"]}, {"id": "A.12", "sec": "A", "secName": "Algoritmi. Programare. Structuri de date", "text": "Care dintre următoarele afirmații este/sunt adevărată/adevărate pentru algoritmul corespunzător funcției de mai jos (se consideră că a este un tablou unidimensional cu n elemente)?\ndef transform(a):\n    n=len(a)\n    for i in range(0,n-1):\n        if (a[i]<a[i+1]):\n            a[i], a[i+1] = a[i+1], a[i]\n    return(a)", "opts": {"a": "Algoritmul sortează descrescător tabloul a", "b": "După aplicarea algoritmului, tabloul a satisface proprietatea a[i] ≥ a[n-1] pentru 0≤i<n", "c": "Algoritmul sortează crescător tabloul a", "d": "După aplicarea algoritmului, tabloul a satisface proprietatea a[i] ≤ a[n-1] pentru 0≤i<n"}, "ans": ["b"]}, {"id": "A.13", "sec": "A", "secName": "Algoritmi. Programare. Structuri de date", "text": "Fie declarațiile: int x=10, y=20. Care este valoarea expresiei !x-y?", "opts": {"a": "0;", "b": "-10;", "c": "-20."}, "ans": ["c"]}, {"id": "A.14", "sec": "A", "secName": "Algoritmi. Programare. Structuri de date", "text": "Fie declarațiile: int x=8, y=20. Care este valoarea expresiei x--/++y?", "opts": {"a": "0;", "b": "3;", "c": "0.399875."}, "ans": ["a"]}, {"id": "A.15", "sec": "A", "secName": "Algoritmi. Programare. Structuri de date", "text": "Care din următoarele variante reprezintă modalități de comunicare între funcții?", "opts": {"a": "prin argumentele actuale;", "b": "prin valoarea returnata;", "c": "prin variabile globale."}, "ans": ["a", "b", "c"]}, {"id": "A.16", "sec": "A", "secName": "Algoritmi. Programare. Structuri de date", "text": "Ce este contextul de apel al unei funcții?", "opts": {"a": "lista argumentelor formale;", "b": "o zonă de memorie (stivă);", "c": "instrucțiunile (definiția funcției)."}, "ans": ["b"]}, {"id": "A.17", "sec": "A", "secName": "Algoritmi. Programare. Structuri de date", "text": "Care din următoarele acțiuni au loc la compilarea unui fișier sursă în C?", "opts": {"a": "analiza lexicală", "b": "includerea fișierelor header", "c": "analiza sintactica", "d": "generarea codului obiect", "e": "editarea de legături"}, "ans": ["a", "c", "d"]}, {"id": "A.18", "sec": "A", "secName": "Algoritmi. Programare. Structuri de date", "text": "Transmiterea argumentelor către funcția apelată (convenția de apel C) se face:", "opts": {"a": "prin variabile globale;", "b": "prin valoare;", "c": "în ordine inversă celei din lista de argumente."}, "ans": ["b", "c"]}, {"id": "A.19", "sec": "A", "secName": "Algoritmi. Programare. Structuri de date", "text": "Ce este o funcție recursivă?", "opts": {"a": "o funcție care recurge la context;", "b": "o funcție cu lista variabilă de argumente;", "c": "o funcție care se autoapelează."}, "ans": ["c"]}, {"id": "A.20", "sec": "A", "secName": "Algoritmi. Programare. Structuri de date", "text": "Ce este un pointer?", "opts": {"a": "un indicator;", "b": "o adresă de memorie;", "c": "o variabilă a cărei valoare se interpretează ca adresă."}, "ans": ["c"]}, {"id": "A.21", "sec": "A", "secName": "Algoritmi. Programare. Structuri de date", "text": "Cât spațiu de memorie ocupă o variabilă structură:", "opts": {"a": "cât spațiu ocupă de cel mai \"voluminos\" dintre membri;", "b": "egal cu suma spațiilor necesare membrilor;", "c": "cel puțin cât suma spațiilor necesare membrilor."}, "ans": ["c"]}, {"id": "A.22", "sec": "A", "secName": "Algoritmi. Programare. Structuri de date", "text": "Care din afirmațiile următoare, referitoare la structuri, sunt adevărate:", "opts": {"a": "sunt tipuri de date agregate;", "b": "sunt tipuri de date definite de programator;", "c": "sunt tipuri de date predefinite."}, "ans": ["a", "b"]}, {"id": "A.23", "sec": "A", "secName": "Algoritmi. Programare. Structuri de date", "text": "Care din următoarele operații sunt legale:", "opts": {"a": "returnarea unei structuri ca valoare a unei funcții;", "b": "adunarea a două structuri;", "c": "copierea unei structuri."}, "ans": ["a", "c"]}, {"id": "A.24", "sec": "A", "secName": "Algoritmi. Programare. Structuri de date", "text": "În care dintre următoarele prelucrări repetitive este posibil să nu se efectueze niciodată corpul ciclului?", "opts": {"a": "FOR;", "b": "REPEAT;", "c": "WHILE."}, "ans": ["a", "c"]}, {"id": "A.25", "sec": "A", "secName": "Algoritmi. Programare. Structuri de date", "text": "Într-o prelucrare repetitivă cu contor (de tip FOR) ordinea efectuării operațiilor este:", "opts": {"a": "inițializare, modificare contor, corp ciclu, testare;", "b": "inițializare, testare, corp ciclu, modificare contor;", "c": "inițializare, corp ciclu, modificare contor, testare."}, "ans": ["b"]}, {"id": "A.26", "sec": "A", "secName": "Algoritmi. Programare. Structuri de date", "text": "Care dintre următoarele afirmații sunt adevărate pentru o prelucrare repetitivă de tip WHILE?", "opts": {"a": "se începe cu verificarea condiției;", "b": "corpul ciclului se execută cel puțin o dată;", "c": "este posibil să nu se execute nici o dată corpul ciclului."}, "ans": ["a", "c"]}, {"id": "A.27", "sec": "A", "secName": "Algoritmi. Programare. Structuri de date", "text": "Efectul execuției următoarelor secvențe:\nfor(exp_1; exp_2; exp_3)\n  instrucțiune;\nversus\nexp_1;\nwhile(exp_2)\n{ instrucțiune;\n  exp_3; }\neste:", "opts": {"a": "identic;", "b": "diferit;", "c": "dependent de context."}, "ans": ["a"]}, {"id": "A.28", "sec": "A", "secName": "Algoritmi. Programare. Structuri de date", "text": "Se consideră secvența în pseudocod:\na=3\nREPEAT\n  a=a*a\nUNTIL a=n\nPentru ce valori ale lui n ciclul de mai sus nu este infinit?", "opts": {"a": "pentru orice valoare naturală multiplu de 3;", "b": "pentru orice valoare naturală care este pătratul unui multiplu de 3;", "c": "pentru orice putere a lui 3 al cărui exponent este o putere a lui 2."}, "ans": ["c"]}, {"id": "A.29", "sec": "A", "secName": "Algoritmi. Programare. Structuri de date", "text": "Fie x[1..n] un tablou cu elemente întregi și secvența în pseudocod:\nFOR i=1, m, +1 DO\n  a=x[i]\n  x[i]=x[n-i+1]\n  x[n-i+1]=a\nENDFOR\nCe valoare ar trebui să aibă m astfel încât efectul secvenței de mai sus să fie inversarea ordinii elementelor tabloului și numărul de interschimbări să fie cât mai mic?", "opts": {"a": "n;", "b": "n DIV 2;", "c": "3n DIV 2."}, "ans": ["b"]}, {"id": "A.30", "sec": "A", "secName": "Algoritmi. Programare. Structuri de date", "text": "Se consideră secvența în pseudocod:\nFOR i=1,n,+ DO\n  FOR j=i+1,n,+1 DO\n    WRITE (i,j)\n  ENDFOR\nENDFOR\nPrin execuția prelucrărilor de mai sus se vor afișa:", "opts": {"a": "toate perechile de forma (i,j) cu 1≤i≤n și 1≤j≤n;", "b": "toate perechile de forma (i,j) cu 1≤i≤n și 1≤j≤n și i<j;", "c": "toate perechile de forma (i,j) cu 1≤i≤n și 1≤j≤n și i≤j."}, "ans": ["c"]}, {"id": "A.31", "sec": "A", "secName": "Algoritmi. Programare. Structuri de date", "text": "Fie x[1..n] un tablou cu elemente reale. Se consideră secvența în pseudocod:\nFOR i=1,n-1,1 DO\n  IF x[i]>x[i+1] THEN\n    aux=x[i]\n    x[i]=x[i+1]\n    x[i+1]=aux\n  ENDIF\nENDFOR\nCe efect are secvența de prelucrări asupra tabloului x?", "opts": {"a": "ordonează crescător elementele lui x;", "b": "aduce cea mai mare valoare pe ultima poziție din tablou;", "c": "inversează ordinea elementelor tabloului."}, "ans": ["b"]}, {"id": "A.32", "sec": "A", "secName": "Algoritmi. Programare. Structuri de date", "text": "La adunarea a două matrice a[1..m,1..n] și b[1..m,1..n] numărul de operații de adunare efectuate asupra elementelor este:", "opts": {"a": "m+n;", "b": "m*n;", "c": "max{m,n}."}, "ans": ["b"]}, {"id": "A.33", "sec": "A", "secName": "Algoritmi. Programare. Structuri de date", "text": "La înmulțirea a două matrice a[1..m,1..n] și b[1..n,1..p] numărul de operații de înmulțire efectuate este:", "opts": {"a": "m+n+p;", "b": "m*n+n*p;", "c": "m*n*p."}, "ans": ["c"]}, {"id": "A.34", "sec": "A", "secName": "Algoritmi. Programare. Structuri de date", "text": "Componentele unei structuri de date:", "opts": {"a": "pot fi la rândul lor structuri de date;", "b": "pot fi toate de același tip;", "c": "pot avea unul din tipurile standard ale limbajului de programare utilizat."}, "ans": ["a", "b", "c"]}, {"id": "A.35", "sec": "A", "secName": "Algoritmi. Programare. Structuri de date", "text": "Următoarea structură de date:\nstruct genealogie {\n  char numepren[20];\n  struct genealogie mama, tata;\n};", "opts": {"a": "nu este o structură recursivă;", "b": "este o descriere greșită în limbajul \"C\" a structurii genealogie;", "c": "este descrierea, în limbajul \"C\", utilizată în practică pentru a descrie structura de arbore genealogic al unei persoane."}, "ans": ["b"]}, {"id": "A.36", "sec": "A", "secName": "Algoritmi. Programare. Structuri de date", "text": "O structură dinamică de date este o structură de date care:", "opts": {"a": "se generează pe parcursul prelucrării;", "b": "este fixă ca formă și dimensiune;", "c": "în momentul compilării nu este cunoscut spațiul de memorie necesar ce urmează a-i fi alocat."}, "ans": ["a", "c"]}, {"id": "A.37", "sec": "A", "secName": "Algoritmi. Programare. Structuri de date", "text": "Un fișier:", "opts": {"a": "este o structură externă de date;", "b": "este o colecție de date pe care s-a definit o anumită structură și căreia îi este specific un anumit mecanism de selecție și identificare;", "c": "este o colecție omogenă de date din punctul de vedere al semnificației și al cerințelor de prelucrare, depusă pe un suport extern de memorare."}, "ans": ["a", "b", "c"]}, {"id": "A.38", "sec": "A", "secName": "Algoritmi. Programare. Structuri de date", "text": "Modul de acces la înregistrările unui fișier poate fi, în funcție de modul de organizare:", "opts": {"a": "aleator;", "b": "secvențial;", "c": "direct."}, "ans": ["b", "c"]}, {"id": "A.39", "sec": "A", "secName": "Algoritmi. Programare. Structuri de date", "text": "Dacă într-un fișier înregistrările sunt depuse în mod continuu pe suport (în locații succesive), în ordinea în care sunt furnizate înregistrările, se spune că fișierul este de organizare:", "opts": {"a": "aleatoare;", "b": "secvențială;", "c": "relativă."}, "ans": ["b"]}, {"id": "A.40", "sec": "A", "secName": "Algoritmi. Programare. Structuri de date", "text": "Dacă într-un fișier informația este depusă pe suport în funcție de valoarea unui câmp cheie, se spune că fișierul este de organizare:", "opts": {"a": "aleatoare;", "b": "secvențială;", "c": "relativă."}, "ans": ["a"]}, {"id": "A.41", "sec": "A", "secName": "Algoritmi. Programare. Structuri de date", "text": "Se numește listă liniară:", "opts": {"a": "structura de date în care inserările, suprimările și orice alt acces se efectuează la unul din capetele listei;", "b": "o colecție de n≥0 elemente de același tip, ale căror proprietăți structurale se reduc la pozițiile relative liniare (unidimensionale) ale elementelor în cadrul structurii;", "c": "o structură de date asimilată cu un tablou în care elementele sunt memorate într-o zonă continuă de memorie, în locații succesive."}, "ans": ["b"]}, {"id": "A.42", "sec": "A", "secName": "Algoritmi. Programare. Structuri de date", "text": "O listă liniară simplu înlănțuită este:", "opts": {"a": "lista liniară, în care relația de ordonare este materializată pe suport printr-un pointer către elementul următor;", "b": "o structură de date implementată prin tipul tablou;", "c": "o structură explicită și recursivă."}, "ans": ["a", "c"]}, {"id": "A.43", "sec": "A", "secName": "Algoritmi. Programare. Structuri de date", "text": "Algoritmul de sortare rapidă este cel mai potrivit pentru:", "opts": {"a": "sortarea unei liste mari cu elemente aleatoare", "b": "sortarea unei liste aproape ordonate", "c": "sortarea unei liste scurte", "d": "nu este potrivit pentru nici un fel de sortare"}, "ans": ["a"]}, {"id": "A.44", "sec": "A", "secName": "Algoritmi. Programare. Structuri de date", "text": "O stivă este:", "opts": {"a": "listă liniară în care inserările se fac la un capăt al listei și suprimările la celălalt capăt al listei;", "b": "o listă liniară de tipul LIFO (Last In First Out);", "c": "o listă liniară în care se manipulează mereu elementul cel mai recent introdus."}, "ans": ["b", "c"]}, {"id": "A.45", "sec": "A", "secName": "Algoritmi. Programare. Structuri de date", "text": "Care din afirmațiile următoare sunt greșite:", "opts": {"a": "stiva este o listă în care inserările, suprimările și orice alt acces se efectuează la un singur capăt numit vârf;", "b": "o stivă poate fi implementată fie static folosind tipul tablou, fie dinamic folosind tipul pointer;", "c": "o stivă este o listă de tip FIFO (First In First Out)."}, "ans": ["c"]}, {"id": "A.46", "sec": "A", "secName": "Algoritmi. Programare. Structuri de date", "text": "O structură de date de tip coadă este:", "opts": {"a": "structură de tip listă cu restricție la intrare;", "b": "o listă liniară de tipul FIFO (First In First Out);", "c": "o listă liniară în care inserările se efectuează la un capăt al listei, iar suprimările se efectuează la celălalt capăt al listei."}, "ans": ["b", "c"]}, {"id": "A.47", "sec": "A", "secName": "Algoritmi. Programare. Structuri de date", "text": "În cazul unei structuri de date de tip arbore:", "opts": {"a": "fiecare nod este subordonat direct unui alt nod;", "b": "fiecare nod este subordonat direct unui nod numit rădăcină;", "c": "fiecare nod, cu excepția nodului rădăcină, este subordonat direct unui alt nod."}, "ans": ["c"]}, {"id": "A.48", "sec": "A", "secName": "Algoritmi. Programare. Structuri de date", "text": "Care din următoarele afirmații sunt adevărate:", "opts": {"a": "gradul maxim al nodurilor unui arbore se numește gradul arborelui;", "b": "numărul fiilor unui nod se numește gradul nodului;", "c": "un nod care nu are fii se numește nod terminal sau frunză."}, "ans": ["a", "b", "c"]}, {"id": "A.49", "sec": "A", "secName": "Algoritmi. Programare. Structuri de date", "text": "Un arbore binar este perfect echilibrat:", "opts": {"a": "dacă nodurile terminale sunt doar pe ultimul nivel;", "b": "dacă nodurile terminale sunt doar pe ultimele două niveluri;", "c": "dacă numărul de noduri din subarborele stâng diferă de numărul de noduri din subarborele drept, cu cel mult 1."}, "ans": ["c"]}, {"id": "A.50", "sec": "A", "secName": "Algoritmi. Programare. Structuri de date", "text": "Într-un arbore adâncimea unui nod este:", "opts": {"a": "egală cu lungimea celui mai lung drum de la nodul respectiv la un nod terminal;", "b": "egală cu înălțimea arborelui;", "c": "egală cu lungimea drumului unic de la rădăcină la acel nod."}, "ans": ["c"]}, {"id": "BD.1", "sec": "BD", "secName": "Baze de Date", "text": "Printr-o bază de date se înțelege:", "opts": {"a": "un fișier cu date;", "b": "colecție de informații stocate astfel încât să poată fi regăsite, modificate sau șterse;", "c": "un tabel cu înregistrări."}, "ans": ["b"]}, {"id": "BD.2", "sec": "BD", "secName": "Baze de Date", "text": "Principalele funcții ale unui SGBD sunt:", "opts": {"a": "stocarea, regăsirea și actualizarea datelor;", "b": "facilitează accesul simultan al mai multor utilizatori;", "c": "securizarea datelor prin parolare."}, "ans": ["a", "b", "c"]}, {"id": "BD.3", "sec": "BD", "secName": "Baze de Date", "text": "Avantajele accesării datelor printr-un SGBD sunt:", "opts": {"a": "asigurarea integrității datelor;", "b": "reducerea redondanței;", "c": "creșterea securității."}, "ans": ["a", "b", "c"]}, {"id": "BD.4", "sec": "BD", "secName": "Baze de Date", "text": "Limbajele de interogare utilizate în gestiunea BD pot fi:", "opts": {"a": "algebrice;", "b": "logice;", "c": "relaționale."}, "ans": ["a", "b", "c"]}, {"id": "BD.5", "sec": "BD", "secName": "Baze de Date", "text": "Datele stocate într-o bază de date sunt:", "opts": {"a": "scalare;", "b": "vectoriale;", "c": "complexe."}, "ans": ["c"]}, {"id": "BD.6", "sec": "BD", "secName": "Baze de Date", "text": "O colecție de date reprezintă:", "opts": {"a": "un set de date scalare;", "b": "un ansamblu de date omogene;", "c": "un vector."}, "ans": ["b"]}, {"id": "BD.7", "sec": "BD", "secName": "Baze de Date", "text": "Între două colecții de date se poate stabili:", "opts": {"a": "o corespondență;", "b": "o relație de subsidiaritate;", "c": "o relație de recurență."}, "ans": ["a"]}, {"id": "BD.8", "sec": "BD", "secName": "Baze de Date", "text": "Corespondența între două colecții poate fi:", "opts": {"a": "una la una;", "b": "una la mai multe;", "c": "mai multe la mai multe."}, "ans": ["a", "b", "c"]}, {"id": "BD.9", "sec": "BD", "secName": "Baze de Date", "text": "Relația între două colecții poate fi:", "opts": {"a": "nondirecțională;", "b": "unidirecțională;", "c": "bidirecțională."}, "ans": ["a", "b", "c"]}, {"id": "BD.10", "sec": "BD", "secName": "Baze de Date", "text": "O colecție de date poate fi legată printr-o relație de:", "opts": {"a": "doar de o singură altă colecție;", "b": "mai multe alte colecții;", "c": "nici una, una sau mai multe colecții."}, "ans": ["c"]}, {"id": "BD.11", "sec": "BD", "secName": "Baze de Date", "text": "O structură de date reprezintă:", "opts": {"a": "o colecție de date complexe;", "b": "o colecție de date scalare;", "c": "o colecție de date cu un mecanism de localizare."}, "ans": ["c"]}, {"id": "BD.12", "sec": "BD", "secName": "Baze de Date", "text": "Mecanismul de accesare al datelor poate fi:", "opts": {"a": "relațional;", "b": "secvențial;", "c": "direct."}, "ans": ["a", "b", "c"]}, {"id": "BD.13", "sec": "BD", "secName": "Baze de Date", "text": "O structură tabelară este divizibilă în:", "opts": {"a": "înregistrări;", "b": "câmpuri;", "c": "predicate."}, "ans": ["a", "b"]}, {"id": "BD.14", "sec": "BD", "secName": "Baze de Date", "text": "O bază de date relațională conține:", "opts": {"a": "un tabel conducător (rădăcină);", "b": "o structură arborescentă de tabele;", "c": "un set de reguli de fidelitate."}, "ans": ["b"]}, {"id": "BD.15", "sec": "BD", "secName": "Baze de Date", "text": "E.F.Codd a definit treisprezece reguli de fidelitate pentru:", "opts": {"a": "clienții bazei de date;", "b": "administratorul bazei de date;", "c": "bazele de date relaționale."}, "ans": ["c"]}, {"id": "BD.16", "sec": "BD", "secName": "Baze de Date", "text": "Limbajul SQL este un limbaj ce permite:", "opts": {"a": "crearea unei baze de date;", "b": "gestionarea datelor;", "c": "interogarea bazelor de date."}, "ans": ["a", "b", "c"]}, {"id": "BD.17", "sec": "BD", "secName": "Baze de Date", "text": "Limbajul SQL conține următoarele subseturi:", "opts": {"a": "Limbaj de definire a datelor;", "b": "Limbaj de manipulare a datelor;", "c": "Limbaj de gestionare a datelor."}, "ans": ["a", "b"]}, {"id": "BD.18", "sec": "BD", "secName": "Baze de Date", "text": "Schema unei baze de date cuprinde:", "opts": {"a": "tabelele, atributele și domeniile acestora;", "b": "restricțiile de integritate;", "c": "drepturile utilizatorilor."}, "ans": ["a", "b"]}, {"id": "BD.19", "sec": "BD", "secName": "Baze de Date", "text": "Limbajul SQL este:", "opts": {"a": "un standard unic;", "b": "un limbaj cu dialecte relativ diferite între ele;", "c": "o familie de limbaje independente fără elemente comune."}, "ans": ["b"]}, {"id": "BD.20", "sec": "BD", "secName": "Baze de Date", "text": "MySQL este:", "opts": {"a": "un mediu de dezvoltare a SGBD relaționale;", "b": "un limbaj de definire a datelor;", "c": "un dialect al SQL."}, "ans": ["c"]}, {"id": "BD.21", "sec": "BD", "secName": "Baze de Date", "text": "MySQL conține instrucțiuni pentru:", "opts": {"a": "definirea datelor;", "b": "programare procedurală;", "c": "programare obiectuală."}, "ans": ["a", "b"]}, {"id": "BD.22", "sec": "BD", "secName": "Baze de Date", "text": "Definirea datelor se face cu sub-limbajul:", "opts": {"a": "DLL;", "b": "DML;", "c": "DDL."}, "ans": ["c"]}, {"id": "BD.23", "sec": "BD", "secName": "Baze de Date", "text": "Există instrucțiuni pentru:", "opts": {"a": "crearea tabelelor;", "b": "definirea câmpurilor;", "c": "delimitarea domeniilor atributelor."}, "ans": ["a", "b", "c"]}, {"id": "BD.24", "sec": "BD", "secName": "Baze de Date", "text": "Protecția unei baze de date împotriva introducerii unor valori eronate se face prin:", "opts": {"a": "controlul permanent al administratorului;", "b": "domenii de inexistență;", "c": "restricții de integritate."}, "ans": ["c"]}, {"id": "BD.25", "sec": "BD", "secName": "Baze de Date", "text": "Ștergerea unei Baze de date este o operație din:", "opts": {"a": "doar sub-limbajul de definire a datelor;", "b": "doar sub-limbajul de manipulare a datelor;", "c": "ambele sub-seturi."}, "ans": ["a"]}, {"id": "BD.26", "sec": "BD", "secName": "Baze de Date", "text": "Declararea atributelor în MySQL se face astfel:", "opts": {"a": "tip_data nume_data;", "b": "tip_data(lungime) nume_data;", "c": "nume_data tip_data(lungime)."}, "ans": ["c"]}, {"id": "BD.27", "sec": "BD", "secName": "Baze de Date", "text": "Dialectul MySQL cuprinde următoarele tipuri de date:", "opts": {"a": "numerice;", "b": "șir;", "c": "dată calendaristică."}, "ans": ["a", "b", "c"]}, {"id": "BD.28", "sec": "BD", "secName": "Baze de Date", "text": "Tipul varchar este:", "opts": {"a": "identic cu char;", "b": "economisește spațiu fiind mai flexibil decât char;", "c": "necesită ZEROFILL."}, "ans": ["b"]}, {"id": "BD.29", "sec": "BD", "secName": "Baze de Date", "text": "Tipul decimal se poate folosi astfel:", "opts": {"a": "decimal(m,d);", "b": "decimal(m);", "c": "decimal."}, "ans": ["a"]}, {"id": "BD.30", "sec": "BD", "secName": "Baze de Date", "text": "Coloana timestamp(12) are formatul:", "opts": {"a": "YYMMDDhhmmss;", "b": "YY-MM-DD hh:mm;", "c": "YYMMDDHHMMSS."}, "ans": ["c"]}, {"id": "BD.31", "sec": "BD", "secName": "Baze de Date", "text": "Crearea unei baze de date se face cu comanda:", "opts": {"a": "CREATE DATABASE;", "b": "CREATE DATABASE nume_bd;", "c": "CREATE DATABASE cale/nume_bd."}, "ans": ["b"]}, {"id": "BD.32", "sec": "BD", "secName": "Baze de Date", "text": "Crearea unui tabel se face cu sintaxa:", "opts": {"a": "CREATE TABLE nume_tab;", "b": "CREATE TABLE nume_tab(lista_nume_cmp);", "c": "CREATE TABLE nume_tab(lista_restrictii)."}, "ans": ["b"]}, {"id": "BD.33", "sec": "BD", "secName": "Baze de Date", "text": "Un tabel poate fi creat:", "opts": {"a": "prin declararea directă a câmpurilor sale;", "b": "prin copierea rezultatelor unei interogări;", "c": "prin indexare."}, "ans": ["a", "b"]}, {"id": "BD.34", "sec": "BD", "secName": "Baze de Date", "text": "Principalele restricții de integritate ale unei coloane sunt:", "opts": {"a": "not null;", "b": "default;", "c": "check out."}, "ans": ["a"]}, {"id": "BD.35", "sec": "BD", "secName": "Baze de Date", "text": "Ștergerea unei baze de date produce eliminarea:", "opts": {"a": "tuturor tabelelor componente;", "b": "directorului corespunzător bazei de date;", "c": "tuplei corespunzătoare bazei de date din SYSDBS."}, "ans": ["a"]}, {"id": "BD.36", "sec": "BD", "secName": "Baze de Date", "text": "Inserarea datelor într-un tabel se face cu instrucțiunile:", "opts": {"a": "INSERT INTO;", "b": "SET;", "c": "LOAD DATA INFILE."}, "ans": ["a", "c"]}, {"id": "BD.37", "sec": "BD", "secName": "Baze de Date", "text": "Instrucțiunea INSERT permite introducerea într-un tabel a:", "opts": {"a": "înregistrărilor complete;", "b": "valorilor unor câmpuri;", "c": "corecturilor."}, "ans": ["a", "b"]}, {"id": "BD.38", "sec": "BD", "secName": "Baze de Date", "text": "Instrucțiunea UPDATE are sintaxa:", "opts": {"a": "SET nume_cp= val/expr WHERE cond;", "b": "UPDATE nume_tab WHERE cond;", "c": "UPDATE nume_tab SET nume_cp= val/expr WHERE cond."}, "ans": ["c"]}, {"id": "BD.39", "sec": "BD", "secName": "Baze de Date", "text": "Instrucțiunea UPDATE poate modifica:", "opts": {"a": "numai un singur câmp dintr-o singură înregistrare;", "b": "mai multe câmpuri dintr-o singură înregistrare;", "c": "mai multe câmpuri din mai multe înregistrări."}, "ans": ["c"]}, {"id": "BD.40", "sec": "BD", "secName": "Baze de Date", "text": "Instrucțiunea DELETE șterge:", "opts": {"a": "înregistrări întregi;", "b": "câmpuri izolate;", "c": "câmpuri adiacente."}, "ans": ["a"]}, {"id": "BD.41", "sec": "BD", "secName": "Baze de Date", "text": "O propoziție SELECT trebuie obligatoriu să conțină:", "opts": {"a": "SELECT;", "b": "FROM;", "c": "WHERE."}, "ans": ["b"]}, {"id": "BD.42", "sec": "BD", "secName": "Baze de Date", "text": "Condițiile WHERE pot conține ca operatori:", "opts": {"a": "AND, OR și NOT;", "b": "=, <>, >, <;", "c": "LIKE, BETWEEN."}, "ans": ["a", "b", "c"]}, {"id": "BD.43", "sec": "BD", "secName": "Baze de Date", "text": "Sortarea descendentă a înregistrărilor se face cu:", "opts": {"a": "SELECT lista_cmp ORDER BY cmp_ord DESC;", "b": "SELECT lista_cmp WHERE cond SORT cmp_ord DESC;", "c": "SELECT lista_cmp FROM lista_tab WHERE cond."}, "ans": ["a"]}, {"id": "BD.44", "sec": "BD", "secName": "Baze de Date", "text": "Eliminarea duplicatelor se poate face cu:", "opts": {"a": "SELECT UNIQUE;", "b": "SELECT DISTINCT;", "c": "WHERE UNIQUE."}, "ans": ["b"]}, {"id": "BD.45", "sec": "BD", "secName": "Baze de Date", "text": "Clauza ORDER BY se poate folosi împreună cu:", "opts": {"a": "ASC;", "b": "DESC;", "c": "LIMIT."}, "ans": ["a", "b", "c"]}, {"id": "BD.46", "sec": "BD", "secName": "Baze de Date", "text": "O propoziție SELECT ce cuprinde mai multe tabele face:", "opts": {"a": "JOIN;", "b": "NATURAL_JOIN;", "c": "RIGHT_JOIN."}, "ans": ["a"]}, {"id": "BD.47", "sec": "BD", "secName": "Baze de Date", "text": "Directiva STRAIGHT_JOIN se plasează în cadrul zonei:", "opts": {"a": "SELECT;", "b": "FROM;", "c": "WHERE."}, "ans": ["b"]}, {"id": "BD.48", "sec": "BD", "secName": "Baze de Date", "text": "Uniunile se folosesc pentru a combina date din:", "opts": {"a": "mai multe câmpuri;", "b": "mai multe tabele;", "c": "mai multe baze de date."}, "ans": ["b"]}, {"id": "BD.49", "sec": "BD", "secName": "Baze de Date", "text": "Uniunile LEFT_JOIN se folosesc pentru:", "opts": {"a": "combinarea unor date din tabele disjuncte;", "b": "combinarea unor date din înregistrări disjuncte;", "c": "evidențierea tuplelor din T1 care nu au corespondent în T2."}, "ans": ["c"]}, {"id": "BD.50", "sec": "BD", "secName": "Baze de Date", "text": "În MySQL se utilizează:", "opts": {"a": "EQUI_JOIN;", "b": "SEMI_JOIN;", "c": "RIGHT_JOIN."}, "ans": ["c"]}, {"id": "J.1", "sec": "J", "secName": "Programare Orientată pe Obiecte (Java)", "text": "Dintr-o singură clasă de bază se pot deriva:", "opts": {"a": "Doar o singură clasă fiică;", "b": "Mai multe clase fiică;", "c": "Nu se pot deriva clasele."}, "ans": ["b"]}, {"id": "J.2", "sec": "J", "secName": "Programare Orientată pe Obiecte (Java)", "text": "În Java metodele sunt scrise:", "opts": {"a": "în interiorul declarației clasei din care fac parte;", "b": "în afara declarației clasei din care fac parte;", "c": "Ambele."}, "ans": ["a"]}, {"id": "J.3", "sec": "J", "secName": "Programare Orientată pe Obiecte (Java)", "text": "Crearea unui obiect se face prin:", "opts": {"a": "Instanțiere;", "b": "Cu ajutorul unui constructor;", "c": "Prin simpla declarare."}, "ans": ["a", "b"]}, {"id": "J.4", "sec": "J", "secName": "Programare Orientată pe Obiecte (Java)", "text": "Instanțierea unui obiect produce:", "opts": {"a": "Rezervarea spațiului în memorie pentru acel obiect;", "b": "Eliminarea clasei utilizate;", "c": "Atribuirea de valori pentru datele membre."}, "ans": ["a", "c"]}, {"id": "J.5", "sec": "J", "secName": "Programare Orientată pe Obiecte (Java)", "text": "Clasele dintr-un program pot fi:", "opts": {"a": "Independente;", "b": "Derivate dintr-o clasă de bază;", "c": "Ambele."}, "ans": ["a", "b", "c"]}, {"id": "J.6", "sec": "J", "secName": "Programare Orientată pe Obiecte (Java)", "text": "Într-un program scris în limbajul Java se poate afla:", "opts": {"a": "O singură clasă;", "b": "Mai multe clase;", "c": "Nu se pun clasele în program, ci în biblioteci."}, "ans": ["b"]}, {"id": "J.7", "sec": "J", "secName": "Programare Orientată pe Obiecte (Java)", "text": "În limbajul Java tipurile simple de date pot fi definite:", "opts": {"a": "În mod identic cu programele procedurale;", "b": "Sub forma unor clase;", "c": "În ambele moduri."}, "ans": ["a", "b", "c"]}, {"id": "J.8", "sec": "J", "secName": "Programare Orientată pe Obiecte (Java)", "text": "După compilare clasele Java se vor găsi plasate în:", "opts": {"a": "Fișierul Java inițial;", "b": "Un fișier executabil cu extensia \".exe\";", "c": "În fișiere cu extensia \".class\" separate."}, "ans": ["c"]}, {"id": "J.9", "sec": "J", "secName": "Programare Orientată pe Obiecte (Java)", "text": "Limbajul Java este independent de platformă fiindcă:", "opts": {"a": "Este pur obiectual;", "b": "Rulează pe o mașină virtuală emulată;", "c": "Nu folosește biblioteci de funcții."}, "ans": ["b"]}, {"id": "J.10", "sec": "J", "secName": "Programare Orientată pe Obiecte (Java)", "text": "Pentru scrierea unui applet Java sunt obligatoriu necesare:", "opts": {"a": "Biblioteci de clase Java;", "b": "Editoare de fișiere java și html;", "c": "Un browser compatibil Java."}, "ans": ["b", "c"]}, {"id": "J.11", "sec": "J", "secName": "Programare Orientată pe Obiecte (Java)", "text": "Un bloc de testare a apariției unei excepții conține obligatoriu:", "opts": {"a": "Instrucțiunea \"if\";", "b": "Instrucțiunea \"try\";", "c": "Instrucțiunea \"finally\"."}, "ans": ["b"]}, {"id": "J.12", "sec": "J", "secName": "Programare Orientată pe Obiecte (Java)", "text": "Limbajul Java permite scrierea de:", "opts": {"a": "Clase de erori proprii;", "b": "Clase de excepții proprii;", "c": "Blocuri de testare multiple."}, "ans": ["a", "b", "c"]}, {"id": "J.13", "sec": "J", "secName": "Programare Orientată pe Obiecte (Java)", "text": "O clasă proprie de excepții se declară:", "opts": {"a": "Cu sintaxa valabilă pentru orice clasă;", "b": "În interiorul unui bloc \"try.catch\";", "c": "Nu se declară."}, "ans": ["a", "b"]}, {"id": "J.14", "sec": "J", "secName": "Programare Orientată pe Obiecte (Java)", "text": "Un bloc \"try.catch\" pentru mai multe tipuri de erori cuprinde obligatoriu:", "opts": {"a": "O singură instrucțiune \"try\";", "b": "Câte o instrucțiune \"catch\" pentru fiecare eroare;", "c": "O instrucțiune \"finally\"."}, "ans": ["a", "b"]}, {"id": "J.15", "sec": "J", "secName": "Programare Orientată pe Obiecte (Java)", "text": "O metodă a cărei acțiune poate produce excepții trebuie să fie:", "opts": {"a": "Eliminată din start;", "b": "Modificată pentru a elimina orice risc;", "c": "Declarată ca fiind susceptibilă să facă acest lucru."}, "ans": ["c"]}, {"id": "J.16", "sec": "J", "secName": "Programare Orientată pe Obiecte (Java)", "text": "Conceptul de multitasking înseamnă:", "opts": {"a": "Execuția simultană a mai multor sarcini;", "b": "Multiplexarea în timp a sarcinilor de executat;", "c": "Execuția sarcinilor pe mai multe procesoare paralele."}, "ans": ["b"]}, {"id": "J.17", "sec": "J", "secName": "Programare Orientată pe Obiecte (Java)", "text": "Un fir de execuție se comportă în timpul rulării ca:", "opts": {"a": "Un bloc al programului;", "b": "Un pachet de clase;", "c": "O aplicație autonomă."}, "ans": ["c"]}, {"id": "J.18", "sec": "J", "secName": "Programare Orientată pe Obiecte (Java)", "text": "Un fir intră în execuție atunci când:", "opts": {"a": "Se naște;", "b": "Are prioritate;", "c": "Primește comanda start()."}, "ans": ["b", "c"]}, {"id": "J.19", "sec": "J", "secName": "Programare Orientată pe Obiecte (Java)", "text": "Un fir de execuție este blocat dacă primește comanda:", "opts": {"a": "sleep();", "b": "wait();", "c": "stop()."}, "ans": ["a", "b"]}, {"id": "J.20", "sec": "J", "secName": "Programare Orientată pe Obiecte (Java)", "text": "Un fir de execuție este oprit dacă:", "opts": {"a": "Este întrerupt de alt fir concurent;", "b": "S-au executat toate acțiunile aferente lui;", "c": "Întreaga execuție a programului este oprită."}, "ans": ["a", "b", "c"]}, {"id": "J.21", "sec": "J", "secName": "Programare Orientată pe Obiecte (Java)", "text": "Într-un program scris în Java o constantă poate fi:", "opts": {"a": "Declarată;", "b": "Inițializată;", "c": "Asignată."}, "ans": ["a", "b"]}, {"id": "J.22", "sec": "J", "secName": "Programare Orientată pe Obiecte (Java)", "text": "Care din secvențele de mai jos sunt corecte:", "opts": {"a": "final int A=0;", "b": "final int A=0; x=A;", "c": "final int A=0; A=A+1;"}, "ans": ["a", "b"]}, {"id": "J.23", "sec": "J", "secName": "Programare Orientată pe Obiecte (Java)", "text": "Care din acțiunile de mai jos sunt semnalate ca erori la compilare:", "opts": {"a": "Asignarea unei variabile cu valoarea unei constante;", "b": "Reutilizarea unei constante în același fișier;", "c": "Adunarea unei constante la o variabilă."}, "ans": ["b"]}, {"id": "J.24", "sec": "J", "secName": "Programare Orientată pe Obiecte (Java)", "text": "O constantă se poate utiliza pentru a stabili:", "opts": {"a": "Un prag de comparație;", "b": "Un număr de repetări ale unui ciclu;", "c": "O contorizare."}, "ans": ["a", "b"]}, {"id": "J.25", "sec": "J", "secName": "Programare Orientată pe Obiecte (Java)", "text": "Diferența între o constantă și o variabilă în Java este:", "opts": {"a": "Nici una;", "b": "Modul de inițializare;", "c": "Stabilitatea valorii."}, "ans": ["c"]}, {"id": "J.26", "sec": "J", "secName": "Programare Orientată pe Obiecte (Java)", "text": "Vectorii diferă față de tabele prin faptul că:", "opts": {"a": "Acceptă ca elemente doar obiectele;", "b": "Permit alocarea dinamică;", "c": "Permit introducerea și eliminarea unor elemente."}, "ans": ["a", "b", "c"]}, {"id": "J.27", "sec": "J", "secName": "Programare Orientată pe Obiecte (Java)", "text": "Sintaxa de declarare a unui vector este:", "opts": {"a": "Vector nume_vector = new Vector();", "b": "Vector = new Vector(nume_vector);", "c": "Vector nume_vector = new Vector(int nr_locatii)."}, "ans": ["a"]}, {"id": "J.28", "sec": "J", "secName": "Programare Orientată pe Obiecte (Java)", "text": "Extragerea unui obiect din vector se face cu metoda:", "opts": {"a": "final synchronized Object elementAt(Object ob);", "b": "final synchronized int indexOf(Object ob);", "c": "final synchronized Object get(Object ob)."}, "ans": ["a"]}, {"id": "J.29", "sec": "J", "secName": "Programare Orientată pe Obiecte (Java)", "text": "Determinarea poziției unui obiect din vector se face cu:", "opts": {"a": "final synchronized Object elementAt(Object ob);", "b": "final synchronized int indexOf(Object ob);", "c": "final synchronized Object get(Object ob)."}, "ans": ["b"]}, {"id": "J.30", "sec": "J", "secName": "Programare Orientată pe Obiecte (Java)", "text": "Găsirea ultimului element al unui vector se face cu:", "opts": {"a": "final synchronized Object firstElement();", "b": "final synchronized Object lastElement();", "c": "final synchronized Object finalElement()."}, "ans": ["b"]}, {"id": "J.31", "sec": "J", "secName": "Programare Orientată pe Obiecte (Java)", "text": "Instrucțiunea \"switch\" se recomandă pentru:", "opts": {"a": "Secvențe cu o unică condiție de test;", "b": "Secvențe cu două condiții de test;", "c": "Secvențe cu mai multe-condiții de test."}, "ans": ["c"]}, {"id": "J.32", "sec": "J", "secName": "Programare Orientată pe Obiecte (Java)", "text": "În limbajul Java se poate înlocui \"if...else if\" cu:", "opts": {"a": "Instrucțiunea \"for\";", "b": "Instrucțiunea \"?:\";", "c": "Instrucțiunea \"switch\"."}, "ans": ["c"]}, {"id": "J.33", "sec": "J", "secName": "Programare Orientată pe Obiecte (Java)", "text": "Instrucțiunea \"for\" devine buclă infinită dacă lipsește:", "opts": {"a": "Expresia de test", "b": "Valoarea inițială a contorului;", "c": "Incrementarea contorului."}, "ans": ["a", "c"]}, {"id": "J.34", "sec": "J", "secName": "Programare Orientată pe Obiecte (Java)", "text": "Particula \"while\" din \"do...while\" reprezintă:", "opts": {"a": "Începutul buclei;", "b": "Punctul de test;", "c": "Sfârșitul buclei."}, "ans": ["b", "c"]}, {"id": "J.35", "sec": "J", "secName": "Programare Orientată pe Obiecte (Java)", "text": "Instrucțiunile \"do...while\" și \"for\" sunt:", "opts": {"a": "Instrucțiuni de control al fluxului;", "b": "Echivalente;", "c": "Ne-echivalente."}, "ans": ["a", "b"]}, {"id": "J.36", "sec": "J", "secName": "Programare Orientată pe Obiecte (Java)", "text": "În limbajul Java declarația unei clase cuprinde:", "opts": {"a": "Numele clasei;", "b": "Datele membre;", "c": "Funcțiile membre."}, "ans": ["a", "b", "c"]}, {"id": "J.37", "sec": "J", "secName": "Programare Orientată pe Obiecte (Java)", "text": "În limbajul Java funcțiile membre sunt:", "opts": {"a": "Declarate în interiorul clasei;", "b": "Declarate în afara clasei;", "c": "În ambele moduri."}, "ans": ["a"]}, {"id": "J.38", "sec": "J", "secName": "Programare Orientată pe Obiecte (Java)", "text": "Diferențele esențiale între clase și structuri sunt:", "opts": {"a": "Clasele conțin în plus date membre;", "b": "Clasele conțin în plus funcții membre;", "c": "Clasele asigură încapsularea."}, "ans": ["b", "c"]}, {"id": "J.39", "sec": "J", "secName": "Programare Orientată pe Obiecte (Java)", "text": "În limbajul Java obiectele sunt:", "opts": {"a": "Alternative ale claselor;", "b": "Instanțe ale claselor;", "c": "Structuri de clase înrudite."}, "ans": ["b"]}, {"id": "J.40", "sec": "J", "secName": "Programare Orientată pe Obiecte (Java)", "text": "Proprietatea de încapsulare a datelor constă în faptul că într-o clasă Java:", "opts": {"a": "Se găsesc date membre și funcții membre;", "b": "Funcțiile membre sunt numai \"in line\";", "c": "Doar funcțiile membre pot accesa datele."}, "ans": ["c"]}, {"id": "J.41", "sec": "J", "secName": "Programare Orientată pe Obiecte (Java)", "text": "Sintaxa de utilizare a unui constructor este:", "opts": {"a": "nume_obiect = new constructor;", "b": "nume_clasa nume_obiect = new constructor;", "c": "nume_clasa nume_obiect = constructor."}, "ans": ["b"]}, {"id": "J.42", "sec": "J", "secName": "Programare Orientată pe Obiecte (Java)", "text": "Dintr-o clasă se instanțiază obiecte prin:", "opts": {"a": "Utilizarea metodei \"main()\";", "b": "Asignarea datelor membre ale clasei;", "c": "Utilizarea constructorului."}, "ans": ["c"]}, {"id": "J.43", "sec": "J", "secName": "Programare Orientată pe Obiecte (Java)", "text": "Constructorul în Java:", "opts": {"a": "Nu are tip de valoare de retur;", "b": "Poate fi implicit;", "c": "Are același nume cu clasa."}, "ans": ["a", "b", "c"]}, {"id": "J.44", "sec": "J", "secName": "Programare Orientată pe Obiecte (Java)", "text": "Un obiect creat de un constructor este:", "opts": {"a": "Dotat cu aceleași datele membre ca și clasa;", "b": "Dotat cu aceleași funcții membre ca și clasa;", "c": "Dotat cu elemente suplimentare față de clasă."}, "ans": ["a", "b"]}, {"id": "J.45", "sec": "J", "secName": "Programare Orientată pe Obiecte (Java)", "text": "Două date membre ale aceluiași obiect sunt:", "opts": {"a": "Plasate în aceiași structura de date;", "b": "Accesibile acelorași metode;", "c": "Sunt inițializate la instanțierea obiectului."}, "ans": ["a", "b", "c"]}, {"id": "J.46", "sec": "J", "secName": "Programare Orientată pe Obiecte (Java)", "text": "Interfețele în Java:", "opts": {"a": "Au rolul de a înlocui moștenirea multiplă;", "b": "Funcționează ca niște clase abstracte;", "c": "Conțin date abstracte."}, "ans": ["a", "b"]}, {"id": "J.47", "sec": "J", "secName": "Programare Orientată pe Obiecte (Java)", "text": "Sintaxa de declarare a unei interfețe este:", "opts": {"a": "nume [extends intf_par] {[date și metode]};", "b": "interface nume {[date și metode]};", "c": "interface nume [extends intf_par] {[date și metode]}."}, "ans": ["b", "c"]}, {"id": "J.48", "sec": "J", "secName": "Programare Orientată pe Obiecte (Java)", "text": "O clasă poate să:", "opts": {"a": "Moștenească mai multe clase părinte;", "b": "Implementeze mai multe interfețe;", "c": "Să implementeze doar o singură interfață."}, "ans": ["b"]}, {"id": "J.49", "sec": "J", "secName": "Programare Orientată pe Obiecte (Java)", "text": "Sintaxa de declarare a unei interfețe moștenitor este:", "opts": {"a": "interface nume_intf [extends intf_par];", "b": "interface nume_intf {[date și metode]};", "c": "interface nume_intf [extends intf_par]{[date și metode]}."}, "ans": ["a", "b"]}, {"id": "J.50", "sec": "J", "secName": "Programare Orientată pe Obiecte (Java)", "text": "Implementarea unei interfețe de către o clasă se face cu sintaxa:", "opts": {"a": "nume_cls num_intf {[date și metode]};", "b": "class num_cls extends num_intf {[date și metode]};", "c": "class num_cls implements num_intf {[date și metode]}."}, "ans": ["c"]}, {"id": "S.1", "sec": "S", "secName": "Securitate informatică", "text": "Care algoritm se încadrează în categoria algoritmilor de cifrare polialfabetici?", "opts": {"a": "Caesar;", "b": "Viginere;", "c": "Playfair."}, "ans": ["b"]}, {"id": "S.2", "sec": "S", "secName": "Securitate informatică", "text": "Care algoritm se încadrează în categoria algoritmilor de cifrare poligramici?", "opts": {"a": "Viginere;", "b": "Polybius;", "c": "Playfair."}, "ans": ["c"]}, {"id": "S.3", "sec": "S", "secName": "Securitate informatică", "text": "Care algoritm de criptare este algoritm asimetric?", "opts": {"a": "RSA;", "b": "Diffie-Hellman;", "c": "DES;", "d": "AES."}, "ans": ["a"]}, {"id": "S.4", "sec": "S", "secName": "Securitate informatică", "text": "Algoritmul DES criptează blocuri de:", "opts": {"a": "32 biți;", "b": "64 biți;", "c": "128 biți;", "d": "16 biți."}, "ans": ["b"]}, {"id": "S.5", "sec": "S", "secName": "Securitate informatică", "text": "Algoritmul DSA (Digital Signature Algorithm) este un algoritm care:", "opts": {"a": "Folosește cheie publică;", "b": "Folosește cheie publică și cheie secretă;", "c": "Folosește cheie secretă."}, "ans": ["b"]}, {"id": "S.6", "sec": "S", "secName": "Securitate informatică", "text": "Câți algoritmi cuprind în general schemele semnăturilor digitale:", "opts": {"a": "3;", "b": "2;", "c": "1."}, "ans": ["a"]}, {"id": "S.7", "sec": "S", "secName": "Securitate informatică", "text": "AES utilizează o dimensiune a cheii de biți de ____.", "opts": {"a": "64, 128 sau 192;", "b": "192 sau 256;", "c": "128, 192 sau 256;", "d": "64 sau 256."}, "ans": ["c"]}, {"id": "S.8", "sec": "S", "secName": "Securitate informatică", "text": "Câte chei sunt necesare pentru criptarea și decriptarea datelor atunci când folosim un cifru asimetric?", "opts": {"a": "0;", "b": "1;", "c": "2;", "d": "3."}, "ans": ["c"]}, {"id": "S.9", "sec": "S", "secName": "Securitate informatică", "text": "Care din următoarele opțiuni definește corect atacul de forță brută (Brute force attack)?", "opts": {"a": "Forțând brutal utilizatorul să partajeze informații utile, cum ar fi coduri și parole;", "b": "O entitate pretinde a fi o altă entitate;", "c": "Încercarea tuturor cheilor posibile pentru a decripta mesajul;", "d": "Mesajul sau informația este modificată înainte de a le trimite către destinatar."}, "ans": ["c"]}, {"id": "S.10", "sec": "S", "secName": "Securitate informatică", "text": "O funcție hash este o funcție:", "opts": {"a": "Care primește ca intrare mesaje de dimensiune fixă din care mesajul inițial nu poate fi recuperat;", "b": "Care primește ca intrare mesaje de dimensiune fixă și returnează un mesaj de lungime fixă din care mesajul inițial poate fi recuperat;", "c": "Care primește ca intrare mesaje de dimensiune variabilă și returnează un mesaj de lungime fixă din care mesajul inițial nu poate fi recuperat."}, "ans": ["c"]}, {"id": "S.11", "sec": "S", "secName": "Securitate informatică", "text": "Ce reprezintă securitatea informației?", "opts": {"a": "Protejarea informațiilor împotriva accesului, modificării și distrugerii neautorizate;", "b": "Un proces de testare a performanței aplicațiilor;", "c": "O metodă de optimizare a rețelelor;", "d": "Un sistem de arhivare a datelor."}, "ans": ["a"]}, {"id": "S.12", "sec": "S", "secName": "Securitate informatică", "text": "Care dintre următoarele este un atac pasiv?", "opts": {"a": "Interceptarea mesajelor;", "b": "Modificarea conținutului mesajelor;", "c": "Injectarea de cod SQL;", "d": "Ransomware."}, "ans": ["a"]}, {"id": "S.13", "sec": "S", "secName": "Securitate informatică", "text": "Ce tip de atac vizează indisponibilizarea unui serviciu prin supraîncărcarea acestuia?", "opts": {"a": "Phishing;", "b": "Man-in-the-Middle;", "c": "Denial-of-Service (DoS);", "d": "Inginerie socială."}, "ans": ["c"]}, {"id": "S.14", "sec": "S", "secName": "Securitate informatică", "text": "Ce atac presupune manipularea utilizatorilor pentru a divulga informații sensibile?", "opts": {"a": "Inginerie socială;", "b": "SQL Injection;", "c": "Denial-of-Service (DoS);", "d": "Phishing."}, "ans": ["a"]}, {"id": "S.15", "sec": "S", "secName": "Securitate informatică", "text": "Ce reprezintă atacul de tip „Man-in-the-Middle\" (MitM)?", "opts": {"a": "Un atac în care un hacker interceptează și modifică comunicațiile între două părți fără ca acestea să știe;", "b": "O metodă prin care un atacator inundă rețeaua cu trafic inutil;", "c": "O tehnică de criptare a comunicațiilor;", "d": "Un atac ce presupune ghicirea parolelor utilizatorilor."}, "ans": ["a"]}, {"id": "S.16", "sec": "S", "secName": "Securitate informatică", "text": "Cum poate fi prevenit un atac MitM (Man-in-the-Middle)?", "opts": {"a": "Folosind HTTP în loc de HTTPS;", "b": "Folosind parole slabe;", "c": "Evitând actualizările software;", "d": "Utilizând certificate SSL/TLS și criptarea comunicațiilor."}, "ans": ["d"]}, {"id": "S.17", "sec": "S", "secName": "Securitate informatică", "text": "Ce este atacul Cross-Site Scripting (XSS)?", "opts": {"a": "O vulnerabilitate care permite injectarea de cod JavaScript într-o pagină web;", "b": "Un mecanism de autentificare;", "c": "Un tip de criptare a mesajelor;", "d": "Un atac ce modifică rutele de rețea."}, "ans": ["a"]}, {"id": "S.18", "sec": "S", "secName": "Securitate informatică", "text": "Cum poate fi prevenit un atac Cross-Site Scripting (XSS)?", "opts": {"a": "Prin validarea inputului utilizatorului;", "b": "Prin dezactivarea protecției web;", "c": "Prin utilizarea unei parole slabe;", "d": "Prin trimiterea parolelor prin e-mail."}, "ans": ["a"]}, {"id": "S.19", "sec": "S", "secName": "Securitate informatică", "text": "Ce rol are Politica de Securitate a Conținutului (CSP) în prevenirea atacurilor XSS?", "opts": {"a": "Criptează datele transmise între server și browser;", "b": "Limitează sursele de scripturi pe care browserul le poate încărca;", "c": "Blochează accesul neautorizat la server;", "d": "Monitorizează traficul de rețea pentru activități suspecte."}, "ans": ["b"]}, {"id": "S.20", "sec": "S", "secName": "Securitate informatică", "text": "Ce este un atac de tip ransomware?", "opts": {"a": "Un atac în care datele victimei sunt criptate și se cere o răscumpărare pentru decriptare;", "b": "O metodă de protecție a datelor;", "c": "Un atac prin care sunt interceptate mesajele;", "d": "O tehnică de creștere a performanței sistemului."}, "ans": ["a"]}, {"id": "S.21", "sec": "S", "secName": "Securitate informatică", "text": "Ce reprezintă atacurile de tip Zero-Day?", "opts": {"a": "Atacuri care exploatează vulnerabilități necunoscute;", "b": "Un mecanism de apărare împotriva malware-ului;", "c": "Un tip de criptare simetrică;", "d": "O metodă de optimizare a rețelelor."}, "ans": ["a"]}, {"id": "S.22", "sec": "S", "secName": "Securitate informatică", "text": "Ce protocol securizat este utilizat pentru accesul la distanță pe un server?", "opts": {"a": "FTP;", "b": "Telnet;", "c": "SSH;", "d": "HTTP."}, "ans": ["c"]}, {"id": "S.23", "sec": "S", "secName": "Securitate informatică", "text": "Care dintre următoarele atacuri se bazează pe trimiterea unui volum mare de trafic pentru a bloca un server?", "opts": {"a": "SQL Injection;", "b": "Phishing;", "c": "Denial of Service (DoS);", "d": "Cross-Site Scripting (XSS)."}, "ans": ["c"]}, {"id": "S.24", "sec": "S", "secName": "Securitate informatică", "text": "Ce înseamnă VPN în securitatea rețelelor?", "opts": {"a": "Virtual Personal Name;", "b": "Virtual Private Network;", "c": "Virtual Public Node;", "d": "Verified Private Network."}, "ans": ["b"]}, {"id": "S.25", "sec": "S", "secName": "Securitate informatică", "text": "Ce reprezintă un atac de tip „phishing\"?", "opts": {"a": "Un atac prin care un hacker ghicește parolele utilizatorilor;", "b": "O tehnică de inginerie socială prin care atacatorii încearcă să obțină date sensibile prin mesaje frauduloase;", "c": "Un atac de interceptare a pachetelor în rețea;", "d": "Un tip de atac fizic asupra echipamentelor IT."}, "ans": ["b"]}, {"id": "S.26", "sec": "S", "secName": "Securitate informatică", "text": "Ce protocol este utilizat pentru transmiterea securizată a paginilor web?", "opts": {"a": "HTTP;", "b": "FTP;", "c": "HTTPS;", "d": "SSH."}, "ans": ["c"]}, {"id": "S.27", "sec": "S", "secName": "Securitate informatică", "text": "Ce rol are un firewall într-o rețea?", "opts": {"a": "Criptează datele utilizatorului pentru securitate maximă;", "b": "Blochează accesul neautorizat și filtrează traficul în funcție de reguli predefinite;", "c": "Permite oricărui dispozitiv să acceseze internetul fără restricții;", "d": "Scanează toate fișierele dintr-un calculator pentru viruși."}, "ans": ["b"]}, {"id": "S.28", "sec": "S", "secName": "Securitate informatică", "text": "Ce tip de criptare utilizează aceeași cheie pentru criptare și decriptare?", "opts": {"a": "Criptarea asimetrică;", "b": "Criptarea simetrică;", "c": "Funcții hash;", "d": "Algoritmii cu cheie publică."}, "ans": ["b"]}, {"id": "S.29", "sec": "S", "secName": "Securitate informatică", "text": "Ce proprietate trebuie să aibă o funcție hash pentru a fi considerată sigură?", "opts": {"a": "Să fie reversibilă;", "b": "Să aibă coliziuni frecvente;", "c": "Să fie deterministă și rezistentă la coliziuni;", "d": "Să folosească criptografie asimetrică."}, "ans": ["c"]}, {"id": "S.30", "sec": "S", "secName": "Securitate informatică", "text": "Ce lungime a cheii este considerată sigură pentru RSA în zilele noastre?", "opts": {"a": "512 biți;", "b": "1024 biți;", "c": "2048 biți;", "d": "256 biți."}, "ans": ["c"]}, {"id": "S.31", "sec": "S", "secName": "Securitate informatică", "text": "Care este principalul avantaj al criptografiei asimetrice față de cea simetrică?", "opts": {"a": "Este mai rapidă;", "b": "Nu necesită partajarea unei chei secrete;", "c": "Folosește mai puțină memorie;", "d": "Are un proces de criptare mai simplu."}, "ans": ["b"]}, {"id": "S.32", "sec": "S", "secName": "Securitate informatică", "text": "Ce algoritm este utilizat în protocolul SSL/TLS pentru criptarea sesiunilor?", "opts": {"a": "RSA;", "b": "AES;", "c": "SHA-1;", "d": "DES."}, "ans": ["b"]}, {"id": "S.33", "sec": "S", "secName": "Securitate informatică", "text": "Care dintre următoarele atacuri vizează slăbiciunile funcțiilor hash?", "opts": {"a": "Atacul de tip „Man-in-the-Middle\";", "b": "Atacul cu dicționar;", "c": "Atacul de coliziune;", "d": "SQL Injection."}, "ans": ["c"]}, {"id": "S.34", "sec": "S", "secName": "Securitate informatică", "text": "Care este principalul avantaj al algoritmului AES față de DES?", "opts": {"a": "Utilizează chei mai scurte;", "b": "Are un număr fix de runde de criptare;", "c": "Este mai rapid și mai sigur;", "d": "Utilizează criptografie asimetrică."}, "ans": ["c"]}, {"id": "S.35", "sec": "S", "secName": "Securitate informatică", "text": "Care dintre următoarele afirmații despre algoritmul RSA este adevărată?", "opts": {"a": "Se bazează pe dificultatea factorizării numerelor mari;", "b": "Utilizează criptografie simetrică;", "c": "Este mai rapid decât AES;", "d": "Folosește funcții hash pentru criptare."}, "ans": ["a"]}, {"id": "S.36", "sec": "S", "secName": "Securitate informatică", "text": "Ce înseamnă atacul „padding oracle\" în criptografie?", "opts": {"a": "O metodă de exploatare a unui sistem de criptare pe baza erorilor generate la decriptare;", "b": "Un atac asupra funcțiilor hash;", "c": "O metodă de modificare a pachetelor de rețea;", "d": "O tehnică de criptare avansată."}, "ans": ["a"]}, {"id": "S.37", "sec": "S", "secName": "Securitate informatică", "text": "Ce este securitatea aplicațiilor?", "opts": {"a": "Procesul de testare a performanței aplicațiilor;", "b": "Ansamblul de practici și tehnologii folosite pentru protejarea aplicațiilor împotriva vulnerabilităților și atacurilor;", "c": "O metodă de îmbunătățire a interfeței utilizatorului;", "d": "Un tip de firewall."}, "ans": ["b"]}, {"id": "S.38", "sec": "S", "secName": "Securitate informatică", "text": "Ce este atacul de tip SQL Injection?", "opts": {"a": "Un atac care forțează aplicația să ruleze interogări SQL malițioase;", "b": "O metodă de criptare a datelor;", "c": "Un atac bazat pe interceptarea traficului de rețea;", "d": "O tehnică de inginerie socială."}, "ans": ["a"]}, {"id": "S.39", "sec": "S", "secName": "Securitate informatică", "text": "Care dintre următoarele este o metodă eficientă de prevenire a atacurilor SQL Injection?", "opts": {"a": "Validarea inputului utilizatorului;", "b": "Utilizarea interogărilor parametrizate;", "c": "Dezactivarea bazei de date;", "d": "Folosirea unui VPN."}, "ans": ["b"]}, {"id": "S.40", "sec": "S", "secName": "Securitate informatică", "text": "Ce sunt cookie-urile HTTP?", "opts": {"a": "Fișiere utilizate pentru stocarea datelor de sesiune ale utilizatorilor;", "b": "Un tip de malware;", "c": "O tehnică de criptare;", "d": "Un protocol de comunicare între servere."}, "ans": ["a"]}, {"id": "S.41", "sec": "S", "secName": "Securitate informatică", "text": "Ce reprezintă „spoofing\"-ul în securitatea rețelei?", "opts": {"a": "Criptarea fișierelor;", "b": "Crearea unei copii de rezervă;", "c": "Falsificarea identității unei surse;", "d": "Încercarea repetată de parole."}, "ans": ["c"]}, {"id": "S.42", "sec": "S", "secName": "Securitate informatică", "text": "Ce este o saltare VLAN?", "opts": {"a": "Migrarea între rețele virtuale;", "b": "Un mod de criptare VLAN;", "c": "Configurarea mai multor VLAN-uri simultan;", "d": "Un atac care permite trecerea între VLAN-uri."}, "ans": ["d"]}, {"id": "S.43", "sec": "S", "secName": "Securitate informatică", "text": "Ce roluri sunt IPS (Sistem de prevenire a intruziunilor)?", "opts": {"a": "Permite traficul necunoscut;", "b": "Detectează și previne atacurile;", "c": "Face backup la fișierele sistemului;", "d": "Monitorizează utilizatorii activi."}, "ans": ["b"]}, {"id": "S.44", "sec": "S", "secName": "Securitate informatică", "text": "Ce este NAT în contextul securității?", "opts": {"a": "Un sistem de detectare a intruziunilor;", "b": "O adresare de ascundere a IP private;", "c": "O aplicație de analiză rețea;", "d": "Tehnologia de tip VPN."}, "ans": ["b"]}, {"id": "S.45", "sec": "S", "secName": "Securitate informatică", "text": "Folosind cifrul Cezar, cu o cheie de 4 care este criptarea cuvântului \"STUDENT\"?", "opts": {"a": "VXYHGQX;", "b": "VWXGHQW;", "c": "WXYHIRX."}, "ans": ["c"]}, {"id": "S.46", "sec": "S", "secName": "Securitate informatică", "text": "Ce este un atac de adulmecare?", "opts": {"a": "O încercare de phishing prin e-mail;", "b": "Un atac asupra parolelor stocate local;", "c": "Un vârf de firewall;", "d": "Interceptarea traficului de rețea pentru a obține date."}, "ans": ["d"]}, {"id": "S.47", "sec": "S", "secName": "Securitate informatică", "text": "Următorul cuvânt a fost criptat folosind un cifru Cezar cu o cheie de 2: ecguct. Ce cuvânt este?", "opts": {"a": "ceaser;", "b": "caezar;", "c": "caesar."}, "ans": ["c"]}, {"id": "S.48", "sec": "S", "secName": "Securitate informatică", "text": "Folosind cifrul Cezar, cu o cheie de 3 care este criptarea cuvântului \"STUDENT\"?", "opts": {"a": "VXYHGQX;", "b": "VWXGHQW;", "c": "VWYHGQV."}, "ans": ["b"]}, {"id": "S.49", "sec": "S", "secName": "Securitate informatică", "text": "Un utilizator al sistemului de criptare asimetric RSA (Rivest-Shamir-Adleman) are cheia publică (n,e)=(35,11). Care este cheia secretă x?", "opts": {"a": "x=7;", "b": "x=9;", "c": "x=11;", "d": "x=5."}, "ans": ["c"]}, {"id": "S.50", "sec": "S", "secName": "Securitate informatică", "text": "Considerăm x exponentul de decriptare, e exponentul de criptare, iar p și q două numere prime în algoritmul asimetric RSA (Rivest-Shamir-Adleman). Pentru p=3, q=5 și e=13, să se determine x.", "opts": {"a": "x=5;", "b": "x=7;", "c": "x=11;", "d": "x=13."}, "ans": ["a"]}];
+
+const TEST_DEFS = [["A.26", "A.24", "A.20", "A.12", "A.5", "A.46", "A.27", "A.10", "BD.43", "BD.42", "BD.14", "BD.10", "BD.20", "BD.30", "BD.2", "BD.1", "J.23", "J.19", "J.11", "J.15", "J.18", "J.20", "J.7", "J.31", "S.49", "S.29", "S.6", "S.14", "S.38", "S.25", "S.23", "S.42"], ["A.30", "A.17", "A.32", "A.22", "A.13", "A.4", "A.40", "A.39", "BD.16", "BD.4", "BD.29", "BD.11", "BD.39", "BD.23", "BD.17", "BD.46", "J.24", "J.1", "J.27", "J.22", "J.38", "J.41", "J.40", "J.33", "S.28", "S.18", "S.15", "S.9", "S.22", "S.35", "S.46", "S.5"], ["A.11", "A.25", "A.36", "A.1", "A.44", "A.19", "A.34", "A.49", "BD.49", "BD.18", "BD.26", "BD.38", "BD.31", "BD.22", "BD.33", "BD.32", "J.13", "J.44", "J.48", "J.6", "J.47", "J.29", "J.4", "J.2", "S.32", "S.31", "S.40", "S.3", "S.19", "S.36", "S.2", "S.8"], ["A.42", "A.31", "A.29", "A.21", "A.23", "A.43", "A.47", "A.37", "BD.28", "BD.50", "BD.12", "BD.27", "BD.21", "BD.34", "BD.9", "BD.48", "J.25", "J.3", "J.49", "J.34", "J.5", "J.8", "J.12", "J.43", "S.37", "S.26", "S.27", "S.44", "S.4", "S.39", "S.16", "S.21"], ["A.33", "A.45", "A.14", "A.50", "A.48", "A.3", "A.28", "A.38", "BD.7", "BD.44", "BD.47", "BD.45", "BD.15", "BD.3", "BD.5", "BD.13", "J.28", "J.39", "J.35", "J.36", "J.16", "J.9", "J.17", "J.10", "S.48", "S.34", "S.50", "S.24", "S.10", "S.13", "S.43", "S.20"], ["A.6", "A.35", "A.7", "A.9", "A.15", "A.16", "A.18", "A.2", "BD.37", "BD.24", "BD.40", "BD.41", "BD.19", "BD.36", "BD.6", "BD.25", "J.30", "J.45", "J.26", "J.32", "J.42", "J.50", "J.21", "J.46", "S.41", "S.7", "S.45", "S.12", "S.33", "S.17", "S.47", "S.1"], ["A.8", "A.41", "A.26", "A.24", "A.20", "A.12", "A.5", "A.46", "BD.8", "BD.35", "BD.43", "BD.42", "BD.14", "BD.10", "BD.20", "BD.30", "J.37", "J.14", "J.23", "J.19", "J.11", "J.15", "J.18", "J.20", "S.30", "S.11", "S.49", "S.29", "S.6", "S.14", "S.38", "S.25"]];
+
+</script>
+<script>
+const SECTIONS = [
+  {code:'A', name:'Algoritmi. Programare. Structuri de date'},
+  {code:'BD', name:'Baze de date'},
+  {code:'J', name:'Programare Orientată pe Obiecte (Java)'},
+  {code:'S', name:'Securitate informatică'}
+];
+
+const QMAP = {};
+QUESTIONS.forEach(q => QMAP[q.id] = q);
+
+let state = {
+  screen: 'setup',
+  instantFeedback: true,
+  testIndex: null,
+  quiz: [],
+  current: 0,
+  answers: [],
+  currentSelection: [],
+  locked: false
+};
+
+// progress across tests, persisted only in-memory for this session
+let completedTests = new Set();
+
+function letters(){ return ['a','b','c','d','e']; }
+
+function startTest(idx){
+  state.testIndex = idx;
+  const ids = TEST_DEFS[idx];
+  state.quiz = ids.map(id => QMAP[id]);
+  state.current = 0;
+  state.answers = new Array(state.quiz.length).fill(null);
+  state.currentSelection = [];
+  state.locked = false;
+  state.screen = 'quiz';
+  render();
+}
+
+function toggleOption(letter){
+  if(state.locked) return;
+  const q = state.quiz[state.current];
+  const isMulti = q.ans.length > 1;
+  if(isMulti){
+    const idx = state.currentSelection.indexOf(letter);
+    if(idx >= 0) state.currentSelection.splice(idx,1);
+    else state.currentSelection.push(letter);
+  } else {
+    state.currentSelection = [letter];
+    if(state.instantFeedback){
+      submitAnswer();
+      return;
+    }
+  }
+  render();
+}
+
+function arraysEqualAsSets(a,b){
+  if(a.length !== b.length) return false;
+  const sa = a.slice().sort();
+  const sb = b.slice().sort();
+  return sa.every((v,i)=>v===sb[i]);
+}
+
+function submitAnswer(){
+  if(state.currentSelection.length === 0) return;
+  const q = state.quiz[state.current];
+  const correct = arraysEqualAsSets(state.currentSelection, q.ans);
+  state.answers[state.current] = {selected: state.currentSelection.slice(), correct: correct};
+  state.locked = true;
+  render();
+}
+
+function nextQuestion(){
+  if(state.current < state.quiz.length - 1){
+    state.current++;
+    state.currentSelection = [];
+    state.locked = false;
+    render();
+  } else {
+    completedTests.add(state.testIndex);
+    state.screen = 'results';
+    render();
+  }
+}
+
+function restart(){
+  state.screen = 'setup';
+  render();
+}
+
+function retrySame(){
+  state.current = 0;
+  state.answers = new Array(state.quiz.length).fill(null);
+  state.currentSelection = [];
+  state.locked = false;
+  state.screen = 'quiz';
+  render();
+}
+
+function esc(s){
+  const d = document.createElement('div');
+  d.innerText = s;
+  return d.innerHTML;
+}
+
+function renderSetup(){
+  const app = document.getElementById('app');
+  app.innerHTML = `
+    <p class="eyebrow">Teste grilă · Licență 2026</p>
+    <h1>Pregătire examen</h1>
+    <p class="sub">7 teste fixe, construite după regulamentul oficial: 32 de întrebări fiecare (8 din Algoritmi, 8 din Baze de date, 8 din Java, 8 din Securitate). Împreună, cele 7 teste acoperă toate cele 200 de întrebări din culegere.</p>
+    <div class="card">
+      <p class="group-title">Alege testul</p>
+      <div class="modes" id="testList"></div>
+
+      <div class="toggle-row">
+        <div>
+          <div class="ttitle">Corectare imediată</div>
+          <div class="tdesc">Vezi pe loc dacă răspunsul e corect, sau doar scorul final</div>
+        </div>
+        <label class="switch">
+          <input type="checkbox" id="feedbackToggle" ${state.instantFeedback ? 'checked' : ''}>
+          <span class="slider-el"></span>
+        </label>
+      </div>
+    </div>
+  `;
+
+  const testList = document.getElementById('testList');
+  TEST_DEFS.forEach((ids, i)=>{
+    const div = document.createElement('div');
+    const done = completedTests.has(i);
+    div.className = 'mode-opt' + (done ? ' active' : '');
+    const note = i === 6 ? ' · include câteva recapitulări, pentru acoperire completă' : '';
+    div.innerHTML = `<input type="radio" name="test" ${done?'checked':''}>
+      <div><div class="mtitle">Test ${i+1}${done ? ' — finalizat' : ''}</div><div class="mdesc">32 întrebări (8 A · 8 BD · 8 J · 8 S)${note}</div></div>`;
+    div.onclick = () => startTest(i);
+    testList.appendChild(div);
+  });
+
+  document.getElementById('feedbackToggle').onchange = (e)=>{
+    state.instantFeedback = e.target.checked;
+  };
+}
+
+function renderQuiz(){
+  const app = document.getElementById('app');
+  const q = state.quiz[state.current];
+  const isMulti = q.ans.length > 1;
+  const answered = state.answers[state.current];
+  const scoreSoFar = state.answers.filter(a=>a && a.correct).length;
+  const answeredCount = state.answers.filter(a=>a).length;
+  const pct = Math.round(((state.current) / state.quiz.length) * 100);
+
+  app.innerHTML = `
+    <div class="quiz-top">
+      <span class="qmeta">Test ${state.testIndex+1} · ${state.current+1} / ${state.quiz.length} · ${q.sec}</span>
+      <span class="qscore">Scor: ${scoreSoFar}/${answeredCount}</span>
+    </div>
+    <div class="progress-track"><div class="progress-fill" style="width:${pct}%"></div></div>
+    <div class="card">
+      <p class="qid">${q.id}</p>
+      <p class="qtext">${esc(q.text)}</p>
+      ${isMulti ? '<p class="multi-hint">Selectează toate variantele corecte</p>' : ''}
+      <div class="opts" id="opts"></div>
+      <div id="feedbackArea"></div>
+      <div class="actions" id="actionsArea"></div>
+    </div>
+  `;
+
+  const opts = document.getElementById('opts');
+  Object.keys(q.opts).forEach(letter=>{
+    const div = document.createElement('div');
+    let cls = 'opt';
+    const isSelected = (answered ? answered.selected : state.currentSelection).includes(letter);
+    if(isSelected) cls += ' selected';
+    if(answered){
+      cls += ' locked';
+      const isCorrectLetter = q.ans.includes(letter);
+      if(isCorrectLetter && isSelected) cls += ' correct';
+      else if(!isCorrectLetter && isSelected) cls += ' incorrect';
+      else if(isCorrectLetter && !isSelected) cls += ' missed';
+    }
+    div.className = cls;
+    div.innerHTML = `<div class="bubble">${letter}</div><div class="opt-text">${esc(q.opts[letter])}</div>`;
+    if(!answered){
+      div.onclick = () => toggleOption(letter);
+    }
+    opts.appendChild(div);
+  });
+
+  const feedbackArea = document.getElementById('feedbackArea');
+  const actionsArea = document.getElementById('actionsArea');
+  if(answered){
+    const fb = document.createElement('div');
+    fb.className = 'feedback ' + (answered.correct ? 'ok' : 'bad');
+    fb.innerText = answered.correct
+      ? 'Corect.'
+      : 'Greșit. Răspunsul corect este: ' + q.ans.join(', ').toUpperCase() + '.';
+    if(state.instantFeedback) feedbackArea.appendChild(fb);
+
+    const nextBtn = document.createElement('button');
+    nextBtn.className = 'primary';
+    nextBtn.innerText = state.current < state.quiz.length - 1 ? 'Următoarea întrebare' : 'Vezi rezultatul';
+    nextBtn.onclick = nextQuestion;
+    actionsArea.appendChild(nextBtn);
+  } else if(isMulti){
+    const submitBtn = document.createElement('button');
+    submitBtn.className = 'primary';
+    submitBtn.innerText = 'Verifică';
+    submitBtn.disabled = state.currentSelection.length === 0;
+    submitBtn.onclick = submitAnswer;
+    actionsArea.appendChild(submitBtn);
+  }
+}
+
+function renderResults(){
+  const app = document.getElementById('app');
+  const total = state.quiz.length;
+  const correct = state.answers.filter(a=>a && a.correct).length;
+  const pct = Math.round((correct/total)*100);
+
+  const bySec = {};
+  state.quiz.forEach((q,i)=>{
+    if(!bySec[q.sec]) bySec[q.sec] = {correct:0, total:0};
+    bySec[q.sec].total++;
+    if(state.answers[i] && state.answers[i].correct) bySec[q.sec].correct++;
+  });
+
+  app.innerHTML = `
+    <p class="eyebrow">Rezultat · Test ${state.testIndex+1}</p>
+    <h1>Test finalizat</h1>
+    <div class="card">
+      <div class="score-hero">
+        <div class="score-num">${correct}/${total}</div>
+        <div class="score-label">${pct}% răspunsuri corecte</div>
+      </div>
+      <div class="breakdown" id="breakdown"></div>
+      <button class="primary" id="retryBtn">Reia acest test</button>
+      <button class="ghost" id="newBtn">Înapoi la lista de teste</button>
+    </div>
+    <div class="card" style="margin-top:16px;" id="reviewCard"></div>
+  `;
+
+  const breakdown = document.getElementById('breakdown');
+  Object.keys(bySec).forEach(sec=>{
+    const b = bySec[sec];
+    const div = document.createElement('div');
+    div.className = 'bd-item';
+    div.innerHTML = `<div class="bname">${sec}</div><div class="bscore">${b.correct}/${b.total}</div>`;
+    breakdown.appendChild(div);
+  });
+
+  document.getElementById('retryBtn').onclick = retrySame;
+  document.getElementById('newBtn').onclick = restart;
+
+  const reviewCard = document.getElementById('reviewCard');
+  const wrongOnes = state.quiz.map((q,i)=>({q, a: state.answers[i]})).filter(x => !x.a || !x.a.correct);
+  if(wrongOnes.length === 0){
+    reviewCard.innerHTML = '<p class="group-title">Recapitulare</p><p style="font-size:14px;color:var(--ink-soft)">Toate răspunsurile au fost corecte.</p>';
+  } else {
+    let html = '<p class="group-title">De revizuit ('+wrongOnes.length+')</p>';
+    wrongOnes.forEach(x=>{
+      const q = x.q;
+      const selected = x.a ? x.a.selected.join(', ').toUpperCase() : '—';
+      html += `<div class="review-item">
+        <p class="qid">${q.id}</p>
+        <p class="review-q">${esc(q.text)}</p>
+        <p class="review-line wrong-ans">Răspunsul tău: ${selected}</p>
+        <p class="review-line correct-ans">Corect: ${q.ans.join(', ').toUpperCase()} — ${q.ans.map(l=>esc(q.opts[l])).join(' ')}</p>
+      </div>`;
+    });
+    reviewCard.innerHTML = html;
+  }
+}
+
+function render(){
+  if(state.screen === 'setup') renderSetup();
+  else if(state.screen === 'quiz') renderQuiz();
+  else if(state.screen === 'results') renderResults();
+}
+
+render();
+
+</script>
+</body>
+</html>
